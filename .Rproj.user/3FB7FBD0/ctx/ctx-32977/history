@@ -1,0 +1,81 @@
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+library(ClimDatDownloadR)
+library(ClimDatDownloadR)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+cite(RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021"))
+cite(RefManageR::ReadCrossRef("doi.org/10.1016/j.ecolmodel.2017.05.021"))
+cite(RefManageR::ReadCrossRef("10.1016:j.ecolmodel.2017.05.021"))
+cite(RefManageR::ReadCrossRef(" 10.1016/j.ecolmodel.2017.05.021"))
+cite(RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021"))
+RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021")
+Cite(RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021"))
+cite(RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021"))
+RefManageR::BibEntry("10.1016/j.ecolmodel.2017.05.021")
+RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021")
+RefManageR::WriteBib(RefManageR::ReadCrossRef("10.1016/j.ecolmodel.2017.05.021"))
+cite("references.bib")
+cite(bib = "references.bib")
+cite(bib = "references.bib", keys = 1)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+source('~/.active-rstudio-document', echo=TRUE)
+library(ClimDatDownloadR)
+devtools::build_manual()
+source('~/.active-rstudio-document', echo=TRUE)
+library(ClimDatDownloadR)
+devtools::build_vignettes()
+devtools::use_vignettes()
+use_vignettes()
+??use_vignettes
+??use_
+devtools::use_vignette("ClimDownloadR")
+update.packages("devtools")
+usethis::use_vignette("ClimDatDownloadR")
+library(ClimDatDownloadR)
+devtools::build_site()
+devtools::build_manual()
+?build_home
+devtools::build_site()
+devtools::build_site()
+devtools::build_site()
+devtools::build_site()
+library(ClimDatDownloadR)
+library(ClimDatDownloadR)
+devtools::build_site()
+library(abind)
+detach("package:abind", unload = TRUE)
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+# install.packages("ClimDatDownloadR", dependencies = TRUE)
+library(ClimDatDownloadR)
+??Chelsa
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+# install.packages("ClimDatDownloadR", dependencies = TRUE)
+library(ClimDatDownloadR)
+?ClimDatDownloadR::Chelsa
+??ClimDatDownloadR::Chelsa
+??ClimDatDownloadR::Chelsa
+?ClimDatDownloadR::Chelsa
+# install.packages("ClimDatDownloadR", dependencies = TRUE)
+library(ClimDatDownloadR)
+?ClimDatDownloadR::Chelsa
+?ClimDatDownloadR::Chelsa.Clim.download
+?ClimDatDownloadR::Chelsa.Clim.download
+?ClimDatDownloadR::WorldClim.HistClim.download
+devtools::build_site()
+devtools::build_site()
+devtools::build_site()

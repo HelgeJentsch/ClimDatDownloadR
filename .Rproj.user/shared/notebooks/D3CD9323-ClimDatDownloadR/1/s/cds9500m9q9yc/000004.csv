@@ -1,0 +1,68 @@
+"0","WorldClim.HistClim.download("
+"0","  # As you can see, the structure of this function is very similar to the Chelsa-function"
+"0","  save.location = ""./"","
+"0","  parameter = c(""temp"", ""bio""),"
+"0","  month.var = c(1),"
+"0","  bio.var = c(1),"
+"0","  # Here the resolution of the downloaded data set must be added"
+"0","  # If no input is given all resolutions will be downloaded"
+"0","  resolution = ""10m"", # here 10 arc-minutes are chosen"
+"0","  # WorldClim also recently had an update to version 2.1"
+"0","  version.var = ""2.1"", # Here the newer version is chosen"
+"0","  clipping = TRUE,"
+"0","  clip.extent = c(-9,20,35,80),"
+"0","  buffer = 5,"
+"0","  convert.files.to.asc = FALSE,"
+"0","  stacking.data = FALSE,"
+"0","  # here you can choose if you want to keep the downloaded zip-file"
+"0","  keep.raw.zip = FALSE,"
+"0","  delete.raw.data = FALSE,"
+"0","  save.bib.file = TRUE"
+"0",")"
+"1","[1]"
+"1"," ""tavg"""
+"1","
+"
+"1","[1]"
+"1"," ""10m"""
+"1","
+"
+"2","trying URL 'http://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_10m_tavg.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 37364656 bytes (35.6 MB)
+"
+"2","downloaded 35.6 MB
+
+"
+"1","[1]"
+"1"," ""wc2.1_10m_tavg_01.tif"""
+"1","
+"
+"1","[1] S. E. Fick and R. J. Hijmans. ‚ÄúWorldClim 2: new 1-km spatial resolution climate surfaces for global land areas‚Äù. In: _International Journal of Climatology_ 37.12 (Okt.
+2017), pp. 4302-4315. DOI: 10.1002/joc.5086. <URL: https://doi.org/10.1002/joc.5086>.
+"
+"2","Writing 1 Bibtex entries ... "
+"2","OK
+Results written to file ëC:/Users/helge/Desktop/ClimDatDownloadR/vignettes/WorldClim21_citation.bibí
+"
+"1","[1]"
+"1"," ""bio"""
+"1","
+"
+"1","[1]"
+"1"," ""10m"""
+"1","
+"
+"2","trying URL 'http://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_10m_bio.zip'
+"
+"2","Content type 'application/zip'"
+"2"," length 49869449 bytes (47.6 MB)
+"
+"2","downloaded 47.6 MB
+
+"
+"1","[1]"
+"1"," ""wc2.1_10m_bio_1.tif"""
+"1","
+"

@@ -1,0 +1,10 @@
+{
+    "type": [
+        2,
+        2
+    ],
+    "data": [
+        "\nR version 4.0.1 (2020-06-06) -- \"See Things Now\"\nCopyright (C) 2020 The R Foundation for Statistical Computing\nPlatform: x86_64-w64-mingw32/x64 (64-bit)\n\nR ist freie Software und kommt OHNE JEGLICHE GARANTIE.\nSie sind eingeladen, es unter bestimmten Bedingungen weiter zu verbreiten.\nTippen Sie 'license()' or 'licence()' für Details dazu.\n\nR ist ein Gemeinschaftsprojekt mit vielen Beitragenden.\nTippen Sie 'contributors()' für mehr Information und 'citation()',\num zu erfahren, wie R oder R packages in Publikationen zitiert werden können.\n\n",
+        "Tippen Sie 'demo()' für einige Demos, 'help()' für on-line Hilfe, oder\n'help.start()' für eine HTML Browserschnittstelle zur Hilfe.\nTippen Sie 'q()', um R zu verlassen.\n\n\nRestarting R session...\n\n"
+    ]
+}

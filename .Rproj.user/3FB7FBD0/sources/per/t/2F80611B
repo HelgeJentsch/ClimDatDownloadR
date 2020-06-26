@@ -1,0 +1,29 @@
+{
+    "id": "2F80611B",
+    "path": "C:/Users/helge/Desktop/ClimDatDownloadR/R/WorldClim_download_functions.R",
+    "project_path": "R/WorldClim_download_functions.R",
+    "type": "r_source",
+    "hash": "1442126391",
+    "contents": "",
+    "dirty": false,
+    "created": 1592903266744.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "cursorPosition": "35,60",
+        "scrollLine": "10",
+        "source_window_id": "wgscttp7fy65x",
+        "tempName": "Untitled1",
+        "docOutlineVisible": "1",
+        "docOutlineSize": "213",
+        "notebook_format": "pdf_document"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1592906068,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1592906068290,
+    "read_only": false,
+    "read_only_alternatives": []
+}

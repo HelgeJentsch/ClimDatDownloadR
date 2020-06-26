@@ -1,0 +1,22 @@
+Package: ClimDatDownloadR
+Type: Package
+Title: Downloads Climate Data from Chelsa and WorldClim
+Version: 0.1.0
+Authors@R: person("Helge", "Jentsch", 
+  email = "helge.jentsch@studium.uni-hamburg.de", 
+  role = c("aut", "cre"))
+Maintainer: Helge Jentsch <helge.jentsch@studium.uni-hamburg.de>
+Description: ClimDatDownloadR provides functions to download and save
+    climate data sets from both Chelsa and WorldClim in their
+    various resolution and provided parameters.
+    The output is provided as RasterStacks, GEOTIFF, or ASCII format.
+YEAR: 2020
+License: CC BY-SA 4.0
+Encoding: UTF-8
+LazyData: true
+Imports:
+    RCurl,
+    raster,
+    stringr,
+    svMisc 
+RoxygenNote: 7.0.2

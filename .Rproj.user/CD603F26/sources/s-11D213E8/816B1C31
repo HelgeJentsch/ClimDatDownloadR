@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1583997003840.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "816B1C31",
+    "lastKnownWriteTime" : 1583999254,
+    "last_content_update" : 1583999261931,
+    "path" : "K:/FL/ClimDatDownloadR/ClimDatDownloadR/R/clipping_converting.R",
+    "project_path" : "R/clipping_converting.R",
+    "properties" : {
+        "cursorPosition" : "36,46",
+        "scrollLine" : "16",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
