@@ -266,6 +266,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
                                full.names = T)
                   )
                 }
+                gc()
                 # crop
                 tl <- crop(raster.temp, extent(-180, 0, 0, 90))
                 bl <- crop(raster.temp, extent(-180, 0, -90, 0))
@@ -318,9 +319,12 @@ WorldClim.HistClim.download <- function(save.location = "./",
               )
               if(bio <= 11){
                 if(res.temp != "30s"){
+                  gc()
                   values(raster.temp) <- as.numeric(values(raster.temp)/10)
+                  gc()
                 }else{
                   # crop
+                  gc()
                   tl <- crop(raster.temp, extent(-180, 0, 0, 90))
                   bl <- crop(raster.temp, extent(-180, 0, -90, 0))
                   tr <- crop(raster.temp, extent(0, 180, 0, 90))
@@ -836,13 +840,17 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                 for (file.conversion.num in 1:length(keep.files)) {
                   if(res.temp != "30s"){
                     raster.temp <- raster(keep.files[file.conversion.num])
+                    gc()
                     values(raster.temp) <- as.numeric(values(raster.temp)/10)
                     writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
+                    rm(raster.temp)
+                    gc()
                   }else{
                     raster.temp <- raster(keep.files[file.conversion.num])
                     # crop
+                    gc()
                     tl <- crop(raster.temp, extent(-180, 0, 0, 90))
                     bl <- crop(raster.temp, extent(-180, 0, -90, 0))
                     tr <- crop(raster.temp, extent(0, 180, 0, 90))
@@ -861,6 +869,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                     writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
+                    rm(raster.temp)
                   }
                   gc()
                 }
@@ -907,14 +916,18 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                 print(file.conversion.temp)
                 if(file.conversion.temp <= 11){
                   if(res.temp != "30s"){
+                    gc()
                     raster.temp <- raster(keep.files[file.conversion.num])
                     values(raster.temp) <- as.numeric(values(raster.temp)/10)
                     writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
+                    rm(raster.temp)
+                    gc()
                   }else{
                     raster.temp <- raster(keep.files[file.conversion.num])
                     # crop
+                    gc()
                     tl <- crop(raster.temp, extent(-180, 0, 0, 90))
                     bl <- crop(raster.temp, extent(-180, 0, -90, 0))
                     tr <- crop(raster.temp, extent(0, 180, 0, 90))
@@ -933,6 +946,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                     writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
+                    rm(raster.temp)
                   }
                   gc()
                 }

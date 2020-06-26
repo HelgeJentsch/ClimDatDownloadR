@@ -177,6 +177,8 @@ Chelsa.Clim.download <- function(save.location = "./",
                 writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
+                rm(raster.temp)
+                gc()
               }
             }else{
               # Error message if file is not available
@@ -292,12 +294,14 @@ Chelsa.Clim.download <- function(save.location = "./",
               # raster.values[raster.values==-32768] <- NA
               # values(raster.temp) <- raster.values
               # rm(raster.values)
-              # gc()
+              gc()
               raster.temp <- process.raster.int.doub(raster.temp)
               writeRaster(raster.temp,
                           paste0(temp.temp.save.location, "CHELSA_",
                                  i, "_", bio, vers, ".tif"),
                           overwrite = TRUE)
+              rm(raster.temp)
+              gc()
             }
           }else{
             # Error message
@@ -517,6 +521,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                                   mode = 'wb',
                                   quiet = FALSE)
                     if(i != "prec"){
+                      gc()
                       raster.temp <- raster(dest.temp)
                       # raster.values <- values(raster.temp)
                       # raster.values[raster.values==-32768] <- NA
@@ -837,6 +842,8 @@ Chelsa.lgm.download <- function(save.location = "./",
                 writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
+                rm(raster.temp)
+                gc()
               }else{
                 # for precipitation as http://chelsa-climate.org/last-glacial-maximum-climate/ says
                 raster.temp <- raster(dest.temp)
@@ -851,6 +858,8 @@ Chelsa.lgm.download <- function(save.location = "./",
                 writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
+                rm(raster.temp)
+                gc()
               }
             }else{
               # Error message
@@ -931,6 +940,8 @@ Chelsa.lgm.download <- function(save.location = "./",
               writeRaster(raster.temp,
                           dest.temp,
                           overwrite = TRUE)
+              rm(raster.temp)
+              gc()
             }else{
               # Error message
               warning(paste0("File does not exist. Did not download: \n", URL.temp),
@@ -1174,6 +1185,8 @@ Chelsa.timeseries.download <- function(save.location = "./",
                              "CHELSA_", i,"_",year_month,
                              "_V1.2.1.tif"),
                       overwrite = TRUE)
+          rm(raster.temp)
+          gc()
         }
       }else{
         # Warning message
@@ -1475,7 +1488,7 @@ Chelsa.CRUts.download <- function(save.location = "./",
                       overwrite = TRUE,
                       mode = 'wb',
                       quiet = FALSE)
-
+        gc()
         raster.temp <- raster(paste0(temp.temp.save.location,
                                      "CHELSA_CRUts_", i,"_",output.year_month,
                                      "_V.1.0.tif"))
@@ -1493,7 +1506,8 @@ Chelsa.CRUts.download <- function(save.location = "./",
                            "CHELSA_CRUts_", i,"_",output.year_month,
                            "_V.1.0.tif"),
                     overwrite = TRUE)
-
+        rm(raster.temp)
+        gc()
       }else{
         # Warning message
         warning(paste0("File does not exist. Did not download: \n", URL.temp, "\n\n"),
