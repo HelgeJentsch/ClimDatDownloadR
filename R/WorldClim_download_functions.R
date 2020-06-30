@@ -21,6 +21,20 @@
 #'
 #'@return WorldClim climate data sets for the period of 1960-1990 (for v1.4) and/or 1970-2000 (for v2.1).
 #'
+#'@examples
+#' ## NOT RUN
+#' ## Bioclim
+#' # WorldClim.HistClim.download(parameter = "bio,
+#' #                             bio.var = c(1,12),
+#' #                             resolution = "10min",
+#' #                             version.var = c("1.4", "2.1"))
+#' ## Precipitation
+#' # WorldClim.HistClim.download(parameter = "prec",
+#' #                             month.var = c(1,12),
+#' #                             resolution = "10min",
+#' #                             version.var = c("1.4", "2.1"))
+#' ## NOT RUN
+#'
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
@@ -34,7 +48,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
                                                       "vapr", "bio", "elev"),
                                         bio.var = c(1:19),
                                         month.var = c(1:12),
-                                        resolution = c("10m", "5m", "2.5m", "30s"),
+                                        resolution = c("10min", "5min", "2.5min", "30s"),
                                         version.var = c("1.4", "2.1"),
                                         clipping = FALSE,
                                         clip.shapefile = NULL,
@@ -151,9 +165,9 @@ WorldClim.HistClim.download <- function(save.location = "./",
         if(vers == "1.4"){
           # resolution control
           res.temp <- switch (res,
-                              "10m" = "10m",
-                              "5m" = "5m",
-                              "2.5m" = "2-5m",
+                              "10min" = "10m",
+                              "5min" = "5m",
+                              "2.5min" = "2-5m",
                               "30s" = "30s",
                               next
           )
@@ -362,9 +376,9 @@ WorldClim.HistClim.download <- function(save.location = "./",
 
         if(vers == "2.1"){
           res.temp <- switch (res,
-                              "10m" = "10m",
-                              "5m" = "5m",
-                              "2.5m" = "2.5m",
+                              "10min" = "10m",
+                              "5min" = "5m",
+                              "2.5min" = "2.5m",
                               "30s" = "30s",
                               next
           )
@@ -576,6 +590,24 @@ WorldClim.HistClim.download <- function(save.location = "./",
 #'
 #'@return WorldClim 1.4 CMIP5 Future climate data sets for the periods of 2041-2060 and/or 2061-2080.
 #'
+#'@examples
+#' ## NOT RUN
+#' ## Bioclim
+#' # WorldClim.CMIP_5.download(parameter = "bio",
+#' #                           bio.var = c(1,12),
+#' #                           resolution = "10min",
+#' #                           model.var = "MPI-ESM-LR",
+#' #                           emission.scenario.var = "rcp26",
+#' #                           time.interval.var = "2050")
+#' ## Precipitation
+#' # WorldClim.CMIP_5.download(parameter = "prec",
+#' #                           month.var = c(1,12),
+#' #                           resolution = "10min",
+#' #                           model.var = "MPI-ESM-LR",
+#' #                           emission.scenario.var = "rcp26",
+#' #                           time.interval.var = "2050")
+#' ## NOT RUN
+#'
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
@@ -588,7 +620,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                                                     "tmin", "bio"),
                                       bio.var = c(1:19),
                                       month.var = c(1:12),
-                                      resolution = c("10m", "5m", "2.5m", "30s"),
+                                      resolution = c("10min", "5min", "2.5min", "30s"),
                                       model.var = c("ACCESS1-0", "BCC-CSM1-1",
                                                     "CCSM4", "CESM1-CAM5-1-FV2",
                                                     "CNRM-CM5", "GFDL-CM3",
@@ -672,9 +704,9 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
     # Third: Through resolution ------------------------------------------------
     for (res in resolution) {
       res.temp <- switch (res,
-                          "10m" = "10m",
-                          "5m" = "5m",
-                          "2.5m" = "2_5m",
+                          "10min" = "10m",
+                          "5min" = "5m",
+                          "2.5min" = "2_5m",
                           "30s" = "30s",
                           next
       )
@@ -1064,6 +1096,24 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 #'
 #'@return WorldClim 2.1 CMIP6 Future climate data sets for the periods of 2021-2040, 2041-2060, 2061-2080 and/or 2081-2100.
 #'
+#'@examples
+#' ## NOT RUN
+#' ## Bioclim
+#' # WorldClim.CMIP_6.download(parameter = "bio",
+#' #                           bio.var = c(1,12),
+#' #                           resolution = "10min",
+#' #                           model.var = "MIROC6",
+#' #                           emission.scenario.var = "ssp126",
+#' #                           time.interval.var = "2021-2040")
+#' ## Precipitation
+#' # WorldClim.CMIP_6.download(parameter = "prec",
+#' #                           month.var = c(1,12),
+#' #                           resolution = "10min",
+#' #                           model.var = "MIROC6",
+#' #                           emission.scenario.var = "ssp126",
+#' #                           time.interval.var = "2021-2040")
+#' ## END
+#'
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
@@ -1076,7 +1126,7 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                                                     "tmin", "bio"),
                                       bio.var = c(1:19),
                                       month.var = c(1:12),
-                                      resolution = c("10m", "5m", "2.5m", "30s"),
+                                      resolution = c("10min", "5min", "2.5min", "30s"),
                                       model.var = c("BCC-CSM2-MR", "CNRM-CM6-1",
                                                     "CNRM-ESM2-1", "CanESM5",
                                                     "GFDL-ESM4", "IPSL-CM6A-LR",
@@ -1163,9 +1213,9 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
     # Third: Through resolution ------------------------------------------------
     for (res in resolution) {
       res.temp <- switch (res,
-                          "10m" = "10m",
-                          "5m" = "5m",
-                          "2.5m" = "2.5m",
+                          "10min" = "10m",
+                          "5mmin" = "5m",
+                          "2.5min" = "2.5m",
                           "30s" = "30s",
                           next
       )

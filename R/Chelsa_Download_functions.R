@@ -19,6 +19,13 @@
 #'@param save.bib.file logical. Whether a bibTex-citation file of the data set should be provided in the Working directory. \cr Default: \code{TRUE}
 #'@return Chelsa climate data sets for the period of 1979 - 2013
 #'
+#'@examples
+#' ## NOT RUN
+#' ## Bioclim
+#' # Chelsa.Clim.download(parameter = "bio", bio.var = c(1,12))
+#' ## Precipitation
+#' # Chelsa.Clim.download(parameter = "prec", month.var = c(1,12))
+#' ## NOT RUN
 #'
 #'@import stringr
 #'@import RCurl
@@ -364,7 +371,7 @@ Chelsa.Clim.download <- function(save.location = "./",
     } # version for-loop END
     # Download END
   } # Parameters for-loop end
-  # Saving BIB File ---------------------------------------------------------
+  # Saving BIB File
   # if save.bib.file is TRUE, the save.citation function will be called.
   # it saves a .bib-file of the downloaded data-set on the highest level of
   # the save.location. If the user's working directory is the desktop
@@ -399,6 +406,22 @@ Chelsa.Clim.download <- function(save.location = "./",
 #'@param save.bib.file logical. Whether a bibTex-citation file of the data set should be provided in the Working directory. \cr Default: \code{TRUE}
 #'
 #'@return Downscaled Chelsa CMIP5 climatologies for 2050 and 2070.
+#'
+#'@examples
+#' ## NOT RUN
+#' ## Bioclim
+#' # Chelsa.CMIP_5.download(parameter = "bio",
+#' #                        bio.var = c(1,12),
+#' #                        emission.scenario.var = "rcp26",
+#' #                        time.interval.var = "2041-2060",
+#' #                        model.var = "MPI-ESM-LR")
+#' ## Precipitation
+#' # Chelsa.CMIP_5.download(parameter = "prec",
+#' #                        month.var = c(1,12),
+#' #                        emission.scenario.var = "rcp26",
+#' #                        time.interval.var = "2041-2060",
+#' #                        model.var = "MPI-ESM-LR")
+#' ## NOT RUN
 #'
 #'@import stringr
 #'@import RCurl
@@ -703,6 +726,19 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
 #'
 #'@return Downscaled global climatological data from the last glacial maximum.
 #'
+#'@examples
+#' ## NOT RUN
+#' ## Bioclim
+#' # Chelsa.lgm.download(parameter = "bio",
+#' #                    bio.var = c(1,12),
+#' #                    model.var = "MPI-ESM-P")
+#' ## Precipitation
+#' # Chelsa.lgm.download(parameter = "prec",
+#' #                    month.var = c(1,12),
+#' #                    model.var = "MPI-ESM-P")
+#' ## NOT RUN
+#'
+#'
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
@@ -1005,7 +1041,7 @@ Chelsa.lgm.download <- function(save.location = "./",
                     quiet = FALSE)
     }
   }
-  # Saving BIB File ---------------------------------------------------------
+# Saving BIB File
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "Chelsa")
 }
 
@@ -1031,6 +1067,16 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
 #'
 #'@return Custom dataset of Chelsa Timeseries for a chosen timeseries.
+#'
+#'@examples
+#' ## NOT RUN
+#' # Chelsa.timeseries.download(parameter = "prec",
+#' #                            start.year.var = 2000,
+#' #                            start.month.var = 1,
+#' #                            end.year.var = 2002,
+#' #                            end.month.var = 12,
+#' #                            include.month.var = c(1,12))
+#' ## END
 #'
 #'@import stringr
 #'@import RCurl
@@ -1315,7 +1361,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
              force = T, recursive = TRUE)
     }
   }
-  # Saving BIB File ---------------------------------------------------------
+  # Saving BIB File
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "Chelsa")
 }
 
@@ -1341,6 +1387,16 @@ Chelsa.timeseries.download <- function(save.location = "./",
 #'@param save.bib.file logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
 #'
 #'@return Custom dataset of Chelsa CRU Timeseries for a chosen timeseries.
+#'
+#'@examples
+#' ## NOT RUN
+#' # Chelsa.CRUts.download(parameter = "prec",
+#' #                       start.year.var = 2000,
+#' #                       start.month.var = 1,
+#' #                       end.year.var = 2002,
+#' #                       end.month.var = 12,
+#' #                       include.month.var = c(1,12))
+#' ## END
 #'
 #'@import stringr
 #'@import RCurl
@@ -1562,6 +1618,6 @@ Chelsa.CRUts.download <- function(save.location = "./",
     }
 
   }
-  # Saving BIB File ---------------------------------------------------------
+  # Saving BIB File
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "Chelsa")
 }

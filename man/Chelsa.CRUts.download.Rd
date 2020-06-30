@@ -62,6 +62,17 @@ Custom dataset of Chelsa CRU Timeseries for a chosen timeseries.
 \description{
 This function supports a download of the Chelsa CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation (mm) and temperature (maximum, minimum; °C) parameters. For further information, please regard \url{http://chelsa-climate.org/chelsacruts/}.\cr For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
+\examples{
+## NOT RUN
+# Chelsa.CRUts.download(parameter = "prec",
+#                       start.year.var = 2000,
+#                       start.month.var = 1,
+#                       end.year.var = 2002,
+#                       end.month.var = 12,
+#                       include.month.var = c(1,12))
+## END
+
+}
 \author{
 Helge Jentsch
 }
