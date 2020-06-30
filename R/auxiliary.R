@@ -149,12 +149,16 @@ convert.to.asc <- function(save.location = "./",
   # requireNamespace("stringr")
   temp.save.location <- normalizePath(save.location, winslash = "/")
   file.path.list <- list.files(temp.save.location, pattern=".tif", full.names = T)
+  temp.save.location <- paste0(temp.save.location, "/")
+
   if(!dir.exists(paste0(temp.save.location, "ASCII_files_",time.stamp.var))){
     dir.create(paste0(temp.save.location, "ASCII_files_",time.stamp.var))
   }
   temp.save.location <- paste0(temp.save.location, "ASCII_files_",time.stamp.var,"/")
   # print(file.path.list)
-  file.list <- str_remove(file.path.list, pattern = normalizePath(save.location, winslash = "/"))
+  file.list <- str_remove(file.path.list,
+                          pattern = paste0(
+                            normalizePath(save.location, winslash = "/"), "/"))
   file.list <- str_remove(file.list, pattern = ".tif")
   if(length(file.list) >= 1){
     for (layer in 1:length(file.list)) {
@@ -403,28 +407,28 @@ save.citation <- function(save.location = "./",
                                          "WorldClim1.4",
                                          "WorldClim2.1")){
   # requireNamespace("RefManageR")
-  save.location <- normalizePath(save.location, winslash = "/")
+  save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
 
   if(dataSetName == "Chelsa"){
-    if(!file.exists(paste0(save.location, "/chelsa_citation.bib"))){
+    if(!file.exists(paste0(save.location, "chelsa_citation.bib"))){
       citation_paper <- RefManageR::ReadCrossRef("10.1038/sdata.2017.122")
       citation_data <- RefManageR::ReadCrossRef("10.5061/dryad.kd1d4")
       print(citation_paper)
       print(citation_data)
-      RefManageR::WriteBib(bib = c(citation_paper, citation_data), file = paste0(save.location, "/chelsa_citation.bib"))
+      RefManageR::WriteBib(bib = c(citation_paper, citation_data), file = paste0(save.location, "chelsa_citation.bib"))
     }
   }
   if (dataSetName == "WorldClim1.4") {
-    if(!file.exists(paste0(save.location, "/Worldclim14_citation.bib"))){
+    if(!file.exists(paste0(save.location, "Worldclim14_citation.bib"))){
       citation <- RefManageR::ReadCrossRef("10.1002/joc.1276")
-      RefManageR::WriteBib(bib = citation, file = paste0(save.location, "/Worldclim14_citation.bib"))
+      RefManageR::WriteBib(bib = citation, file = paste0(save.location, "Worldclim14_citation.bib"))
     }
   }
   if (dataSetName == "WorldClim2.1") {
-    if(!file.exists(paste0(save.location, "/WorldClim21_citation.bib"))){
+    if(!file.exists(paste0(save.location, "WorldClim21_citation.bib"))){
       citation <- RefManageR::ReadCrossRef("10.1002/joc.5086")
       print(citation)
-      RefManageR::WriteBib(bib = citation, file = paste0(save.location, "/WorldClim21_citation.bib"))
+      RefManageR::WriteBib(bib = citation, file = paste0(save.location, "WorldClim21_citation.bib"))
     }
   }
 }
@@ -457,14 +461,17 @@ combine.raw.in.zip <- function(save.location = "./",
     }
   }
   reset.wd <- getwd()
-  temp.save.location <- normalizePath(save.location, winslash = "/")
+  temp.save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
   setwd(temp.save.location)
   # print(getwd())
   file.path.list <- list.files(temp.save.location, pattern=".tif", full.names = T)
   file.path.list <- stringr::str_replace(file.path.list, pattern = getwd(), replacement = ".")
   # print(file.path.list)
 
-  file.list <- stringr::str_remove(file.path.list, pattern = normalizePath(save.location, winslash = "/"))
+  file.list <- stringr::str_remove(file.path.list,
+                                   pattern = paste0(
+                                     normalizePath(save.location, winslash = "/"),
+                                     "/"))
   file.list <- stringr::str_remove(file.list, pattern = ".tif")
   # print(file.list)
 
