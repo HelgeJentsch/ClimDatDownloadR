@@ -9,7 +9,7 @@ WorldClim.HistClim.download(
   parameter = c("prec", "temp", "tmax", "tmin", "srad", "wind", "vapr", "bio", "elev"),
   bio.var = c(1:19),
   month.var = c(1:12),
-  resolution = c("10m", "5m", "2.5m", "30s"),
+  resolution = c("10min", "5min", "2.5min", "30s"),
   version.var = c("1.4", "2.1"),
   clipping = FALSE,
   clip.shapefile = NULL,
@@ -61,6 +61,21 @@ This function supports a download of the WorldClim Historical Climate dataset.  
 }
 \note{
 Please note, that  solar radiation, wind speed, water vapor pressure, bioclimatic parameters, and elevation raster are only provided by the WorldClim Version 2.1 (current version).
+}
+\examples{
+## NOT RUN
+## Bioclim
+# WorldClim.HistClim.download(parameter = "bio,
+#                             bio.var = c(1,12),
+#                             resolution = "10min",
+#                             version.var = c("1.4", "2.1"))
+## Precipitation
+# WorldClim.HistClim.download(parameter = "prec",
+#                             month.var = c(1,12),
+#                             resolution = "10min",
+#                             version.var = c("1.4", "2.1"))
+## NOT RUN
+
 }
 \author{
 Helge Jentsch

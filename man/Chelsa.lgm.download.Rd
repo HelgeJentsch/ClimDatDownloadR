@@ -66,6 +66,20 @@ This function supports a download of the Chelsa Last Glacial Maximum Climate dat
 \note{
 For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of Chelsa Climate (\url{http://chelsa-climate.org/last-glacial-maximum-climate/}).
 }
+\examples{
+## NOT RUN
+## Bioclim
+# Chelsa.lgm.download(parameter = "bio",
+#                    bio.var = c(1,12),
+#                    model.var = "MPI-ESM-P")
+## Precipitation
+# Chelsa.lgm.download(parameter = "prec",
+#                    month.var = c(1,12),
+#                    model.var = "MPI-ESM-P")
+## NOT RUN
+
+
+}
 \author{
 Helge Jentsch
 }

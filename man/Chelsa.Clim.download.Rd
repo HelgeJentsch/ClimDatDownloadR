@@ -56,6 +56,15 @@ Chelsa climate data sets for the period of 1979 - 2013
 \description{
 This function supports a download of the Chelsa Climate dataset. This includes precipitation (mm), temperature (average, maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid,and stacking-tool is included.\cr An output of a .bib-file of the literature is also optional.\cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
+\examples{
+## NOT RUN
+## Bioclim
+# Chelsa.Clim.download(parameter = "bio", bio.var = c(1,12))
+## Precipitation
+# Chelsa.Clim.download(parameter = "prec", month.var = c(1,12))
+## NOT RUN
+
+}
 \author{
 Helge Jentsch
 }

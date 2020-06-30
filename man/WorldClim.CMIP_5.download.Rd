@@ -9,7 +9,7 @@ WorldClim.CMIP_5.download(
   parameter = c("prec", "tmax", "tmin", "bio"),
   bio.var = c(1:19),
   month.var = c(1:12),
-  resolution = c("10m", "5m", "2.5m", "30s"),
+  resolution = c("10min", "5min", "2.5min", "30s"),
   model.var = c("ACCESS1-0", "BCC-CSM1-1", "CCSM4", "CESM1-CAM5-1-FV2", "CNRM-CM5",
     "GFDL-CM3", "GFDL-ESM2G", "GISS-E2-R", "HadGEM2-AO", "HadGEM2-CC", "HadGEM2-ES",
     "INMCM4", "IPSL-CM5A-LR", "MIROC-ESM-CHEM", "MIROC-ESM", "MIROC5", "MPI-ESM-LR",
@@ -70,6 +70,25 @@ This function supports a download of the WorldClim v1.4 CMIP5 Future Climate dat
 }
 \note{
 Please note, that this dataset is regarded to as "outdated" by the WorldClim creators. The download of the current dataset "CMIP6" is also provided by this package with the \code{\link{WorldClim.CMIP_6.download}} function.
+}
+\examples{
+## NOT RUN
+## Bioclim
+# WorldClim.CMIP_5.download(parameter = "bio",
+#                           bio.var = c(1,12),
+#                           resolution = "10min",
+#                           model.var = "MPI-ESM-LR",
+#                           emission.scenario.var = "rcp26",
+#                           time.interval.var = "2050")
+## Precipitation
+# WorldClim.CMIP_5.download(parameter = "prec",
+#                           month.var = c(1,12),
+#                           resolution = "10min",
+#                           model.var = "MPI-ESM-LR",
+#                           emission.scenario.var = "rcp26",
+#                           time.interval.var = "2050")
+## NOT RUN
+
 }
 \author{
 Helge Jentsch

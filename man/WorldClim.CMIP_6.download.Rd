@@ -9,7 +9,7 @@ WorldClim.CMIP_6.download(
   parameter = c("prec", "tmax", "tmin", "bio"),
   bio.var = c(1:19),
   month.var = c(1:12),
-  resolution = c("10m", "5m", "2.5m", "30s"),
+  resolution = c("10min", "5min", "2.5min", "30s"),
   model.var = c("BCC-CSM2-MR", "CNRM-CM6-1", "CNRM-ESM2-1", "CanESM5", "GFDL-ESM4",
     "IPSL-CM6A-LR", "MIROC-ES2L", "MIROC6", "MRI-ESM2-0"),
   emission.scenario.var = c("ssp126", "ssp245", "ssp370", "ssp585"),
@@ -65,6 +65,25 @@ WorldClim 2.1 CMIP6 Future climate data sets for the periods of 2021-2040, 2041-
 }
 \description{
 This function supports a download of the WorldClim v2.1 CMIP6 Future Climate dataset. This includes precipitation (mm), temperature (maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+}
+\examples{
+## NOT RUN
+## Bioclim
+# WorldClim.CMIP_6.download(parameter = "bio",
+#                           bio.var = c(1,12),
+#                           resolution = "10min",
+#                           model.var = "MIROC6",
+#                           emission.scenario.var = "ssp126",
+#                           time.interval.var = "2021-2040")
+## Precipitation
+# WorldClim.CMIP_6.download(parameter = "prec",
+#                           month.var = c(1,12),
+#                           resolution = "10min",
+#                           model.var = "MIROC6",
+#                           emission.scenario.var = "ssp126",
+#                           time.interval.var = "2021-2040")
+## END
+
 }
 \author{
 Helge Jentsch

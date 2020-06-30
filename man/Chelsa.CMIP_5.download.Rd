@@ -74,6 +74,23 @@ This function supports a download of the Chelsa CMIP5 future climate data sets. 
 \note{
 For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of Chelsa Climate (\url{http://chelsa-climate.org/future/}).
 }
+\examples{
+## NOT RUN
+## Bioclim
+# Chelsa.CMIP_5.download(parameter = "bio",
+#                        bio.var = c(1,12),
+#                        emission.scenario.var = "rcp26",
+#                        time.interval.var = "2041-2060",
+#                        model.var = "MPI-ESM-LR")
+## Precipitation
+# Chelsa.CMIP_5.download(parameter = "prec",
+#                        month.var = c(1,12),
+#                        emission.scenario.var = "rcp26",
+#                        time.interval.var = "2041-2060",
+#                        model.var = "MPI-ESM-LR")
+## NOT RUN
+
+}
 \author{
 Helge Jentsch
 }
