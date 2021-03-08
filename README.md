@@ -10,11 +10,12 @@ _This R-package was developed as a student project for the masters programm Geog
 As of today an alpha version is released. 
 If you want to test the ClimDatDownloadR-package please feel free to install the package via
 
-`install.packages("https://attachment.rrz.uni-hamburg.de/e5515e88/ClimDatDownloadR-0.1.4.tar.gz", repos = NULL, type = "source")`
+`install.packages("https://attachment.rrz.uni-hamburg.de/e5515e88/ClimDatDownloadR-0.1.5.tar.gz", repos = NULL, type = "source")`
 
 and if you need the dependencies via 
 
-`install.packages(c("httr","ncdf4","raster","RCurl","RefManageR","rgdal","stringr","sf","sp","svMisc","utils"), dependencies = TRUE)`.
+`install.packages(c("gdalUtils", "httr", "ncdf4", "qpdf", "raster", "RCurl", "RefManageR", "rgdal", "stringr", "sf", "sp", "svMisc", "utils"), dependencies = TRUE)`.
+
 
 I would appreciate your feedback and possible bug reports. 
 If you find anything, please send an email to [helge.marc.ole.jentsch@uni-hamburg.de](<mailto:helge.marc.ole.jentsch@uni-hamburg.de>)
