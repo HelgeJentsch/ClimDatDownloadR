@@ -1,0 +1,46 @@
+Package: ClimDatDownloadR
+Type: Package
+Title: Downloads Climate Data from Chelsa and WorldClim
+Version: 0.1.5
+Authors@R: c(person("Helge", "Jentsch", 
+  email = "helge.jentsch@studium.uni-hamburg.de", 
+  role = c("aut", "cre")),
+  person("Maria", "Bobrowski", 
+  email = "maria.bobrowski@uni-hamburg.de", 
+  role = c("aut")),
+  person("Johannes", "Weidinger", 
+  email = "johannes.weidinger@uni-hamburg.de", 
+  role = c("aut")), 
+  person("Nadine", "Kaul", 
+  email = "nadine.kaul@studium.uni-hamburg.de", 
+  role = c("ctb")))
+Maintainer: Helge Jentsch <helge.jentsch@studium.uni-hamburg.de>
+Description: ClimDatDownloadR provides functions to download and save
+    climate data sets from both Chelsa and WorldClim in their
+    various resolution and provided parameters.
+    The output is provided as GEOTIFF, ASCII, or netCDF format.
+    This work is based on work by Karger et al. (2017) 
+    <doi:10.1038/sdata.2017.122> (Chelsa), Hijmans et al. (2005) 
+    <doi:10.1002/joc.1276> (WorldClim 1.4), and Fick and Hijmans (2017)
+    <doi:10.1002/joc.5086> (WorldClim 2.1). A applied comparison of the 
+    two data sets is given by Bobrowski & Schickhoff 2017 
+    <doi:10.1016/j.ecolmodel.2017.05.021>.
+YEAR: 2021
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.6)
+Imports: gdalUtils(>= 2.0.3.2), httr (>= 1.4.1), ncdf4 (>= 1.17), qpdf
+        (>= 1.1), raster (>= 3.1-5), RCurl (>= 1.98), RefManageR (>=
+        1.2.12), rgdal (>= 1.5-10), stringr (>= 1.4.0), sf (>= 0.9-4),
+        sp (>= 1.4-1), svMisc (>= 1.1.0), utils
+RoxygenNote: 7.1.1
+Suggests: knitr, testthat, usethis
+VignetteBuilder: knitr
+SystemRequirements: Tested with at least 4 GB RAM.
+NeedsCompilation: no
+Packaged: 2021-03-08 13:50:27 UTC; helge
+Author: Helge Jentsch [aut, cre],
+  Maria Bobrowski [aut],
+  Johannes Weidinger [aut],
+  Nadine Kaul [ctb]
