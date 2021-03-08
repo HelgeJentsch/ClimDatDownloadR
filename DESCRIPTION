@@ -1,7 +1,7 @@
 Package: ClimDatDownloadR
 Type: Package
 Title: Downloads Climate Data from Chelsa and WorldClim
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(person("Helge", "Jentsch", 
   email = "helge.jentsch@studium.uni-hamburg.de", 
   role = c("aut", "cre")),
@@ -25,20 +25,21 @@ Description: ClimDatDownloadR provides functions to download and save
     <doi:10.1002/joc.5086> (WorldClim 2.1). A applied comparison of the 
     two data sets is given by Bobrowski & Schickhoff 2017 
     <doi:10.1016/j.ecolmodel.2017.05.021>.
-YEAR: 2020
+YEAR: 2021
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.6)
-Imports: httr (>= 1.4.1), ncdf4 (>= 1.17), raster (>= 3.1-5), RCurl (>=
-        1.98), RefManageR (>= 1.2.12), rgdal (>= 1.5-10), stringr (>=
-        1.4.0), sf (>= 0.9-4), sp (>= 1.4-1), svMisc (>= 1.1.0), utils
-RoxygenNote: 7.1.0
-Suggests: knitr, qpdf, testthat, usethis
+Imports: gdalUtils(>= 2.0.3.2), httr (>= 1.4.1), ncdf4 (>= 1.17), qpdf
+        (>= 1.1), raster (>= 3.1-5), RCurl (>= 1.98), RefManageR (>=
+        1.2.12), rgdal (>= 1.5-10), stringr (>= 1.4.0), sf (>= 0.9-4),
+        sp (>= 1.4-1), svMisc (>= 1.1.0), utils
+RoxygenNote: 7.1.1
+Suggests: knitr, testthat, usethis
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2020-08-13 17:48:52 UTC; helge
+Packaged: 2021-03-08 13:50:27 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],
