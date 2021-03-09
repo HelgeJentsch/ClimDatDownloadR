@@ -49,10 +49,6 @@ Chelsa.Clim.download <- function(save.location = "./",
                                  combine.raw.zip = FALSE,
                                  delete.raw.data  = FALSE,
                                  save.bib.file = TRUE){
-  # requireNamespace("stringr")
-  # requireNamespace("RCurl")
-  # requireNamespace("ncdf4")
-  # requireNamespace("raster")
   gc()
   call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
@@ -133,13 +129,14 @@ Chelsa.Clim.download <- function(save.location = "./",
                      "1.2" = "_V1.2",
                      stop())
       ### Download: 3. Preparation of the save location 2. order -----------------
+      vers_path <- str_remove(vers, pattern = "_")
       # set the 2nd order temporal save location to create a
       # managable directory tree in the 1st order directory
       temp.temp.save.location <- paste0(temp.save.location,
                                         str_replace_all(interm,
                                                         pattern = "/",
                                                         "_"),
-                                        vers, "/")
+                                        vers_path, "/")
       # if not already created, create new directory
       if(!dir.exists(temp.temp.save.location)){
         dir.create(temp.temp.save.location)

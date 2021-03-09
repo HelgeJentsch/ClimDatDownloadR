@@ -797,8 +797,6 @@ combine.raw.in.zip <- function(save.location = "./",
                                  stringr::str_replace_all(paste0(Sys.time()), pattern = ":",replacement = "-"),
                                  pattern = " ", replacement = "_")){
   gc()
-  # requireNamespace("utils")
-  # requireNamespace("stringr")
   if(unique.name == FALSE){
     temp.time.stamp.var <- ""
   }else{
@@ -811,19 +809,8 @@ combine.raw.in.zip <- function(save.location = "./",
   reset.wd <- getwd()
   temp.save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
   setwd(temp.save.location)
-  # print(getwd())
   file.path.list <- list.files(temp.save.location, pattern=".tif", full.names = T)
   file.path.list <- stringr::str_replace(file.path.list, pattern = getwd(), replacement = ".")
-
-  # warum?!
-  # print(file.path.list)
-  # file.list <- stringr::str_remove(file.path.list,
-  #                                  pattern = paste0(
-  #                                    normalizePath(temp.save.location, winslash = "/"),
-  #                                    "/"))
-  # file.list <- stringr::str_remove(file.list, pattern = ".tif")
-  # print(file.list)
-
 
   if(!str_detect(utils::sessionInfo()$platform, pattern = "linux")){
     if(length(file.path.list) >= 1){

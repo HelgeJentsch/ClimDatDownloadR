@@ -3,7 +3,7 @@ Type: Package
 Title: Downloads Climate Data from Chelsa and WorldClim
 Version: 0.1.5
 Authors@R: c(person("Helge", "Jentsch", 
-  email = "helge.jentsch@studium.uni-hamburg.de", 
+  email = "helge.marc.ole.jentsch@uni-hamburg.de", 
   role = c("aut", "cre")),
   person("Maria", "Bobrowski", 
   email = "maria.bobrowski@uni-hamburg.de", 
@@ -39,7 +39,7 @@ Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2021-03-09 13:21:02 UTC; helge
+Packaged: 2021-03-09 14:46:19 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],
