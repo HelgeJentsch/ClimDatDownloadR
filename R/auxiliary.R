@@ -820,7 +820,7 @@ combine.raw.in.zip <- function(save.location = "./",
     }
   }else{
     if(length(file.path.list) >= 1){
-      utils::tar(paste0(zip.name, temp.time.stamp.var,".tar"), stringr::str_remove(file.path.list, pattern = "./"))
+      utils::tar(paste0(zip.name, temp.time.stamp.var,".tar"), stringr::str_remove(file.path.list, pattern = ".//"))
     }else{
       warning(paste0("No file in this directory! \n", getwd()))
     }
