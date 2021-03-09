@@ -793,7 +793,9 @@ save.citation <- function(save.location = "./",
 combine.raw.in.zip <- function(save.location = "./",
                                zip.name = "RAWDATA",
                                unique.name = TRUE,
-                               time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),pattern = ":",replacement = "-"), pattern = " ", replacement = "_")){
+                               time.stamp.var = stringr::str_replace_all(
+                                 stringr::str_replace_all(paste0(Sys.time()), pattern = ":",replacement = "-"),
+                                 pattern = " ", replacement = "_")){
   gc()
   # requireNamespace("utils")
   # requireNamespace("stringr")
@@ -811,15 +813,18 @@ combine.raw.in.zip <- function(save.location = "./",
   setwd(temp.save.location)
   # print(getwd())
   file.path.list <- list.files(temp.save.location, pattern=".tif", full.names = T)
-  file.path.list <- stringr::str_replace(file.path.list, pattern = getwd(), replacement = ".") # warum?!
-  # print(file.path.list)
+  file.path.list <- stringr::str_replace(file.path.list, pattern = getwd(), replacement = ".")
 
+  # warum?!
+  # print(file.path.list)
   # file.list <- stringr::str_remove(file.path.list,
   #                                  pattern = paste0(
-  #                                    normalizePath(save.location, winslash = "/"),
+  #                                    normalizePath(temp.save.location, winslash = "/"),
   #                                    "/"))
   # file.list <- stringr::str_remove(file.list, pattern = ".tif")
-  # # print(file.list)
+  # print(file.list)
+
+
   if(!str_detect(utils::sessionInfo()$platform, pattern = "linux")){
     if(length(file.path.list) >= 1){
       utils::zip(paste0(zip.name, temp.time.stamp.var,".zip"), file.path.list)
@@ -828,7 +833,7 @@ combine.raw.in.zip <- function(save.location = "./",
     }
   }else{
     if(length(file.path.list) >= 1){
-      utils::tar(paste0(zip.name, temp.time.stamp.var,".tar"), file.path.list)
+      utils::tar(paste0(zip.name, temp.time.stamp.var,".tar"), stringr::str_remove(file.path.list, pattern = "./"))
     }else{
       warning(paste0("No file in this directory! \n", getwd()))
     }
