@@ -60,10 +60,12 @@ clipping.tif  <- function(clip.save.location = "./",
     if(temp.shp.crs != "GCS"){
       warning("Shapefile is not in GCS! It will be transformed in the next step.",
               immediate. = T)
-      new.extent <- as.numeric(st_bbox(st_transform(temp.shp, 4326))[c(1,3,2,4)])
-      temp.clip.extent <- extent(new.extent)
+      crs_wgs84 <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs")
+      new.extent <- as.numeric(st_bbox(obj = st_transform(x = temp.shp,
+                                                          crs = crs_wgs84))[c(1,3,2,4)])
+      temp.clip.extent <- raster::extent(x = new.extent)
     }else{
-      temp.clip.extent <- extent(as.numeric(st_bbox(temp.shp)[c(1,3,2,4)]))
+      temp.clip.extent <- raster::extent(as.numeric(st_bbox(temp.shp)[c(1,3,2,4)]))
     }
     rm(temp.shp.crs, temp.shp)
     gc()
