@@ -29,17 +29,17 @@ YEAR: 2021
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.6)
+Depends: R (>= 3.6), raster (>= 3.1-5)
 Imports: gdalUtils(>= 2.0.3.2), httr (>= 1.4.1), ncdf4 (>= 1.17), qpdf
-        (>= 1.1), raster (>= 3.1-5), RCurl (>= 1.98), RefManageR (>=
-        1.2.12), rgdal (>= 1.5-10), stringr (>= 1.4.0), sf (>= 0.9-4),
-        sp (>= 1.4-1), svMisc (>= 1.1.0), utils
+        (>= 1.1), RCurl (>= 1.98), RefManageR (>= 1.2.12), rgdal (>=
+        1.5-10), stringr (>= 1.4.0), sf (>= 0.9-4), sp (>= 1.4-1),
+        svMisc (>= 1.1.0), utils
 RoxygenNote: 7.1.1
 Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2021-03-09 16:28:39 UTC; helge
+Packaged: 2021-03-12 15:29:24 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],
