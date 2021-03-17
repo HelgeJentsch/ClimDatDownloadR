@@ -253,10 +253,8 @@ stacking.downloaded.data <- function(stack.save.location = "./",
   if(stack.clipped == TRUE){
     # print(paste0(stack.save.location,"/clipped_", time.stamp.var))
     if(dir.exists(paste0(stack.save.location,"/clipped_", time.stamp.var))){
-      stack.save.location <- c(
-        paste0(stack.save.location,
-               "/clipped_", time.stamp.var),
-        stack.save.location
+      stack.save.location <- c( paste0(stack.save.location,"/clipped_",time.stamp.var)
+                                # , stack.save.location
       )
     }else{
       stop()
