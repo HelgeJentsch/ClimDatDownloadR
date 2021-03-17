@@ -76,16 +76,6 @@ Chelsa.Clim.download <- function(save.location = "./",
 
   # Download: 1. work through all parameters -----------------------------------
   for(i in parameter){
-    # delete all temporary files
-    # temp.dir <- tempdir()
-    # file.list.temporary <- list.files(temp.dir,
-    #                                   all.files = TRUE,
-    #                                   full.names = TRUE,
-    #                                   recursive = FALSE,
-    #                                   include.dirs = FALSE,
-    #                                   pattern = "r_tmp")
-    # print(file.list.temporary)
-    # unlink(file.list.temporary, force = TRUE)
 
     # clear up the temporary directory
     unlink(list.files(tempdir(), recursive = T, full.names=T))
@@ -171,7 +161,6 @@ Chelsa.Clim.download <- function(save.location = "./",
             if(url.exists(URL.temp)){
               # clear up the temporary directory
               unlink(list.files(tempdir(), recursive = T, full.names=T))
-
               # download file to save location
               download.file(url = URL.temp,
                             destfile = dest.temp,
@@ -189,15 +178,13 @@ Chelsa.Clim.download <- function(save.location = "./",
                             cacheOK = FALSE)
               if(i != "prec"){
                 raster.temp <- raster(dest.temp)
-                # raster.values <- values(raster.temp)
-                # raster.values[raster.values==-32768] <- NA
-                # values(raster.temp) <- raster.values
-                # rm(raster.values)
+
                 gc()
                 raster.temp <- clamp(raster.temp, lower = -1000,
                                      useValues = FALSE)
                 gain(raster.temp) <- 0.1
                 gc()
+
                 writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
@@ -564,7 +551,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
         dir.create(paste0(save.location, "/", i))
       }
       temp.save.location <- paste0(save.location, "/", i, "/")
-      print(temp.save.location)
+      # print(temp.save.location)
       for (model in model.var) {
         for (emission.scenario in emission.scenario.var) {
             temp.temp.save.location <- paste0(temp.save.location,
@@ -578,8 +565,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
               dir.create(str_sub(temp.temp.save.location,
                                  end = str_length(temp.temp.save.location)-1))
             }
-            # temp.temp.save.location <- normalizePath(temp.temp.save.location,
-            #                                          winslash = "/")
+
             if(i != "bio"){
               for(month in month.var){
                 dest.temp <- paste0(temp.temp.save.location, "CHELSA_", model,
@@ -602,11 +588,6 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                     if(i != "prec"){
                       gc()
                       raster.temp <- raster(dest.temp)
-                      # raster.values <- values(raster.temp)
-                      # raster.values[raster.values==-32768] <- NA
-                      # values(raster.temp) <- raster.values
-                      # rm(raster.values)
-
                       raster.temp <- clamp(raster.temp, lower = -1000,
                                            useValues = FALSE)
                       gc()
@@ -642,13 +623,16 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                                    time.stamp.var = call.time)
                   }
                   if(stacking.data == TRUE){
-                    stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                             variable.numbers = variable.numbers,
-                                             time.stamp.var = call.time)
                     if(clipping==TRUE){
                       stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                               parameter.var = i,
                                                variable.numbers = variable.numbers,
                                                stack.clipped = TRUE,
+                                               time.stamp.var = call.time)
+                    }else{
+                      stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                               parameter.var = i,
+                                               variable.numbers = variable.numbers,
                                                time.stamp.var = call.time)
                     }
                   }
@@ -724,16 +708,18 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                                    time.stamp.var = call.time)
                   }
                   if(stacking.data == TRUE){
-                    stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                             parameter.var = i,
-                                             variable.numbers = variable.numbers,
-                                             time.stamp.var = call.time)
                     if(clipping==TRUE){
                       stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                                parameter.var = i,
                                                variable.numbers = variable.numbers,
                                                stack.clipped = TRUE,
                                                time.stamp.var = call.time)
+                    }else{
+                      stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                               parameter.var = i,
+                                               variable.numbers = variable.numbers,
+                                               time.stamp.var = call.time)
+
                     }
                   }
                   if(combine.raw.zip == TRUE){
@@ -938,20 +924,14 @@ Chelsa.lgm.download <- function(save.location = "./",
                             quiet = FALSE)
               if(i != "prec"){
                 raster.temp <- raster(dest.temp)
-                # raster.values <- values(raster.temp)
-                # raster.values[raster.values==-32768] <- NA
-                # values(raster.temp) <- raster.values
-                # rm(raster.values)
 
                 raster.temp <- clamp(raster.temp, lower = -1000, useValues= FALSE)
                 gc()
 
-                # Umrechnung Float
-                # raster.temp <- process.raster.int.doub(raster.temp)
+                # Conversion Float
                 gain(raster.temp) <- 0.1
                 # umrechnung Kelvin - Celsius
                 gc()
-                # values(raster.temp) <- as.numeric(values(raster.temp)-273.15)
                 offs(raster.temp) <- -273.15
 
                 writeRaster(raster.temp,
@@ -962,13 +942,8 @@ Chelsa.lgm.download <- function(save.location = "./",
               }else{
                 # for precipitation as http://chelsa-climate.org/last-glacial-maximum-climate/ says
                 raster.temp <- raster(dest.temp)
-                # raster.values <- values(raster.temp)
-                # raster.values[raster.values==32767] <- NA
-                # values(raster.temp) <- raster.values
-                # rm(raster.values)
                 raster.temp <- clamp(raster.temp, upper = 30000, useValues= FALSE)
                 gc()
-                # raster.temp <- process.raster.int.doub(raster.temp)
                 gain(raster.temp) <- 0.1
                 writeRaster(raster.temp,
                             dest.temp,
@@ -999,15 +974,14 @@ Chelsa.lgm.download <- function(save.location = "./",
                              time.stamp.var = call.time)
             }
             if(stacking.data == TRUE){
-              stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                       parameter.var = i,
-                                       variable.numbers = variable.numbers,
-                                       time.stamp.var = call.time)
               if(clipping==TRUE){
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                          parameter.var = i,
-                                         variable.numbers = variable.numbers,
                                          stack.clipped = TRUE,
+                                         time.stamp.var = call.time)
+              }else{
+                stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                         parameter.var = i,
                                          time.stamp.var = call.time)
               }
             }
@@ -1079,13 +1053,14 @@ Chelsa.lgm.download <- function(save.location = "./",
                              time.stamp.var = call.time)
             }
             if(stacking.data == TRUE){
-              stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                       variable.numbers = variable.numbers,
-                                       time.stamp.var = call.time)
               if(clipping==TRUE){
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                         variable.numbers = variable.numbers,
+                                         parameter.var = i,
                                          stack.clipped = TRUE,
+                                         time.stamp.var = call.time)
+              }else{
+                stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                         parameter.var = i,
                                          time.stamp.var = call.time)
               }
             }
@@ -1270,7 +1245,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
                                                       pattern = "/",
                                                       "_"),
                                       "timeseries","/")
-    print(str_sub(temp.temp.save.location, end=-2))
+    # print(str_sub(temp.temp.save.location, end=-2))
     if(!dir.exists(temp.temp.save.location)){
       dir.create(str_sub(temp.temp.save.location, end=-2))
     }
@@ -1280,7 +1255,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
     # if(i == "temp"){
     #   i <- "tmean"
     # }
-    print(interm)
+    # print(interm)
     # Download ----------------------------------------------------------------
     # if(i != "bio"){
     for (year_month in ts_string){
@@ -1348,17 +1323,18 @@ Chelsa.timeseries.download <- function(save.location = "./",
                          time.stamp.var = call.time)
         }
         if(stacking.data == TRUE){
-          stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                   parameter.var = i,
-                                   variable.numbers = variable.numbers,
-                                   stack.time.series = TRUE,
-                                   time.series = ts_string,
-                                   time.stamp.var = call.time)
           if(clipping==TRUE){
             stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                      parameter.var = i,
                                      variable.numbers = variable.numbers,
                                      stack.clipped = TRUE,
+                                     stack.time.series = TRUE,
+                                     time.series = ts_string,
+                                     time.stamp.var = call.time)
+          }else{
+            stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                     parameter.var = i,
+                                     variable.numbers = variable.numbers,
                                      stack.time.series = TRUE,
                                      time.series = ts_string,
                                      time.stamp.var = call.time)
@@ -1376,79 +1352,6 @@ Chelsa.timeseries.download <- function(save.location = "./",
         }
       }
     }
-    # }else{
-    #   for (bio in bio.var){
-    #     for (year in start.year.var:end.year.var) {
-    #       URL.temp <-
-    #         paste0("https://envidatrepo.wsl.ch/uploads/chelsa/chelsa_V1/timeseries/",
-    #                interm, "CHELSA_", i, bio,"_",year,
-    #                "_V1.2.1.tif")
-    #       # check if URL is available
-    #       if(url.exists(URL.temp)){
-    #         # download file to save location
-    #         download.file(url = URL.temp,
-    #                       destfile = paste0(temp.temp.save.location,
-    #                                         "CHELSA_", year,"_", i,"_",bio,
-    #                                         "_V1.2.1.tif"),
-    #                       overwrite = TRUE,
-    #                       mode = 'wb',
-    #                       quiet = FALSE)
-    #
-    #         if(bio <= 11){
-    #           # raster.values <- values(raster.temp)
-    #           # raster.values[raster.values==-32768] <- NA
-    #           # values(raster.temp) <- raster.values
-    #           # rm(raster.values)
-    #           raster.temp <- raster(paste0(temp.temp.save.location,
-    #                                        "CHELSA_", year,"_", i,"_",bio,
-    #                                        "_V1.2.1.tif"))
-    #           values(raster.temp) <- as.numeric(values(raster.temp)/10)
-    #           values(raster.temp) <- as.numeric(values(raster.temp)-273.15)
-    #           writeRaster(raster.temp,
-    #                       paste0(temp.temp.save.location,
-    #                              "CHELSA_", year,"_", i,"_",bio,
-    #                              "_V1.2.1.tif"),
-    #                       overwrite = TRUE)
-    #         }
-    #       }else{
-    #         # Warning message
-    #         warning(paste0("File does not exist. Did not download: \n", URL.temp, "\n\n"),
-    #                 call. = TRUE, immediate. = FALSE)
-    #       }
-    #     }
-    #     if(bio == bio.var[length(bio.var)] &
-    #        length(list.files(temp.temp.save.location,
-    #                          pattern = ".tif",
-    #                          include.dirs = FALSE)) != 0){
-    #       if(clipping == TRUE){
-    #         clipping.tif(clip.save.location = temp.temp.save.location,
-    #                      clip.shapefile = clip.shapefile,
-    #                      clip.extent = clip.extent,
-    #                      convert.files.to.asc = convert.files.to.asc,
-    #                      buffer = buffer,
-    #                      time.stamp.var = call.time)
-    #       }
-    #       if(convert.files.to.asc == TRUE){
-    #         convert.to.asc(temp.temp.save.location,
-    #                        time.stamp.var = call.time)
-    #       }
-    #       if(stacking.data == TRUE){
-    #         stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-    #                                  time.stamp.var = call.time)
-    #       }
-    #       if(combine.raw.zip == TRUE){
-    #         combine.raw.in.zip(save.location = temp.temp.save.location,
-    #                            zip.name = paste0("ChelsaTimeseries_", i, ""),
-    #                            time.stamp.var = call.time)
-    #       }
-    #       if(delete.raw.data == TRUE){
-    #         unlink(list.files(temp.temp.save.location,
-    #                           pattern = ".tif",
-    #                           include.dirs = FALSE, full.names = T), force = TRUE)
-    #       }
-    #     }
-    #   }
-    # }
 
     # Clean up, if no data was downloaded. ------------------------------------
 
@@ -1692,13 +1595,20 @@ Chelsa.CRUts.download <- function(save.location = "./",
                          time.stamp.var = call.time)
         }
         if(stacking.data == TRUE){
-          stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                   variable.numbers = variable.numbers,
-                                   time.stamp.var = call.time)
           if(clipping==TRUE){
             stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                     parameter.var = i,
                                      variable.numbers = variable.numbers,
                                      stack.clipped = TRUE,
+                                     stack.time.series = TRUE,
+                                     time.series = ts_string,
+                                     time.stamp.var = call.time)
+          }else{
+            stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                     parameter.var = i,
+                                     variable.numbers = variable.numbers,
+                                     stack.time.series = TRUE,
+                                     time.series = ts_string,
                                      time.stamp.var = call.time)
           }
         }
