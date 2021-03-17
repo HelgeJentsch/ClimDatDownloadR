@@ -215,9 +215,6 @@ stacking.downloaded.data <- function(stack.save.location = "./",
                                      time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),pattern = ":",replacement = "-"), pattern = " ", replacement = "_")
 ){
   gc()
-  # requireNamespace("raster")
-  # requireNamespace("stringr")
-  # requireNamespace("ncdf4")
 
   # Abbruchbedingungen
   if(!(is.element("prec", parameter.var)|is.element("temp", parameter.var)|
