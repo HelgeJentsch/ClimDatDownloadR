@@ -34,13 +34,13 @@ clipping.tif  <- function(clip.save.location = "./",
   global.crs <- raster::crs(
     raster::projection("+proj=longlat +datum=WGS84 +no_defs")
   )
-  if((length(clip.extent) != 4) & !is.null(clip.extent)) stop("URGH")
-  if((is.null(clip.shapefile) & is.null(clip.extent))) stop("ARGH")
+  if((length(clip.extent) != 4) & !is.null(clip.extent)) stop("Please enter a extent as shown in the help! E.g. c(0, 30, 25, 80)")
+  if((is.null(clip.shapefile) & is.null(clip.extent))) stop("Please provide a valid extent or shapefile to which the files should be clipped!")
   temp.list.files <- list.files(clip.save.location,
                                 full.names = TRUE,
                                 recursive = FALSE,
                                 pattern = ".tif")
-  if(length(temp.list.files) == 0) stop()
+  if(length(temp.list.files) == 0) stop(paste0("No files found at location: ", clip.save.location))
   temp.list.file.names <- list.files(clip.save.location,
                                      full.names = FALSE,
                                      recursive = FALSE,
@@ -255,7 +255,11 @@ stacking.downloaded.data <- function(stack.save.location = "./",
                                 # , stack.save.location
       )
     }else{
-      stop()
+      stop(paste0("No clipped data found at: '",
+                  paste0(stack.save.location,"/clipped_",time.stamp.var),
+                  "'\n Try calling the function directly on the directory '",
+                  stack.save.location,
+                  "' and set the parameter 'stack.clipped' to FALSE."))
     }
   }
   # print(stack.save.location)
