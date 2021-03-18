@@ -502,15 +502,17 @@ WorldClim.HistClim.download <- function(save.location = "./",
           # (found in the auxiliary.R-File) is executed.
           # The save.location is the same location as the
           # "current" save location.
-          stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                   parameter.var = parm,
-                                   variable.numbers = variable.numbers,
-                                   time.stamp.var = call.time)
+
           if(clipping==TRUE){
             stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                      parameter.var = parm,
                                      variable.numbers = variable.numbers,
                                      stack.clipped = TRUE,
+                                     time.stamp.var = call.time)
+          }else{
+            stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                     parameter.var = parm,
+                                     variable.numbers = variable.numbers,
                                      time.stamp.var = call.time)
           }
         }
@@ -993,17 +995,19 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
               # (found in the auxiliary.R-File) is executed.
               # The save.location is the same location as the
               # "current" save location.
-              stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                       parameter.var = parm.temp,
-                                       variable.numbers = variable.numbers,
-                                       time.stamp.var = call.time)
+
               if(clipping==TRUE){
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                          parameter.var = parm.temp,
                                          variable.numbers = variable.numbers,
                                          stack.clipped = TRUE,
                                          time.stamp.var = call.time)
-              }
+              }else{
+                stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                             parameter.var = parm.temp,
+                                             variable.numbers = variable.numbers,
+                                             time.stamp.var = call.time)
+                }
             }
             # if delete.raw.data is TRUE ...
             if(delete.raw.data == TRUE){
@@ -1368,15 +1372,17 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
               # (found in the auxiliary.R-File) is executed.
               # The save.location is the same location as the
               # "current" save location.
-              stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                       parameter.var = parm.temp,
-                                       variable.numbers = variable.numbers,
-                                       time.stamp.var = call.time)
+
               if(clipping==TRUE){
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                          parameter.var = parm.temp,
                                          variable.numbers = variable.numbers,
                                          stack.clipped = TRUE,
+                                         time.stamp.var = call.time)
+              }else{
+                stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                         parameter.var = parm.temp,
+                                         variable.numbers = variable.numbers,
                                          time.stamp.var = call.time)
               }
             }

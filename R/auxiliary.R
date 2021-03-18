@@ -55,7 +55,7 @@ clipping.tif  <- function(clip.save.location = "./",
     if(is.na(temp.shp.crs)){
       # print(temp.shp)
       stop(paste0("No spatial reference was found. \n",
-           "Please set the spatial reference of the shapefile and restart!"), )
+                  "Please set the spatial reference of the shapefile and restart!"), )
     }
     if(temp.shp.crs != "GCS"){
       warning("Shapefile is not in GCS! It will be transformed in the next step.",
@@ -215,7 +215,6 @@ stacking.downloaded.data <- function(stack.save.location = "./",
                                      time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),pattern = ":",replacement = "-"), pattern = " ", replacement = "_")
 ){
   gc()
-
   # Abbruchbedingungen
   if(!(is.element("prec", parameter.var)|is.element("temp", parameter.var)|
        is.element("tmax", parameter.var)|is.element("tmin", parameter.var)|
@@ -251,7 +250,6 @@ stacking.downloaded.data <- function(stack.save.location = "./",
                                      pattern = ".tif")
 
   if(stack.clipped == TRUE){
-    # print(paste0(stack.save.location,"/clipped_", time.stamp.var))
     if(dir.exists(paste0(stack.save.location,"/clipped_", time.stamp.var))){
       stack.save.location <- c( paste0(stack.save.location,"/clipped_",time.stamp.var)
                                 # , stack.save.location
@@ -304,194 +302,15 @@ stacking.downloaded.data <- function(stack.save.location = "./",
           rm(temp.raster)
           gc()
 
-          # print(temp.stack.files[layer])
-          # temp.raster <- raster(temp.stack.files[layer])
-          # # temp.raster <- flip(temp.raster, direction = 2)
-          # # cellsize <- (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols
-          # # Tipp: Hijmans:
-          # cellsize <- res(temp.raster)
-          #
-          # # Set Longitudes
-          # # lon <- as.array(seq(temp.raster@extent@xmin+cellsize/2,
-          # #                     temp.raster@extent@xmax-cellsize/2,
-          # #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-          # # Tipp: Hijmans:
-          # lon <- yFromRow(temp.raster, 1:nrow(temp.raster))
-          # nlon <- length(lon)
-          #
-          # # Set Latitudes
-          # # lat <- as.array(seq(temp.raster@extent@ymin+cellsize/2,
-          # #                     temp.raster@extent@ymax-cellsize/2,
-          # #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-          # # Tipp: Hijmans:
-          # lat <- xFromRow(temp.raster, 1:ncol(temp.raster))
-          #
-          # nlat <- length(lat)
-          #
-          #
-          # temp.raster.data <- t(apply(matrix(data = as.numeric(values(temp.raster)),
-          #                                    nrow = nlat,
-          #                                    ncol = nlon,
-          #                                    byrow = TRUE),
-          #                             2,
-          #                             rev))
-          # temp.raster.data <- array(temp.raster.data, dim=c(nlon,nlat,1))
-          # rm(temp.raster)
-          # gc()
-          # openNC <- nc_open(filename = paste0(directory,
-          #                                     "/stacked", time.stamp.var, ".nc"),
-          #                   write = TRUE)
-          # parameter.var.dim <- paste0(parameter.var,"_dim")
-          # ncvar_put(openNC,
-          #           varid = parameter.var.dim,
-          #           vals = layer,
-          #           start = layer,
-          #           count = 1
-          # )
-          # ncvar_put(openNC,
-          #           varid = parameter.var,
-          #           vals = temp.raster.data,
-          #           start = c(1,1,layer),
-          #           count = c(nlon, nlat, 1)
-          # )
-          # # ncvar_put(openNC,
-          # #           varid = parameter.var,
-          # #           vals = variable.numbers[layer],
-          # #           start = c(layer),
-          # #           count = 1
-          # # )
-          # nc_close(openNC)
-          # rm(openNC, temp.raster.data)
-          # gc()
-
         }else{
           gc()
           temp.raster <- raster(x = temp.stack.files[layer])
           temp.raster.stack <- stack(temp.raster)
           rm(temp.raster)
           gc()
-          # temp.raster <- raster(temp.stack.files[layer])
-          # # temp.raster@data@values[temp.raster@data@values == 65535] <- NA
-          # # temp.raster <- flip(temp.raster, direction = 2)
-          # # Calculate cellsize
-          # cellsize <- (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols
-          #
-          # # Set Longitudes
-          # lon <- as.array(seq(temp.raster@extent@xmin+cellsize/2,
-          #                     temp.raster@extent@xmax-cellsize/2,
-          #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-          # nlon <- length(lon)
-          #
-          # # Set Latitudes
-          # lat <- as.array(seq(temp.raster@extent@ymin+cellsize/2,
-          #                     temp.raster@extent@ymax-cellsize/2,
-          #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-          # nlat <- length(lat)
-          #
-          # # Get time in netcdf units
-          # variable.numbers <- variable.numbers
-          # nVar <- length(variable.numbers)
-          #
-          # # was: rotate(matrix(as.integer(values(temp.raster)),
-          #
-          # temp.raster.data <- t(apply(matrix(data = as.numeric(values(temp.raster)),
-          #                                    nrow = nlat,
-          #                                    ncol = nlon,
-          #                                    byrow = TRUE),
-          #                             MARGIN = 2,
-          #                             FUN = rev))
-          # # temp.raster.data <- array(temp.raster, dim=c(nlon,nlat,1))
-          #
-          # # temp.raster.data <- array(temp.raster, dim=c(nlon,nlat,1))
-          # rm(temp.raster)
-          # gc()
-          # # path and file name, set dname
-          # ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
-          # # PREC_dname <- 'prec'
-          #
-          # # create and write the netCDF file -- ncdf4 version
-          # # define dimensions
-          # londim <- ncdim_def('lon','degrees_east',as.double(lon))
-          # latdim <- ncdim_def('lat','degrees_north',as.double(lat))
-          # parameter.var.dim <- paste0(parameter.var,"_dim")
-          # vardim <- ncdim_def(parameter.var.dim, var.units, vals = as.integer(nVar), unlim = TRUE)
-          #
-          #
-          # # define variables
-          # fillvalue <- -9999
-          # # PREC_dlname <- 'precipitation'
-          # var_def <- ncvar_def(name = parameter.var,
-          #                      units = var.units,
-          #                      dim = list(londim,latdim,vardim),
-          #                      missval = fillvalue
-          #                      # ,prec = 'single'
-          # )
-          #
-          # # create netCDF file and put arrays
-          # openNC <- nc_create(filename = ncfname,
-          #                     vars = list(var_def),
-          #                     force_v4 = TRUE)
-          #
-          # # put variables
-          # ncvar_put(openNC,
-          #           var_def,
-          #           temp.raster.data)
-          #
-          # # # ncvar_put(openNC,
-          # # #           # varid = parameter.var,
-          # # #           vals = variable.numbers[layer],
-          # # #           start = c(1,1,layer),
-          # # #           count = 1
-          # # # )
-          # # eval(parse(text = paste0(
-          # #   "print(openNC$var$",parameter.var,"$dim[[1]]$len)"
-          # # )))
-          # #
-          # # ncvar_put(openNC,
-          # #             varid = var_def,
-          # #             vals = temp.raster.data,
-          # #             verbose = TRUE)"
-          # #
-          # # # ncvar_put(openNC,
-          # # #           varid = parameter.var,
-          # # #           vals = temp.raster.data,
-          # # #           start = c(openNC$var$Variable$dim[[1]]$len,
-          # # #                     openNC$var$Variable$dim[[2]]$len,
-          # # #                     layer),
-          # # #           count = c(openNC$var$Variable$dim[[1]]$len,
-          # # #                     openNC$var$Variable$dim[[2]]$len,
-          # # #                     1),
-          # # #           verbose = TRUE)
-          #
-          #
-          # # put additional attributes into dimension and data variables
-          # # ncatt_put(openNC,"lon","axis","X")
-          # # ncatt_put(openNC,"lat","axis","Y")
-          # ncatt_put(openNC,parameter.var.dim,"axis",var.units)
-          #
-          # # add global attributes
-          # # ncatt_put(openNC,0,"title",'CentralAsia - Chelsa PRECIPITATION Data' )
-          # # ncatt_put(openNC,0,"institution",'University of Hamburg - CEN')
-          # # ncatt_put(openNC,0,"source",'CHELSA')
-          # # ncatt_put(openNC,0,"references",'Paper XX')
-          # # history <- paste("J.W.H. Weidinger", date(), sep=", ")
-          # # ncatt_put(openNC,0,"history",history)
-          # # ncatt_put(openNC,0,"Conventions",'Genau so')
-          #
-          # # Get a summary of the created file:
-          # # openNC
-          #
-          # # close the file, writing data to disk
-          # nc_close(openNC)
-          # rm(openNC)
-          # gc()
         }
         if(layer == length(temp.stack.files)){
-          # for (naminglayer in 1:length(temp.stack.files)) {
-          #   print(temp.raster.stack@layers[[naminglayer]]@data@names)
-          #   temp.raster.stack@layers[[naminglayer]]@data@names <- temp.stack.file.names[naminglayer]
-          # }
-          # print(temp.raster.stack@data@names)
+
           ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
           gc()
           writeRaster(x = temp.raster.stack,
@@ -504,7 +323,7 @@ stacking.downloaded.data <- function(stack.save.location = "./",
           )
           gc()
           nc <- nc_open(ncfname, write = TRUE)
-          ncvar_put(nc, as.character(var.units), as.integer(variable.numbers))
+          ncvar_put(nc = nc, varid = as.character(var.units), vals = as.integer(variable.numbers))
           nc_close(nc)
         }
       }
@@ -516,197 +335,15 @@ stacking.downloaded.data <- function(stack.save.location = "./",
           temp.raster.stack <- addLayer(temp.raster.stack, temp.raster)
           rm(temp.raster)
           gc()
-          {
-            # print(temp.stack.files[layer])
-            # temp.raster <- raster(temp.stack.files[layer])
-            # # temp.raster <- flip(temp.raster, direction = 2)
-            # # cellsize <- (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols
-            # # Tipp: Hijmans:
-            # cellsize <- res(temp.raster)
-            #
-            # # Set Longitudes
-            # # lon <- as.array(seq(temp.raster@extent@xmin+cellsize/2,
-            # #                     temp.raster@extent@xmax-cellsize/2,
-            # #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-            # # Tipp: Hijmans:
-            # lon <- yFromRow(temp.raster, 1:nrow(temp.raster))
-            # nlon <- length(lon)
-            #
-            # # Set Latitudes
-            # # lat <- as.array(seq(temp.raster@extent@ymin+cellsize/2,
-            # #                     temp.raster@extent@ymax-cellsize/2,
-            # #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-            # # Tipp: Hijmans:
-            # lat <- xFromRow(temp.raster, 1:ncol(temp.raster))
-            #
-            # nlat <- length(lat)
-            #
-            #
-            # temp.raster.data <- t(apply(matrix(data = as.numeric(values(temp.raster)),
-            #                                    nrow = nlat,
-            #                                    ncol = nlon,
-            #                                    byrow = TRUE),
-            #                             2,
-            #                             rev))
-            # temp.raster.data <- array(temp.raster.data, dim=c(nlon,nlat,1))
-            # rm(temp.raster)
-            # gc()
-            # openNC <- nc_open(filename = paste0(directory,
-            #                                     "/stacked", time.stamp.var, ".nc"),
-            #                   write = TRUE)
-            # parameter.var.dim <- paste0(parameter.var,"_dim")
-            # ncvar_put(openNC,
-            #           varid = parameter.var.dim,
-            #           vals = layer,
-            #           start = layer,
-            #           count = 1
-            # )
-            # ncvar_put(openNC,
-            #           varid = parameter.var,
-            #           vals = temp.raster.data,
-            #           start = c(1,1,layer),
-            #           count = c(nlon, nlat, 1)
-            # )
-            # # ncvar_put(openNC,
-            # #           varid = parameter.var,
-            # #           vals = variable.numbers[layer],
-            # #           start = c(layer),
-            # #           count = 1
-            # # )
-            # nc_close(openNC)
-            # rm(openNC, temp.raster.data)
-            # gc()
-          }
+
         }else{
           gc()
           temp.raster <- raster(x = temp.stack.files[layer])
           temp.raster.stack <- stack(temp.raster)
           rm(temp.raster)
           gc()
-          {
-            # temp.raster <- raster(temp.stack.files[layer])
-            # # temp.raster@data@values[temp.raster@data@values == 65535] <- NA
-            # # temp.raster <- flip(temp.raster, direction = 2)
-            # # Calculate cellsize
-            # cellsize <- (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols
-            #
-            # # Set Longitudes
-            # lon <- as.array(seq(temp.raster@extent@xmin+cellsize/2,
-            #                     temp.raster@extent@xmax-cellsize/2,
-            #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-            # nlon <- length(lon)
-            #
-            # # Set Latitudes
-            # lat <- as.array(seq(temp.raster@extent@ymin+cellsize/2,
-            #                     temp.raster@extent@ymax-cellsize/2,
-            #                     (temp.raster@extent@xmax-temp.raster@extent@xmin)/temp.raster@ncols))
-            # nlat <- length(lat)
-            #
-            # # Get time in netcdf units
-            # variable.numbers <- variable.numbers
-            # nVar <- length(variable.numbers)
-            #
-            # # was: rotate(matrix(as.integer(values(temp.raster)),
-            #
-            # temp.raster.data <- t(apply(matrix(data = as.numeric(values(temp.raster)),
-            #                                    nrow = nlat,
-            #                                    ncol = nlon,
-            #                                    byrow = TRUE),
-            #                             MARGIN = 2,
-            #                             FUN = rev))
-            # # temp.raster.data <- array(temp.raster, dim=c(nlon,nlat,1))
-            #
-            # # temp.raster.data <- array(temp.raster, dim=c(nlon,nlat,1))
-            # rm(temp.raster)
-            # gc()
-            # # path and file name, set dname
-            # ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
-            # # PREC_dname <- 'prec'
-            #
-            # # create and write the netCDF file -- ncdf4 version
-            # # define dimensions
-            # londim <- ncdim_def('lon','degrees_east',as.double(lon))
-            # latdim <- ncdim_def('lat','degrees_north',as.double(lat))
-            # parameter.var.dim <- paste0(parameter.var,"_dim")
-            # vardim <- ncdim_def(parameter.var.dim, var.units, vals = as.integer(nVar), unlim = TRUE)
-            #
-            #
-            # # define variables
-            # fillvalue <- -9999
-            # # PREC_dlname <- 'precipitation'
-            # var_def <- ncvar_def(name = parameter.var,
-            #                      units = var.units,
-            #                      dim = list(londim,latdim,vardim),
-            #                      missval = fillvalue
-            #                      # ,prec = 'single'
-            # )
-            #
-            # # create netCDF file and put arrays
-            # openNC <- nc_create(filename = ncfname,
-            #                     vars = list(var_def),
-            #                     force_v4 = TRUE)
-            #
-            # # put variables
-            # ncvar_put(openNC,
-            #           var_def,
-            #           temp.raster.data)
-            #
-            # # # ncvar_put(openNC,
-            # # #           # varid = parameter.var,
-            # # #           vals = variable.numbers[layer],
-            # # #           start = c(1,1,layer),
-            # # #           count = 1
-            # # # )
-            # # eval(parse(text = paste0(
-            # #   "print(openNC$var$",parameter.var,"$dim[[1]]$len)"
-            # # )))
-            # #
-            # # ncvar_put(openNC,
-            # #             varid = var_def,
-            # #             vals = temp.raster.data,
-            # #             verbose = TRUE)"
-            # #
-            # # # ncvar_put(openNC,
-            # # #           varid = parameter.var,
-            # # #           vals = temp.raster.data,
-            # # #           start = c(openNC$var$Variable$dim[[1]]$len,
-            # # #                     openNC$var$Variable$dim[[2]]$len,
-            # # #                     layer),
-            # # #           count = c(openNC$var$Variable$dim[[1]]$len,
-            # # #                     openNC$var$Variable$dim[[2]]$len,
-            # # #                     1),
-            # # #           verbose = TRUE)
-            #
-            #
-            # # put additional attributes into dimension and data variables
-            # # ncatt_put(openNC,"lon","axis","X")
-            # # ncatt_put(openNC,"lat","axis","Y")
-            # ncatt_put(openNC,parameter.var.dim,"axis",var.units)
-            #
-            # # add global attributes
-            # # ncatt_put(openNC,0,"title",'CentralAsia - Chelsa PRECIPITATION Data' )
-            # # ncatt_put(openNC,0,"institution",'University of Hamburg - CEN')
-            # # ncatt_put(openNC,0,"source",'CHELSA')
-            # # ncatt_put(openNC,0,"references",'Paper XX')
-            # # history <- paste("J.W.H. Weidinger", date(), sep=", ")
-            # # ncatt_put(openNC,0,"history",history)
-            # # ncatt_put(openNC,0,"Conventions",'Genau so')
-            #
-            # # Get a summary of the created file:
-            # # openNC
-            #
-            # # close the file, writing data to disk
-            # nc_close(openNC)
-            # rm(openNC)
-            # gc()
-          }
         }
         if(layer == length(temp.stack.files)){
-          # for (naminglayer in 1:length(temp.stack.files)) {
-          #   print(temp.raster.stack@layers[[naminglayer]]@data@names)
-          #   temp.raster.stack@layers[[naminglayer]]@data@names <- temp.stack.file.names[naminglayer]
-          # }
-          # print(temp.raster.stack@data@names)
           ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
           gc()
           writeRaster(x = temp.raster.stack,
