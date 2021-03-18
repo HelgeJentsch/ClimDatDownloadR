@@ -829,13 +829,13 @@ Chelsa.lgm.download <- function(save.location = "./",
   if(is.element("prec", parameter)|is.element("temp", parameter)|
      is.element("tmax", parameter)|is.element("tmin", parameter)){
     month.var <- c(month.var)
-    if(!is.numeric(month.var)) stop()
+    if(!is.numeric(month.var)) stop("month.var needs to be a numeric vector")
     # month.var <- str_pad(month.var, 2, 'left', pad = "0")
   }
 
   if(is.element("bio", parameter)){
     bio.var <- c(bio.var)
-    if(!is.numeric(bio.var)) stop()
+    if(!is.numeric(bio.var)) stop("bio.var needs to be a numeric vector")
     bio.var <- as.character(bio.var)
     bio.var <- str_pad(bio.var, 2, 'left', pad = "0")
     # print(bio.var)
@@ -982,6 +982,7 @@ Chelsa.lgm.download <- function(save.location = "./",
               }else{
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                          parameter.var = i,
+                                         variable.numbers = variable.numbers,
                                          time.stamp.var = call.time)
               }
             }
