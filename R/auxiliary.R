@@ -380,7 +380,9 @@ stacking.downloaded.data <- function(stack.save.location = "./",
 #'@note DISCLAIMER: No warranty or liability! The citations are provided without any warranty of any kind whatsoever, either expressed or implied, including warranties of merchantability and fitness for a particular purpose. The author should not be responsible for any incomplete citation of datasets or climate data products downloaded through this package.
 #'
 #'@importFrom RefManageR ReadCrossRef
+#'@importFrom RefManageR ReadBib
 #'@importFrom RefManageR WriteBib
+#'@importFrom utils download.file
 #'
 #'@export
 save.citation <- function(save.location = "./",
@@ -392,25 +394,57 @@ save.citation <- function(save.location = "./",
   save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
 
   if(dataSetName == "Chelsa"){
+    print("Please regard 'https://chelsa-climate.org/downloads/' for correct citations.")
     if(!file.exists(paste0(save.location, "chelsa_citation.bib"))){
+      # citation_  <- RefManageR::ReadCrossRef("")
+
       citation_paper <- RefManageR::ReadCrossRef("10.1038/sdata.2017.122")
+      citation_CHELSA_cmip5_ts <- RefManageR::ReadCrossRef("10.1038/s41597-020-00587-y")
+      citation_PBCOR <- RefManageR::ReadCrossRef("10.1175/JCLI-D-19-0332.1")
+
+      # Data
       citation_data <- RefManageR::ReadCrossRef("10.5061/dryad.kd1d4")
-      print(citation_paper)
-      print(citation_data)
-      RefManageR::WriteBib(bib = c(citation_paper, citation_data), file = paste0(save.location, "chelsa_citation.bib"))
+      utils::download.file("https://www.envidat.ch/dataset/eur11/export/bibtex.bib",
+                           destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
+      citation_EUR11 <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
+      unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      utils::download.file("https://www.envidat.ch/dataset/chelsacruts/export/bibtex.bib",
+                           destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
+      citation_CHELSAcruts_data   <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
+      unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      utils::download.file("https://www.envidat.ch/dataset/chelsa_cmip5_ts/export/bibtex.bib",
+                           destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
+      citation_CHELSA_cmip5_ts_data  <-  RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
+      unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+
+      # Old versions
+      citation_Version1.0  <- RefManageR::ReadCrossRef("10.1594/WDCC/CHELSA_v1")
+      citation_Version1.1  <- RefManageR::ReadCrossRef("10.1594/WDCC/CHELSA_v1_1")
+
+      eval(parse(text = paste0("print(c(", paste(ls(pattern = "citation_"), collapse = ","),"))")))
+      eval(parse(text = paste0("RefManageR::WriteBib(bib = c(",
+                               paste(ls(pattern = "citation_"), collapse = ","),
+                               "), file = paste0(save.location, 'chelsa_citation.bib'))")))
     }
   }
   if (dataSetName == "WorldClim1.4") {
+    print("Please regard 'www.worldclim.org' for correct citations.")
     if(!file.exists(paste0(save.location, "Worldclim14_citation.bib"))){
-      citation <- RefManageR::ReadCrossRef("10.1002/joc.1276")
-      RefManageR::WriteBib(bib = citation, file = paste0(save.location, "Worldclim14_citation.bib"))
+      citation_WC14 <- RefManageR::ReadCrossRef("10.1002/joc.1276")
+      # citation_  <- RefManageR::ReadCrossRef("")
+      print(citation_WC14)
+      RefManageR::WriteBib(bib = citation_WC14, file = paste0(save.location, "Worldclim14_citation.bib"))
     }
   }
   if (dataSetName == "WorldClim2.1") {
+    print("Please regard 'www.worldclim.org' for correct citations.")
     if(!file.exists(paste0(save.location, "WorldClim21_citation.bib"))){
-      citation <- RefManageR::ReadCrossRef("10.1002/joc.5086")
-      print(citation)
-      RefManageR::WriteBib(bib = citation, file = paste0(save.location, "WorldClim21_citation.bib"))
+      citation_WC21_hist_Clim_Monthly <- RefManageR::ReadCrossRef("10.1002/joc.5086")
+      citation_WC21_CRUTS403 <- RefManageR::ReadCrossRef("10.1002/joc.3711")
+
+      print(c(citation_WC21_hist_Clim_Monthly, citation_WC21_CRUTS403))
+      RefManageR::WriteBib(bib = c(citation_WC21_hist_Clim_Monthly, citation_WC21_CRUTS403),
+                           file = paste0(save.location, "WorldClim21_citation.bib"))
     }
   }
 }
