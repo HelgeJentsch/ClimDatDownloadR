@@ -1057,11 +1057,13 @@ Chelsa.lgm.download <- function(save.location = "./",
               if(clipping==TRUE){
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                          parameter.var = i,
+                                         variable.numbers = variable.numbers,
                                          stack.clipped = TRUE,
                                          time.stamp.var = call.time)
               }else{
                 stacking.downloaded.data(stack.save.location = temp.temp.save.location,
                                          parameter.var = i,
+                                         variable.numbers = variable.numbers,
                                          time.stamp.var = call.time)
               }
             }
