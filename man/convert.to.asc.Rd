@@ -19,7 +19,7 @@ convert.to.asc(
 This function returns ASCII-format raster files to a new directory. This directory is dynamically created.
 }
 \description{
-This function Converts all .tif-raster files in a specified directory into an ASCII-File format in a new directory named "ASCII_files" with a unique timestamp of the current system time.
+This function converts and saves all .tif-raster files to ASCII-file format to a specified location and creates a new folder named "ASCII_files" with a unique timestamp of the current system time.
 }
 \examples{
 convert.to.asc(save.location = system.file("pictures/", package = "rgdal"))

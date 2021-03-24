@@ -1,14 +1,16 @@
-#'@title Function for downloading the WorldClim Historical Climate dataset
+#'@title Function for downloading the WorldClim historical climate dataset
 #'@author Helge Jentsch
-#'@description This function supports a download of the WorldClim Historical Climate dataset.  \cr This includes precipitation (mm), temperature (average, maximum, minimum; °C), solar radiation (kJ m-2 day-1), wind speed (m s-1), water vapor pressure (kPa) and bioclimatic parameters. Also an elevation raster is provided. \cr For convenience also a clipping-, conversion to ASCII-grid, and stacking-tool is included in this function. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
-#'@note Please note, that  solar radiation, wind speed, water vapor pressure, bioclimatic parameters, and elevation raster are only provided by the WorldClim Version 2.1 (current version).
+#'@description This function supports the download, pre-processing and management of the WorldClim historical climate dataset.\cr This comprises of monthly precipitation sums (mm), temperature (average, maximum, minimum; °C), monthly solar radiation sums (kJ m-2 day-1), wind speed (m s-1), water vapor pressure (kPa), and annual chracteristics (19 bioclimatic variables). Also an elevation raster is provided.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'
+#'@note Please note that  solar radiation, wind speed, water vapor pressure, bioclimatic parameters, and elevation raster are only provided by the WorldClim Version 2.1 (current version).
+#'@note Please note also that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution.
 #'
 #'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
 #'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "temp", "tmax","tmin", "srad", "wind", "vapr", "bio", "elev").}
 #'@param bio.var integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{https://www.worldclim.org/data/bioclim.html}. \cr Default: \code{c(1:19)}
 #'@param month.var integer (vector). Input which monthly data should be downloaded. \cr Default: \code{c(1:12)}
 #'@param resolution string (vector). Ranging from a 10 arc-minute resolution over 5 and 2.5 arc-minute to 30 arc-second resolution.\cr Default: \code{c("10m", "5m", "2.5m", "30s")}
-#'@param version.var string (vector). Input which version of the data set should be downloaded. Multiple selection is possible. \cr Default:  \code{c("1.4", "2.1")}
+#'@param version.var string (vector). Input which version of the dataset should be downloaded. Multiple selection is possible. \cr Default:  \code{c("1.4", "2.1")}
 #'@param clipping logical. Input whether the downloaded data should be clipped. See \code{\link{clipping.tif}} for more information. \cr If \code{FALSE}: \code{clip.shapefile}, \code{buffer}, \code{clip.extent} will be ignored. \cr Default: \code{FALSE}
 #'@param clip.shapefile string. Input which shapefile should be used for clipping. \cr Default: \code{NULL}
 #'@param clip.extent numeric (vector). Input vector with four numeric values. This is following the input order c("xleft", "xright", "ybottom", "ytop").\cr Default: \code{c(-180, 180, -90, 90)}
@@ -17,23 +19,27 @@
 #'@param stacking.data logical. Input whether the downloaded data should be stacked as a netCDF-rasterstack. See \code{\link{stacking.downloaded.data}} for more information. \cr Default: \code{FALSE}
 #'@param keep.raw.zip logical. Should the downloaded raw-data be provided as "zip"-file. See \code{\link{combine.raw.in.zip}} for more information. \cr Default: \code{FALSE}
 #'@param delete.raw.data  logical. Should the downloaded raw-data be deleted. \cr If the "combine.raw.zip"-option is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}
-#'@param save.bib.file logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory. See \code{\link{save.citation}} for more information. \cr Default: \code{TRUE}
+#'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. See \code{\link{save.citation}} for more information. \cr Default: \code{TRUE}
 #'
-#'@return WorldClim climate data sets for the period of 1960-1990 (for v1.4) and/or 1970-2000 (for v2.1).
+#'@return WorldClim climate datasets for the period of 1960-1990 (for v1.4) and/or 1970-2000 (for v2.1).
+#'
+#'@references R. J. Hijmans, S. E. Cameron, J. L. Parra, et al. "Very high resolution interpolated climate surfaces for global land areas". In: _International Journal of Climatology_ 25.15 (2005), pp. 1965-1978. DOI: 10.1002/joc.1276. <URL: https://doi.org/10.1002/joc.1276>.
+#'@references S. E. Fick and R. J. Hijmans. "WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas". In: _International Journal of Climatology_ 37.12 (Okt. 2017), pp. 4302-4315. DOI: 10.1002/joc.5086. <URL:https://doi.org/10.1002/joc.5086>.
 #'
 #'@examples
-#' ## NOT RUN
-#' ## Bioclim
-#' # WorldClim.HistClim.download(parameter = "bio,
-#' #                             bio.var = c(1,12),
-#' #                             resolution = "10min",
-#' #                             version.var = c("1.4", "2.1"))
-#' ## Precipitation
-#' # WorldClim.HistClim.download(parameter = "prec",
-#' #                             month.var = c(1,12),
-#' #                             resolution = "10min",
-#' #                             version.var = c("1.4", "2.1"))
-#' ## NOT RUN
+#' \dontrun{
+#' # Bioclim
+#' WorldClim.HistClim.download(parameter = "bio",
+#'                             bio.var = c(1,12),
+#'                             resolution = "10min",
+#'                             version.var = c("1.4", "2.1"))
+#' # Precipitation
+#' WorldClim.HistClim.download(parameter = "prec",
+#'                              month.var = c(1,12),
+#'                              resolution = "10min",
+#'                              version.var = c("1.4", "2.1")
+#'                              )
+#' }
 #'
 #'@import stringr
 #'@import RCurl
@@ -481,7 +487,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
                        # buffer is passed
                        # default: 0. Unit is arc-degrees
                        buffer = buffer,
-                       # conversion to ascii format here integrated into the
+                       # conversion to ASCII format here integrated into the
                        # clipping function. Since it can be assumed that
                        # they should be converted later on anyway.
                        convert.files.to.asc = convert.files.to.asc,
@@ -555,10 +561,12 @@ WorldClim.HistClim.download <- function(save.location = "./",
 }
 
 
-#'@title Function for downloading the WorldClim v1.4 CMIP5 Future Climate dataset
+#'@title Function for downloading the WorldClim v1.4 CMIP5 future climate dataset
 #'@author Helge Jentsch
-#'@description This function supports a download of the WorldClim v1.4 CMIP5 Future Climate dataset. This includes precipitation (mm), temperature (maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
-#'@note Please note, that this dataset is regarded to as "outdated" by the WorldClim creators. The download of the current dataset "CMIP6" is also provided by this package with the \code{\link{WorldClim.CMIP_6.download}} function.
+#'@description This function supports the download, pre-processing and management of the WorldClim v1.4 CMIP5 future climate dataset.\cr This comprises of monthly precipitation sums (mm), temperature (maximum, minimum; °C), and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'
+#'@note Please note that this dataset is regarded to as "outdated" by the WorldClim creators. The download of the current dataset "CMIP6" is also provided by this package with the \code{\link{WorldClim.CMIP_6.download}} function.
+#'@note Please note also that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution.
 #'
 #'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
 #'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "tmax", "tmin", "bio")}
@@ -576,27 +584,29 @@ WorldClim.HistClim.download <- function(save.location = "./",
 #'@param stacking.data logical. Input whether the downloaded data should be stacked as a netCDF-rasterstack.\cr Default: \code{FALSE}
 #'@param keep.raw.zip logical. Should the downloaded raw-data be "zipped".\cr Default: \code{FALSE}
 #'@param delete.raw.data  logical. Should the downloaded raw-data be deleted.\cr If the \code{combine.raw.zip}-option is \code{TRUE}, raw-data is still available in the zipped file.\cr Default: \code{FALSE}
-#'@param save.bib.file logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory.\cr Default: \code{TRUE}
+#'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory.\cr Default: \code{TRUE}
 #'
-#'@return WorldClim 1.4 CMIP5 Future climate data sets for the periods of 2041-2060 and/or 2061-2080.
+#'@return WorldClim 1.4 CMIP5 Future climate datasets for the periods of 2041-2060 and/or 2061-2080.
+#'
+#'@references R. J. Hijmans, S. E. Cameron, J. L. Parra, et al. "Very high resolution interpolated climate surfaces for global land areas". In: _International Journal of Climatology_ 25.15 (2005), pp. 1965-1978. DOI: 10.1002/joc.1276. <URL: https://doi.org/10.1002/joc.1276>.
 #'
 #'@examples
-#' ## NOT RUN
-#' ## Bioclim
-#' # WorldClim.CMIP_5.download(parameter = "bio",
-#' #                           bio.var = c(1,12),
-#' #                           resolution = "10min",
-#' #                           model.var = "MPI-ESM-LR",
-#' #                           emission.scenario.var = "rcp26",
-#' #                           time.interval.var = "2050")
-#' ## Precipitation
-#' # WorldClim.CMIP_5.download(parameter = "prec",
-#' #                           month.var = c(1,12),
-#' #                           resolution = "10min",
-#' #                           model.var = "MPI-ESM-LR",
-#' #                           emission.scenario.var = "rcp26",
-#' #                           time.interval.var = "2050")
-#' ## NOT RUN
+#' \dontrun{
+#' # Bioclim
+#' WorldClim.CMIP_5.download(parameter = "bio",
+#'                            bio.var = c(1,12),
+#'                            resolution = "10min",
+#'                            model.var = "MPI-ESM-LR",
+#'                            emission.scenario.var = "rcp26",
+#'                            time.interval.var = "2050")
+#' # Precipitation
+#' WorldClim.CMIP_5.download(parameter = "prec",
+#'                            month.var = c(1,12),
+#'                            resolution = "10min",
+#'                            model.var = "MPI-ESM-LR",
+#'                            emission.scenario.var = "rcp26",
+#'                            time.interval.var = "2050")
+#' }
 #'
 #'@import stringr
 #'@import RCurl
@@ -974,7 +984,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                            # buffer is passed
                            # default: 0. Unit is arc-degrees
                            buffer = buffer,
-                           # conversion to ascii format here integrated into the
+                           # conversion to ASCII format here integrated into the
                            # clipping function. Since it can be assumed that
                            # they should be converted lateron anyway.
                            convert.files.to.asc = convert.files.to.asc,
@@ -1046,9 +1056,11 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 }
 
 
-#'@title Function for downloading the WorldClim v2.1 CMIP6 Future Climate dataset
+#'@title Function for downloading the WorldClim v2.1 CMIP6 future climate dataset
 #'@author Helge Jentsch
-#'@description This function supports a download of the WorldClim v2.1 CMIP6 Future Climate dataset. This includes precipitation (mm), temperature (maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'@description This function supports the download, pre-processing and management of the WorldClim v2.1 CMIP6 future climate dataset.\cr This comprises of monthly precipitation sums (mm), temperature (maximum, minimum; °C), and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'
+#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution.
 #'
 #'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
 #'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "tmax", "tmin", "bio")}
@@ -1066,27 +1078,29 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 #'@param stacking.data logical. Input whether the downloaded data should be stacked as a netCDF-rasterstack. \cr Default: \code{FALSE}
 #'@param keep.raw.zip logical. Should the downloaded raw-data be "zipped". \cr Default: \code{FALSE}
 #'@param delete.raw.data  logical. Should the downloaded raw-data be deleted. If the "combine.raw.zip"-option is \code{TRUE}, raw-data is still available in the zipped file. \cr Default: \code{FALSE}
-#'@param save.bib.file logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
+#'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
 #'
-#'@return WorldClim 2.1 CMIP6 Future climate data sets for the periods of 2021-2040, 2041-2060, 2061-2080 and/or 2081-2100.
+#'@return WorldClim 2.1 CMIP6 Future climate datasets for the periods of 2021-2040, 2041-2060, 2061-2080 and/or 2081-2100.
+#'
+#'@references S. E. Fick and R. J. Hijmans. "WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas". In: _International Journal of Climatology_ 37.12 (Okt. 2017), pp. 4302-4315. DOI: 10.1002/joc.5086. <URL:https://doi.org/10.1002/joc.5086>.
 #'
 #'@examples
-#' ## NOT RUN
-#' ## Bioclim
-#' # WorldClim.CMIP_6.download(parameter = "bio",
-#' #                           bio.var = c(1,12),
-#' #                           resolution = "10min",
-#' #                           model.var = "MIROC6",
-#' #                           emission.scenario.var = "ssp126",
-#' #                           time.interval.var = "2021-2040")
-#' ## Precipitation
-#' # WorldClim.CMIP_6.download(parameter = "prec",
-#' #                           month.var = c(1,12),
-#' #                           resolution = "10min",
-#' #                           model.var = "MIROC6",
-#' #                           emission.scenario.var = "ssp126",
-#' #                           time.interval.var = "2021-2040")
-#' ## END
+#' \dontrun{
+#' # Bioclim
+#' WorldClim.CMIP_6.download(parameter = "bio",
+#'                            bio.var = c(1,12),
+#'                            resolution = "10min",
+#'                            model.var = "MIROC6",
+#'                            emission.scenario.var = "ssp126",
+#'                            time.interval.var = "2021-2040")
+#' # Precipitation
+#' WorldClim.CMIP_6.download(parameter = "prec",
+#'                            month.var = c(1,12),
+#'                            resolution = "10min",
+#'                            model.var = "MIROC6",
+#'                            emission.scenario.var = "ssp126",
+#'                            time.interval.var = "2021-2040")
+#' }
 #'
 #'@import stringr
 #'@import RCurl
@@ -1336,7 +1350,7 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                            # buffer is passed
                            # default: 0. Unit is arc-degrees
                            buffer = buffer,
-                           # conversion to ascii format here integrated into the
+                           # conversion to ASCII format here integrated into the
                            # clipping function. Since it can be assumed that
                            # they should be converted lateron anyway.
                            convert.files.to.asc = convert.files.to.asc,
@@ -1388,7 +1402,7 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
             }
             # if delete.raw.data is TRUE ...
             if(delete.raw.data == TRUE){
-              # All .tif raster files in the current 2nd order subdirectory are
+              # All tif files in the current 2nd order subdirectory are
               # unlinked (deleted).
               unlink(list.files(temp.temp.save.location,
                                 pattern = ".tif",

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chelsa_Download_functions.R
 \name{Chelsa.lgm.download}
 \alias{Chelsa.lgm.download}
-\title{Function for downloading Chelsa Last Glacial Maximum datasets}
+\title{Function for downloading CHELSA Last Glacial Maximum datasets}
 \usage{
 Chelsa.lgm.download(
   save.location = "./",
@@ -52,33 +52,38 @@ Chelsa.lgm.download(
 
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted. If the "combine.raw.zip"-option is \code{TRUE}, raw-data is still available in the zipped file.\cr Default: \code{FALSE}}
 
-\item{save.bib.file}{logical. Whether a bibTex-citation file of the Chelsa-dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
+\item{save.bib.file}{logical. Whether a BibTex-citation file of the CHELSA dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
 }
 \value{
 Downscaled global climatological data from the last glacial maximum.
 }
 \description{
-This function supports a download of the Chelsa Last Glacial Maximum Climate datasets (21.000 years ago). This includes precipitation (mm), temperature (average, maximum, minimum; °C), bioclimatic parameters, and a global digital elevation model. For further information, please regard \url{http://chelsa-climate.org/last-glacial-maximum-climate/}.\cr For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports a download of the CHELSA Last Glacial Maximum Climate datasets (21.000 BP). This includes monthly precipitation sums in mm, monthly temperature (average, maximum, minimum) in degree Celsius, annual characteristics (19 bioclimatic parameters), and a global digital elevation model. For further information, please regard \url{http://chelsa-climate.org/last-glacial-maximum-climate/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \details{
-"The CHELSA LGM data is based on a implementation of the CHELSA algorithm on PMIP3 data." (Chelsa Climate 2020: \url{http://chelsa-climate.org/last-glacial-maximum-climate/})
+"The CHELSA LGM data is based on a implementation of the CHELSA algorithm on PMIP3 data." (CHELSA Climate 2020: \url{http://chelsa-climate.org/last-glacial-maximum-climate/})
 }
 \note{
-For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of Chelsa Climate (\url{http://chelsa-climate.org/last-glacial-maximum-climate/}).
+Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{http://chelsa-climate.org/last-glacial-maximum-climate/}).
 }
 \examples{
-## NOT RUN
-## Bioclim
-# Chelsa.lgm.download(parameter = "bio",
-#                    bio.var = c(1,12),
-#                    model.var = "MPI-ESM-P")
-## Precipitation
-# Chelsa.lgm.download(parameter = "prec",
-#                    month.var = c(1,12),
-#                    model.var = "MPI-ESM-P")
-## NOT RUN
+\dontrun{
+# Bioclim
+Chelsa.lgm.download(parameter = "bio",
+                    bio.var = c(1,19),
+                    model.var = "MPI-ESM-P")
+# Precipitation
+Chelsa.lgm.download(parameter = "prec",
+                    month.var = c(1,12),
+                    model.var = "MPI-ESM-P")
+}
 
 
+}
+\references{
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
 }
 \author{
 Helge Jentsch

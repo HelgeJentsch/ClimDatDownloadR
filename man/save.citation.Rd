@@ -6,7 +6,7 @@
 \usage{
 save.citation(
   save.location = "./",
-  dataSetName = c("Chelsa", "WorldClim1.4", "WorldClim2.1")
+  dataSetName = c("CHELSA", "WorldClim1.4", "WorldClim2.1")
 )
 }
 \arguments{
@@ -15,13 +15,20 @@ save.citation(
 \item{dataSetName}{string (vector). Specifies which dataset was downloaded or which citation should be saved. \cr Default: \code{c("Chelsa1.2", "WorldClim1.4", "WorldClim2.1")} (all available datasets)}
 }
 \value{
-BIBtex-file with biliography of the downloaded dataset
+BibTex-file with biliography of the downloaded dataset
 }
 \description{
-Saves the citation of the downloaded dataset into a BibTex-file in the Working Directory.
+Saves the citation of the downloaded dataset into a BibTex-file in the working directory.
 }
 \note{
-DISCLAIMER: No warranty or liability! The citations are provided without any warranty of any kind whatsoever, either expressed or implied, including warranties of merchantability and fitness for a particular purpose. The author should not be responsible for any incomplete citation of datasets or climate data products downloaded through this package.
+DISCLAIMER: No warranty or liability! The citations are provided without any warranty of any kind whatsoever, either expressed or implied, including warranties of merchantability and fitness for a particular purpose. The package author will not be responsible for any incomplete citation of datasets or climate data products downloaded through this package.
+}
+\examples{
+\dontrun{
+save.citation(dataSetName = "Chelsa")
+save.citation(dataSetName = "WorldClim1.4")
+save.citation(dataSetName = "WorldClim2.1")
+}
 }
 \author{
 Helge Jentsch

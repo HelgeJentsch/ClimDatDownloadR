@@ -4,16 +4,16 @@
 \alias{process.raster.int.doub}
 \title{Preprocessing data to get real values}
 \usage{
-process.raster.int.doub(raster.file = NULL)
+process.raster.int.doub(raster.layer = NULL)
 }
 \arguments{
-\item{raster.file}{Raster*File to be processed}
+\item{raster.layer}{RasterLayer to be processed}
 }
 \value{
-Rasterfile
+RasterLayer
 }
 \description{
-Takes input Raster* File, crops it, processes the integer values into double values, mosaiks the cropped and processed data, and returns the mosaiked Rasterfile
+Takes input RasterLayer, crops it, processes the integer values into double values, mosaiks the cropped and processed data, and returns the mosaiked Rasterfile
 }
 \author{
 Helge Jentsch

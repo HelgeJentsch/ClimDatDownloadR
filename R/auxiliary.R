@@ -1,6 +1,6 @@
 #'@title Clipping .tif-raster files in one specified directory
 #'@author Helge Jentsch
-#'@description This function clips all .tif-raster files in a specified directory (clip.save.location) to an extent given by a shapefile or user input with the possibility of adding a buffer. Furthermore an option for conversion to ASCII format is given.
+#'@description This function clips all .tif-raster files at a defined extent (e.g., shapefile or coordinates). Additionally, a buffer can be specified and added to the clipping extent. For user convenience, clipped rasters will be saved to a specified directory (clip.save.location). Furthermore, an option for conversion to ASCII format is given.
 #'
 #'@param clip.save.location string (directory path). The directory where .tif-raster files are saved. \cr Default: \code{"./"} (Working directory)
 #'@param clip.shapefile string (file path to a ESRI shapefile with the file extension ".shp"). \cr Extent of this shapefile is used to clip the .tif-raster files if no buffer is specified. \cr Default: \code{NULL}
@@ -9,15 +9,15 @@
 #'@param convert.files.to.asc logical. Input whether the clipped output should be converted into ASCII-Grids. \cr Default: \code{FALSE}
 #'@param time.stamp.var string. Timestamp to create unique directories for multiple run outputs. \cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}
 #'
-#'@return This function returns, depending on the parameter \code{convert.files.to.asc} whether it is ASCII- or GEOTIFF-format, clipped raster files to a new directory. This directory is dynamically created.
+#'@return This function returns, depending on the parameter \code{convert.files.to.asc} whether it is ASCII or tif format, clipped raster files to a new directory. This directory is automatically created.
 #'
 #'@import raster
 #'@import stringr
 #'@import sp
 #'@import sf
 #'
-#'@examples
-#'#clipping.tif(clip.save.location = system.file("pictures/", package = "rgdal"))
+#' @examples
+#' clipping.tif(clip.save.location = system.file("pictures/", package = "rgdal"))
 #'
 #'@export
 clipping.tif  <- function(clip.save.location = "./",
@@ -142,7 +142,7 @@ clipping.tif  <- function(clip.save.location = "./",
 
 #'@title Converting .tif-raster files in one specified directory into ASCII-Grids
 #'@author Helge Jentsch
-#'@description This function Converts all .tif-raster files in a specified directory into an ASCII-File format in a new directory named "ASCII_files" with a unique timestamp of the current system time.
+#'@description This function converts and saves all .tif-raster files to ASCII-file format to a specified location and creates a new folder named "ASCII_files" with a unique timestamp of the current system time.
 #'
 #'@param save.location string (directory path). The directory where .tif-raster files are saved. \cr Default: \code{"./"} (Working directory)
 #'@param time.stamp.var string. Timestamp to create unique directories for multiple run outputs. \cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}
@@ -191,12 +191,12 @@ convert.to.asc <- function(save.location = "./",
 
 #'@title Stacking .tif-raster files in one specified directory
 #'@author Helge Jentsch
-#'@description This function stacks all .tif-raster files in a specified directory and saves the Raster*stack File as netCDF-file in the specified directory.
+#'@description This function stacks all .tif-raster files of a specified directory and saves the stacked layers as a netCDF-file in that directory.
 #'
-#'@param stack.save.location string (directory path). The directory where .tif-raster files are saved. Rasterfiles must be in a Geographic Coordinate System (in Arc-Degrees) \cr Default: \code{"./"} (Working directory)
+#'@param stack.save.location string (directory path). The directory where .tif-raster files are saved. Raster-files must be in a Geographic Coordinate System (in arc-degrees) \cr Default: \code{"./"} (Working directory)
 #'@param stack.clipped logical. Input whether clipped data should be stacked and saved as netCDF as well. \cr Default: \code{FALSE}
 #'@param parameter.var string. Input whether bioclim or climatic parameters are the input for the stacking process. \cr Default: \code{NULL}
-#'@param variable.numbers numeric (vector). Input how the stack variables should be called. By default just a sequence from 1 to the number of ".tif"-files are used.\cr Default: \code{c(1:length(list.files("./", pattern = ".tif")))}
+#'@param variable.numbers numeric (vector). Input how the stack variables should be called. By default just a sequence from 1 to the number of tif-raster files are used.\cr Default: \code{c(1:length(list.files("./", pattern = ".tif")))}
 #'@param stack.time.series logical. Input whether a timeseries should be stacked. \cr Default: \code{FALSE}
 #'@param time.series string (vector). String input of timeseries vector. \cr Default: \code{NULL}
 #'@param time.stamp.var string. Timestamp to create unique directories for multiple run outputs.\cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}
@@ -371,29 +371,35 @@ stacking.downloaded.data <- function(stack.save.location = "./",
 #'@title Save the citation of the downloaded dataset
 #'@author Helge Jentsch
 #'
-#'@description Saves the citation of the downloaded dataset into a BibTex-file in the Working Directory.
+#'@description Saves the citation of the downloaded dataset into a BibTex-file in the working directory.
 #'
 #'@param save.location string (directory path). Where the BibTex-file will be saved. \cr Default: \code{"./"} (Working Directory)
 #'@param dataSetName string (vector). Specifies which dataset was downloaded or which citation should be saved. \cr Default: \code{c("Chelsa1.2", "WorldClim1.4", "WorldClim2.1")} (all available datasets)
 #'
-#'@return BIBtex-file with biliography of the downloaded dataset
-#'@note DISCLAIMER: No warranty or liability! The citations are provided without any warranty of any kind whatsoever, either expressed or implied, including warranties of merchantability and fitness for a particular purpose. The author should not be responsible for any incomplete citation of datasets or climate data products downloaded through this package.
+#'@return BibTex-file with biliography of the downloaded dataset
+#'@note DISCLAIMER: No warranty or liability! The citations are provided without any warranty of any kind whatsoever, either expressed or implied, including warranties of merchantability and fitness for a particular purpose. The package author will not be responsible for any incomplete citation of datasets or climate data products downloaded through this package.
 #'
 #'@importFrom RefManageR ReadCrossRef
 #'@importFrom RefManageR ReadBib
 #'@importFrom RefManageR WriteBib
 #'@importFrom utils download.file
 #'
+#'@examples
+#' \dontrun{
+#' save.citation(dataSetName = "Chelsa")
+#' save.citation(dataSetName = "WorldClim1.4")
+#' save.citation(dataSetName = "WorldClim2.1")
+#' }
 #'@export
 save.citation <- function(save.location = "./",
-                          dataSetName= c("Chelsa",
+                          dataSetName= c("CHELSA",
                                          "WorldClim1.4",
                                          "WorldClim2.1")){
   gc()
   # requireNamespace("RefManageR")
   save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
 
-  if(dataSetName == "Chelsa"){
+  if(dataSetName == "CHELSA"){
     print("Please regard 'https://chelsa-climate.org/downloads/' for correct citations.")
     if(!file.exists(paste0(save.location, "chelsa_citation.bib"))){
       # citation_  <- RefManageR::ReadCrossRef("")
@@ -451,9 +457,9 @@ save.citation <- function(save.location = "./",
 
 #'@title Combines all .tif-raster files into a .zip-file
 #'@author Helge Jentsch
-#'@description Combines all .tif-raster files of one directory into a .zip-file with a custom name.
+#'@description Combines and saves all .tif-raster files to a .zip-file, whereas name and saving location can be specified.
 #'
-#'@param save.location string (directory path). The directory where .tif-raster files are saved and the created/updated .zip file should be saved. \cr Default: \code{"./"} (Working directory)
+#'@param save.location string (directory path). The directory where .tif-raster files are saved and the created/updated .zip file will be saved. \cr Default: \code{"./"} (Working directory)
 #'@param zip.name string. Input how the .zip-file should be named. \cr Default: \code{"RAWDATA"}
 #'@param unique.name logical. Should the .zip-file be named uniquely? If TRUE the current system time is added as a timestamp to create unique directories for multiple run outputs. \cr Default: \code{TRUE}
 #'@param time.stamp.var string. Input of current system time or, if called within another function the initial time of the execution. \cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}
@@ -503,42 +509,42 @@ combine.raw.in.zip <- function(save.location = "./",
 
 #'@title Preprocessing data to get real values
 #'@author Helge Jentsch
-#'@description Takes input Raster* File, crops it, processes the integer values into double values, mosaiks the cropped and processed data, and returns the mosaiked Rasterfile
+#'@description Takes input RasterLayer, crops it, processes the integer values into double values, mosaiks the cropped and processed data, and returns the mosaiked Rasterfile
 #'
-#'@param raster.file Raster*File to be processed
+#'@param raster.layer RasterLayer to be processed
 #'
-#'@return Rasterfile
+#'@return RasterLayer
 #'
 #'@import raster
 #'@import sp
-#'@export
-process.raster.int.doub <- function(raster.file = NULL)
+#'
+process.raster.int.doub <- function(raster.layer = NULL)
 {
   gc()
-  if(is.null(raster.file)){
-    stop("raster.file is NULL")
+  if(is.null(raster.layer)){
+    stop("raster.layer is NULL")
   }
-  if(class(raster.file)[1] != "RasterLayer"){
-    stop("raster.file is not a 'RasterLayer'")
+  if(class(raster.layer)[1] != "RasterLayer"){
+    stop("raster.layer is not a 'RasterLayer'")
   }
-  extent_rasterfile <- extent(raster.file)
+  extent_rasterfile <- extent(raster.layer)
   # crop
-  tl <- crop(raster.file, extent(extent_rasterfile@xmin,
+  tl <- crop(raster.layer, extent(extent_rasterfile@xmin,
                                  (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
                                  (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
                                  extent_rasterfile@ymax)
   )
-  bl <- crop(raster.file, extent(extent_rasterfile@xmin,
+  bl <- crop(raster.layer, extent(extent_rasterfile@xmin,
                                  (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
                                  extent_rasterfile@ymin,
                                  (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
   )
-  tr <- crop(raster.file, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
+  tr <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
                                  extent_rasterfile@xmax,
                                  (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
                                  extent_rasterfile@ymax)
   )
-  br <- crop(raster.file, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
+  br <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
                                  extent_rasterfile@xmax,
                                  extent_rasterfile@ymin,
                                  (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
@@ -561,6 +567,6 @@ process.raster.int.doub <- function(raster.file = NULL)
   bottom <- mosaic(bl,br, fun = "mean")
   rm(bl, br)
   gc()
-  raster.file <- mosaic(top, bottom, fun = "mean")
-  return(raster.file)
+  raster.layer <- mosaic(top, bottom, fun = "mean")
+  return(raster.layer)
 }

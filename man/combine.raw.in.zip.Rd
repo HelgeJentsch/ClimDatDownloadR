@@ -14,7 +14,7 @@ combine.raw.in.zip(
 )
 }
 \arguments{
-\item{save.location}{string (directory path). The directory where .tif-raster files are saved and the created/updated .zip file should be saved. \cr Default: \code{"./"} (Working directory)}
+\item{save.location}{string (directory path). The directory where .tif-raster files are saved and the created/updated .zip file will be saved. \cr Default: \code{"./"} (Working directory)}
 
 \item{zip.name}{string. Input how the .zip-file should be named. \cr Default: \code{"RAWDATA"}}
 
@@ -23,7 +23,7 @@ combine.raw.in.zip(
 \item{time.stamp.var}{string. Input of current system time or, if called within another function the initial time of the execution. \cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}}
 }
 \description{
-Combines all .tif-raster files of one directory into a .zip-file with a custom name.
+Combines and saves all .tif-raster files to a .zip-file, whereas name and saving location can be specified.
 }
 \author{
 Helge Jentsch

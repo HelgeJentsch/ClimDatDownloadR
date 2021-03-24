@@ -17,13 +17,13 @@ stacking.downloaded.data(
 )
 }
 \arguments{
-\item{stack.save.location}{string (directory path). The directory where .tif-raster files are saved. Rasterfiles must be in a Geographic Coordinate System (in Arc-Degrees) \cr Default: \code{"./"} (Working directory)}
+\item{stack.save.location}{string (directory path). The directory where .tif-raster files are saved. Raster-files must be in a Geographic Coordinate System (in arc-degrees) \cr Default: \code{"./"} (Working directory)}
 
 \item{stack.clipped}{logical. Input whether clipped data should be stacked and saved as netCDF as well. \cr Default: \code{FALSE}}
 
 \item{parameter.var}{string. Input whether bioclim or climatic parameters are the input for the stacking process. \cr Default: \code{NULL}}
 
-\item{variable.numbers}{numeric (vector). Input how the stack variables should be called. By default just a sequence from 1 to the number of ".tif"-files are used.\cr Default: \code{c(1:length(list.files("./", pattern = ".tif")))}}
+\item{variable.numbers}{numeric (vector). Input how the stack variables should be called. By default just a sequence from 1 to the number of tif-raster files are used.\cr Default: \code{c(1:length(list.files("./", pattern = ".tif")))}}
 
 \item{stack.time.series}{logical. Input whether a timeseries should be stacked. \cr Default: \code{FALSE}}
 
@@ -32,7 +32,7 @@ stacking.downloaded.data(
 \item{time.stamp.var}{string. Timestamp to create unique directories for multiple run outputs.\cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}}
 }
 \description{
-This function stacks all .tif-raster files in a specified directory and saves the Raster*stack File as netCDF-file in the specified directory.
+This function stacks all .tif-raster files of a specified directory and saves the stacked layers as a netCDF-file in that directory.
 }
 \author{
 Helge Jentsch
