@@ -1,7 +1,7 @@
 ## Welcome to the help-page of ClimDatDownloadR
 
 
-To get started please proceed [here](./README.md#a-warm-welcome). 
+To get started please proceed further down under the update section. 
 
 
 _This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany._
