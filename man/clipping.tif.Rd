@@ -28,13 +28,13 @@ clipping.tif(
 \item{time.stamp.var}{string. Timestamp to create unique directories for multiple run outputs. \cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}}
 }
 \value{
-This function returns, depending on the parameter \code{convert.files.to.asc} whether it is ASCII- or GEOTIFF-format, clipped raster files to a new directory. This directory is dynamically created.
+This function returns, depending on the parameter \code{convert.files.to.asc} whether it is ASCII or tif format, clipped raster files to a new directory. This directory is automatically created.
 }
 \description{
-This function clips all .tif-raster files in a specified directory (clip.save.location) to an extent given by a shapefile or user input with the possibility of adding a buffer. Furthermore an option for conversion to ASCII format is given.
+This function clips all .tif-raster files at a defined extent (e.g., shapefile or coordinates). Additionally, a buffer can be specified and added to the clipping extent. For user convenience, clipped rasters will be saved to a specified directory (clip.save.location). Furthermore, an option for conversion to ASCII format is given.
 }
 \examples{
-#clipping.tif(clip.save.location = system.file("pictures/", package = "rgdal"))
+clipping.tif(clip.save.location = system.file("pictures/", package = "rgdal"))
 
 }
 \author{

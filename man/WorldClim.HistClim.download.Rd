@@ -2,7 +2,7 @@
 % Please edit documentation in R/WorldClim_download_functions.R
 \name{WorldClim.HistClim.download}
 \alias{WorldClim.HistClim.download}
-\title{Function for downloading the WorldClim Historical Climate dataset}
+\title{Function for downloading the WorldClim historical climate dataset}
 \usage{
 WorldClim.HistClim.download(
   save.location = "./",
@@ -33,7 +33,7 @@ WorldClim.HistClim.download(
 
 \item{resolution}{string (vector). Ranging from a 10 arc-minute resolution over 5 and 2.5 arc-minute to 30 arc-second resolution.\cr Default: \code{c("10m", "5m", "2.5m", "30s")}}
 
-\item{version.var}{string (vector). Input which version of the data set should be downloaded. Multiple selection is possible. \cr Default:  \code{c("1.4", "2.1")}}
+\item{version.var}{string (vector). Input which version of the dataset should be downloaded. Multiple selection is possible. \cr Default:  \code{c("1.4", "2.1")}}
 
 \item{clipping}{logical. Input whether the downloaded data should be clipped. See \code{\link{clipping.tif}} for more information. \cr If \code{FALSE}: \code{clip.shapefile}, \code{buffer}, \code{clip.extent} will be ignored. \cr Default: \code{FALSE}}
 
@@ -51,31 +51,39 @@ WorldClim.HistClim.download(
 
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted. \cr If the "combine.raw.zip"-option is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}}
 
-\item{save.bib.file}{logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory. See \code{\link{save.citation}} for more information. \cr Default: \code{TRUE}}
+\item{save.bib.file}{logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. See \code{\link{save.citation}} for more information. \cr Default: \code{TRUE}}
 }
 \value{
-WorldClim climate data sets for the period of 1960-1990 (for v1.4) and/or 1970-2000 (for v2.1).
+WorldClim climate datasets for the period of 1960-1990 (for v1.4) and/or 1970-2000 (for v2.1).
 }
 \description{
-This function supports a download of the WorldClim Historical Climate dataset.  \cr This includes precipitation (mm), temperature (average, maximum, minimum; °C), solar radiation (kJ m-2 day-1), wind speed (m s-1), water vapor pressure (kPa) and bioclimatic parameters. Also an elevation raster is provided. \cr For convenience also a clipping-, conversion to ASCII-grid, and stacking-tool is included in this function. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports the download, pre-processing and management of the WorldClim historical climate dataset.\cr This comprises of monthly precipitation sums (mm), temperature (average, maximum, minimum; °C), monthly solar radiation sums (kJ m-2 day-1), wind speed (m s-1), water vapor pressure (kPa), and annual chracteristics (19 bioclimatic variables). Also an elevation raster is provided.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \note{
-Please note, that  solar radiation, wind speed, water vapor pressure, bioclimatic parameters, and elevation raster are only provided by the WorldClim Version 2.1 (current version).
+Please note that  solar radiation, wind speed, water vapor pressure, bioclimatic parameters, and elevation raster are only provided by the WorldClim Version 2.1 (current version).
+
+Please note also that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution.
 }
 \examples{
-## NOT RUN
-## Bioclim
-# WorldClim.HistClim.download(parameter = "bio,
-#                             bio.var = c(1,12),
-#                             resolution = "10min",
-#                             version.var = c("1.4", "2.1"))
-## Precipitation
-# WorldClim.HistClim.download(parameter = "prec",
-#                             month.var = c(1,12),
-#                             resolution = "10min",
-#                             version.var = c("1.4", "2.1"))
-## NOT RUN
+\dontrun{
+# Bioclim
+WorldClim.HistClim.download(parameter = "bio",
+                            bio.var = c(1,12),
+                            resolution = "10min",
+                            version.var = c("1.4", "2.1"))
+# Precipitation
+WorldClim.HistClim.download(parameter = "prec",
+                             month.var = c(1,12),
+                             resolution = "10min",
+                             version.var = c("1.4", "2.1")
+                             )
+}
 
+}
+\references{
+R. J. Hijmans, S. E. Cameron, J. L. Parra, et al. "Very high resolution interpolated climate surfaces for global land areas". In: _International Journal of Climatology_ 25.15 (2005), pp. 1965-1978. DOI: 10.1002/joc.1276. <URL: https://doi.org/10.1002/joc.1276>.
+
+S. E. Fick and R. J. Hijmans. "WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas". In: _International Journal of Climatology_ 37.12 (Okt. 2017), pp. 4302-4315. DOI: 10.1002/joc.5086. <URL:https://doi.org/10.1002/joc.5086>.
 }
 \author{
 Helge Jentsch

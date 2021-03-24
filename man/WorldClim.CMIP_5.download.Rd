@@ -2,7 +2,7 @@
 % Please edit documentation in R/WorldClim_download_functions.R
 \name{WorldClim.CMIP_5.download}
 \alias{WorldClim.CMIP_5.download}
-\title{Function for downloading the WorldClim v1.4 CMIP5 Future Climate dataset}
+\title{Function for downloading the WorldClim v1.4 CMIP5 future climate dataset}
 \usage{
 WorldClim.CMIP_5.download(
   save.location = "./",
@@ -60,35 +60,40 @@ WorldClim.CMIP_5.download(
 
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted.\cr If the \code{combine.raw.zip}-option is \code{TRUE}, raw-data is still available in the zipped file.\cr Default: \code{FALSE}}
 
-\item{save.bib.file}{logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory.\cr Default: \code{TRUE}}
+\item{save.bib.file}{logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory.\cr Default: \code{TRUE}}
 }
 \value{
-WorldClim 1.4 CMIP5 Future climate data sets for the periods of 2041-2060 and/or 2061-2080.
+WorldClim 1.4 CMIP5 Future climate datasets for the periods of 2041-2060 and/or 2061-2080.
 }
 \description{
-This function supports a download of the WorldClim v1.4 CMIP5 Future Climate dataset. This includes precipitation (mm), temperature (maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports the download, pre-processing and management of the WorldClim v1.4 CMIP5 future climate dataset.\cr This comprises of monthly precipitation sums (mm), temperature (maximum, minimum; °C), and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \note{
-Please note, that this dataset is regarded to as "outdated" by the WorldClim creators. The download of the current dataset "CMIP6" is also provided by this package with the \code{\link{WorldClim.CMIP_6.download}} function.
+Please note that this dataset is regarded to as "outdated" by the WorldClim creators. The download of the current dataset "CMIP6" is also provided by this package with the \code{\link{WorldClim.CMIP_6.download}} function.
+
+Please note also that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution.
 }
 \examples{
-## NOT RUN
-## Bioclim
-# WorldClim.CMIP_5.download(parameter = "bio",
-#                           bio.var = c(1,12),
-#                           resolution = "10min",
-#                           model.var = "MPI-ESM-LR",
-#                           emission.scenario.var = "rcp26",
-#                           time.interval.var = "2050")
-## Precipitation
-# WorldClim.CMIP_5.download(parameter = "prec",
-#                           month.var = c(1,12),
-#                           resolution = "10min",
-#                           model.var = "MPI-ESM-LR",
-#                           emission.scenario.var = "rcp26",
-#                           time.interval.var = "2050")
-## NOT RUN
+\dontrun{
+# Bioclim
+WorldClim.CMIP_5.download(parameter = "bio",
+                           bio.var = c(1,12),
+                           resolution = "10min",
+                           model.var = "MPI-ESM-LR",
+                           emission.scenario.var = "rcp26",
+                           time.interval.var = "2050")
+# Precipitation
+WorldClim.CMIP_5.download(parameter = "prec",
+                           month.var = c(1,12),
+                           resolution = "10min",
+                           model.var = "MPI-ESM-LR",
+                           emission.scenario.var = "rcp26",
+                           time.interval.var = "2050")
+}
 
+}
+\references{
+R. J. Hijmans, S. E. Cameron, J. L. Parra, et al. "Very high resolution interpolated climate surfaces for global land areas". In: _International Journal of Climatology_ 25.15 (2005), pp. 1965-1978. DOI: 10.1002/joc.1276. <URL: https://doi.org/10.1002/joc.1276>.
 }
 \author{
 Helge Jentsch

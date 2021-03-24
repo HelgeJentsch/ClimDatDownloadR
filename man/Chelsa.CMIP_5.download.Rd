@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chelsa_Download_functions.R
 \name{Chelsa.CMIP_5.download}
 \alias{Chelsa.CMIP_5.download}
-\title{Function for downloading Chelsa CMIP 5 future climatologies data sets for 2050 and 2070}
+\title{Function for downloading CHELSA CMIP 5 future climatologies for the years 2041-2060 and 2061-2080}
 \usage{
 Chelsa.CMIP_5.download(
   save.location = "./",
@@ -40,7 +40,7 @@ Chelsa.CMIP_5.download(
 
 \item{emission.scenario.var}{string (vector). Input which emission scenario dataset should be downloaded. Provided are the representative concentration pathways (RCP) 2.6, 4.5, 6.0, and 8.5.\cr Default: \code{c("rcp26", "rcp45", "rcp60", "rcp85")}}
 
-\item{time.interval.var}{string (vector). Input for which time interval data should be downloaded. Chelsa provides downscaled CMIP5 climatologies for 2050 and 2070. Multiple inputs possible.\cr Default: \code{c("2041-2060", "2061-2080")}}
+\item{time.interval.var}{string (vector). Input for which time interval data should be downloaded. CHELSA provides downscaled CMIP5 climatologies for 2050 and 2070. Multiple inputs possible.\cr Default: \code{c("2041-2060", "2061-2080")}}
 
 \item{model.var}{string (vector). Input which future model dataset should be downloaded. For more information see: \url{http://chelsa-climate.org/future/}.\cr For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("ACCESS1-0", "bcc-csm1-1", "BNU-ESM", "CanESM2", "CCSM4", "CESM1-BGC", } \cr \code{"CESM1-CAM5", "CMCC-CESM", "CMCC-CM", "CMCC-CMS", "CNRM-CM5", "CSIRO-Mk3-6-0",} \cr \code{ "CSIRO-Mk3L-1-2", "EC-EARTH", "FGOALS-g2", "FIO-ESM", "GFDL-CM3", "GFDL-ESM2G", } \cr \code{"GFDL-ESM2M","GISS-E2-H", "GISS-E2-H-CC", "GISS-E2-R", "GISS-E2-R-CC", "HadGEM2-AO",} \cr \code{"HadGEM2-CC", "HadGEM2-ES", "inmcm4", "IPSL-CM5A-LR", "IPSL-CM5A-MR","MIROC-ESM",} \cr \code{"MIROC-ESM-CHEM","MIROC5", "MPI-ESM-LR", "MPI-ESM-MR", "MRI-CGCM3", "MRI-ESM1",} \cr \code{ "NorESM1-M","NorESM1-ME")}}
 
@@ -60,36 +60,41 @@ Chelsa.CMIP_5.download(
 
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted. If the \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}}
 
-\item{save.bib.file}{logical. Whether a bibTex-citation file of the data set should be provided in the Working directory. \cr Default: \code{TRUE}}
+\item{save.bib.file}{logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
 }
 \value{
-Downscaled Chelsa CMIP5 climatologies for 2050 and 2070.
+Downscaled CHELSA CMIP5 climatologies for 2050 and 2070.
 }
 \description{
-This function supports a download of the Chelsa CMIP5 future climate data sets. This includes precipitation (mm), temperature (average, maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included.  An output of a .bib-file of the literature is also optional.  For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports the download of CHELSA CMIP5 future climate scenarios comprising of monthly precipitation sums in mm, monthly temperature (average, minimum, maximum) in degrees Celsius, and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \details{
-"The Downscaled data has been produced using climatological aided interpolation based on the 1979-2013 reference climatologies from CHELSA." (Chelsa Climate 2020: \url{http://chelsa-climate.org/future/})
+"The downscaled data has been produced using climatological aided interpolation based on the 1979-2013 reference climatologies from CHELSA." (CHELSA Climate 2020: \url{http://chelsa-climate.org/future/})
 }
 \note{
-For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of Chelsa Climate (\url{http://chelsa-climate.org/future/}).
+Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models and rcps are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{http://chelsa-climate.org/future/}). Please note, that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 }
 \examples{
-## NOT RUN
-## Bioclim
-# Chelsa.CMIP_5.download(parameter = "bio",
-#                        bio.var = c(1,12),
-#                        emission.scenario.var = "rcp26",
-#                        time.interval.var = "2041-2060",
-#                        model.var = "MPI-ESM-LR")
-## Precipitation
-# Chelsa.CMIP_5.download(parameter = "prec",
-#                        month.var = c(1,12),
-#                        emission.scenario.var = "rcp26",
-#                        time.interval.var = "2041-2060",
-#                        model.var = "MPI-ESM-LR")
-## NOT RUN
+\dontrun{
+# Bioclim
+Chelsa.CMIP_5.download(parameter = "bio",
+                        bio.var = c(1,19),
+                        emission.scenario.var = "rcp26",
+                        time.interval.var = "2041-2060",
+                        model.var = "MPI-ESM-LR")
+# Precipitation
+Chelsa.CMIP_5.download(parameter = "prec",
+                        month.var = c(1,12),
+                        emission.scenario.var = "rcp26",
+                        time.interval.var = "2041-2060",
+                        model.var = "MPI-ESM-LR")
+}
 
+}
+\references{
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
 }
 \author{
 Helge Jentsch

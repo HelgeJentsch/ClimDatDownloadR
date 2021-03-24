@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chelsa_Download_functions.R
 \name{Chelsa.Clim.download}
 \alias{Chelsa.Clim.download}
-\title{Function for downloading the Chelsa Climate dataset}
+\title{Function for downloading the CHELSA climate dataset (1979-2013)}
 \usage{
 Chelsa.Clim.download(
   save.location = "./",
@@ -22,15 +22,15 @@ Chelsa.Clim.download(
 )
 }
 \arguments{
-\item{save.location}{string. Input where the datasets should be saved. \cr Default: Working Directory.}
+\item{save.location}{string. Input where the datasets will be saved. \cr Default: Working Directory.}
 
 \item{parameter}{string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "temp", "tmax", "tmin", "bio")}}
 
 \item{bio.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{http://chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}}
 
-\item{month.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to precipitation and temperature (average, maximum, minimum). \cr Default: \code{c(1:12O)}}
+\item{month.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to precipitation and temperature (average, maximum, minimum). \cr Default: \code{c(1:12)}}
 
-\item{version.var}{string (vector). Input which version of the data set should be downloaded. Multiple selection is possible. \cr Default:  \code{c("1.1", "1.2")}}
+\item{version.var}{string (vector). Input which version of the dataset should be downloaded. Multiple selection is possible. \cr Default:  \code{c("1.2")}}
 
 \item{clipping}{logical. Input whether the downloaded data should be clipped.\cr If \code{FALSE}: clip.shapefile, buffer, clip.extent will be ignored. \cr Default: \code{FALSE}}
 
@@ -48,22 +48,30 @@ Chelsa.Clim.download(
 
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted.\cr If \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}}
 
-\item{save.bib.file}{logical. Whether a bibTex-citation file of the data set should be provided in the Working directory. \cr Default: \code{TRUE}}
+\item{save.bib.file}{logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
 }
 \value{
-Chelsa climate data sets for the period of 1979 - 2013
+CHELSA climate datasets for the period of 1979 - 2013
 }
 \description{
-This function supports a download of the Chelsa Climate dataset. This includes precipitation (mm), temperature (average, maximum, minimum; °C), and bioclimatic parameters. For convenience also a clipping-, conversion to ascii-grid,and stacking-tool is included.\cr An output of a .bib-file of the literature is also optional.\cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports the download, pre-processing and management of CHELSA climate data comprising of monthly precipitation sums in mm, monthly temperature (average, minimum, maximum) in degrees Celsius, and annual chracteristics (19 bioclimatic variables). The spatial resolution of the downloaded data is 30 arc-seconds.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+}
+\note{
+Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 }
 \examples{
-## NOT RUN
-## Bioclim
-# Chelsa.Clim.download(parameter = "bio", bio.var = c(1,12))
-## Precipitation
-# Chelsa.Clim.download(parameter = "prec", month.var = c(1,12))
-## NOT RUN
+\dontrun{
+# Bioclim
+Chelsa.Clim.download(parameter = "bio", bio.var = c(1,19))
+# Precipitation
+Chelsa.Clim.download(parameter = "prec", month.var = c(1,12))
+}
 
+}
+\references{
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
 }
 \author{
 Helge Jentsch

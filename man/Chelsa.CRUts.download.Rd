@@ -2,7 +2,7 @@
 % Please edit documentation in R/Chelsa_Download_functions.R
 \name{Chelsa.CRUts.download}
 \alias{Chelsa.CRUts.download}
-\title{Chelsa CRU Timeseries Download}
+\title{CHELSA CRU Timeseries Download}
 \usage{
 Chelsa.CRUts.download(
   save.location = "./",
@@ -54,24 +54,34 @@ Chelsa.CRUts.download(
 
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted. If \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}}
 
-\item{save.bib.file}{logical. Whether a bibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
+\item{save.bib.file}{logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
 }
 \value{
-Custom dataset of Chelsa CRU Timeseries for a chosen timeseries.
+Custom dataset of CHELSA CRU Timeseries for a chosen timeseries.
 }
 \description{
-This function supports a download of the Chelsa CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation (mm) and temperature (maximum, minimum; °C) parameters. For further information, please regard \url{http://chelsa-climate.org/chelsacruts/}.\cr For convenience also a clipping-, conversion to ascii-grid, and stacking-tool is included. \cr An output of a .bib-file of the literature is also optional. \cr For a clear working environment, directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports a download of the CHELSA CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation sums in mm and temperature (maximum, minimum) in degree Celsius. For further information, please regard \url{http://chelsa-climate.org/chelsacruts/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+}
+\note{
+Please note that the downloaded data for temperature is processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 }
 \examples{
-## NOT RUN
-# Chelsa.CRUts.download(parameter = "prec",
-#                       start.year.var = 2000,
-#                       start.month.var = 1,
-#                       end.year.var = 2002,
-#                       end.month.var = 12,
-#                       include.month.var = c(1,12))
-## END
+\dontrun{
+Chelsa.CRUts.download(parameter = "prec",
+                       start.year.var = 2000,
+                       start.month.var = 1,
+                       end.year.var = 2002,
+                       end.month.var = 12,
+                       include.month.var = c(1,12))
+}
 
+}
+\references{
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
+
+D. N. Karger and N. E. Zimmermann. _CHELSAcruts - High resolution temperature and precipitation timeseries for the 20th century and beyond_. 2018. DOI: http://dx.doi.org/10.16904/envidat.159.
 }
 \author{
 Helge Jentsch
