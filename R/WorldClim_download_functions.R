@@ -1060,7 +1060,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 #'@author Helge Jentsch
 #'@description This function supports the download, pre-processing and management of the WorldClim v2.1 CMIP6 future climate dataset.\cr This comprises of monthly precipitation sums (mm), temperature (maximum, minimum; °C), and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 #'
-#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution.
+#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time depending on the spatial resolution. \cr **The 30 arc-second resolution is not yet available. It was scheduled to be released by March 2020 but until March 2021 no data was released publicly.**
 #'
 #'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
 #'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "tmax", "tmin", "bio")}
