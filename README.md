@@ -39,10 +39,10 @@ Very well, now that you have the package installed and attached, let's start wit
 
 Besides the functions to download the currend climatologies of [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](../man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](../man/WorldClim.HistClim.download.Rd), the package offers more download functions.  
 - Beginning with the 'Last Glacial Maximum'-data set (LGM), Chelsa offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](../man/Chelsa.lgm.download.Rd).  
-- [Chelsa's](http://chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](../man/Chelsa.timeseries.download.RD)-function.  
+- [Chelsa's](http://chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](../man/Chelsa.timeseries.download.Rd)-function.  
 - For projected climatic conditions both [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options. 
-  - [Chelsa's](http://chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](../man/Chelsa.CMIP_5.download.RD) and/or [`Chelsa.CRUts.download()`](../man/Chelsa.CRUts.download.RD). 
-  - [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](../man/WorldClim.CMIP_5.download.RD) and/or [`WorldClim.CMIP_6.download()`](../man/WorldClim.CMIP_6.download.RD).  
+  - [Chelsa's](http://chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](../man/Chelsa.CMIP_5.download.Rd) and/or [`Chelsa.CRUts.download()`](../man/Chelsa.CRUts.download.Rd). 
+  - [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](../man/WorldClim.CMIP_5.download.Rd) and/or [`WorldClim.CMIP_6.download()`](../man/WorldClim.CMIP_6.download.Rd).  
 
 ## Download Climatologies
 
