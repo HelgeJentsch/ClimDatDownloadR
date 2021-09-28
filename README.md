@@ -1,7 +1,7 @@
 ## Welcome to the help-page of ClimDatDownloadR
 
 
-To get started please proceed [here](./articles/ClimDatDownloadR.html). 
+To get started please proceed [here](https://gitlab.rrz.uni-hamburg.de/helgejentsch/climdatdownloadr/-/blob/master/README.md). 
 
 
 
