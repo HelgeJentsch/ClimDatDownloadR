@@ -35,11 +35,11 @@
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
-Chelsa.Clim.download_deprecated<- function(save.location = "./",
+Chelsa.Clim.download.deprecated<- function(save.location = "./",
                                            parameter = c("prec", "temp", "tmax", "tmin", "bio"),
                                            bio.var = c(1:19),
                                            month.var = c(1:12),
@@ -473,7 +473,7 @@ Chelsa.Clim.download_deprecated<- function(save.location = "./",
 #'@import ncdf4
 #'@import raster
 #'@import httr
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -805,7 +805,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -1163,7 +1163,7 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@import ncdf4
 #'@import raster
 #'@import httr
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -1432,7 +1432,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
 #'@import ncdf4
 #'@import raster
 #'@import httr
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
