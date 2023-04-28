@@ -42,10 +42,11 @@
 #' }
 #'
 #'@import stringr
+#'@importFrom curl curl_fetch_memory
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'@export
 WorldClim.HistClim.download <- function(save.location = "./",
@@ -158,7 +159,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
                                  stop())
       # Thrid: Through resolution -----------------------------------------------
       for (res in resolution) {
-        temp.temp.save.location <- paste0(temp.save.location,"WorldClim_",
+        temp.temp.save.location <- paste0(temp.save.location,"/WorldClim_",
                                           vers, "_", parm.temp, "_", res, "/")
         # if not already created, create new directory
         if(!dir.exists(temp.temp.save.location)){
@@ -185,15 +186,17 @@ WorldClim.HistClim.download <- function(save.location = "./",
               immediate. = TRUE)
           }
           # destination file
-          dest.temp <- paste0(temp.temp.save.location, "WC_",vers, "_",
-                              res, "_", parm.temp, "_", "_Bulk.zip")
+          dest.temp <- paste0(temp.temp.save.location, "/WC_",vers, "_",
+                              res, "_", parm.temp, "_Bulk.zip")
           if(!(parm.temp == "bio" & res.temp == "30s")){
             if(!file.exists(dest.temp)){
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
               URL.temp <- paste0(URL.1 , parm.temp, "_", res.temp, "_bil.zip")
+              urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
               # check if URL is available
-              if(url.exists(URL.temp)){
+              # if(url.exists(URL.temp)){
+              if(urlCheck == 200){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 # download file to save location
@@ -228,8 +231,10 @@ WorldClim.HistClim.download <- function(save.location = "./",
                 # create a variable for the later requested Download-URL to avoid
                 # requiring multiple changes, if the link changes.
                 URL.temp <- paste0(URL.1 , parm.temp, div, "_", res.temp, "_bil.zip")
+                urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
                 # check if URL is available
-                if(url.exists(URL.temp)){
+                # if(url.exists(URL.temp)){
+                if(urlCheck == 200){
                   # clear up the temporary directory
                   unlink(list.files(tempdir(), recursive = T, full.names=T))
                   # download file to save location
@@ -379,9 +384,10 @@ WorldClim.HistClim.download <- function(save.location = "./",
             # create a variable for the later requested Download-URL to avoid
             # requireing multiple changes, if the link changes.
             URL.temp <- paste0(URL.1, res.temp, "_", parm.temp, ".zip")
-            paste0(URL.temp)
+            urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
             # check if URL is available
-            if(url.exists(URL.temp)){
+            # if(url.exists(URL.temp)){
+            if(urlCheck == 200){
               # clear up the temporary directory
               unlink(list.files(tempdir(), recursive = T, full.names=T))
               # download file to save location
@@ -609,10 +615,11 @@ WorldClim.HistClim.download <- function(save.location = "./",
 #' }
 #'
 #'@import stringr
+#'@importFrom curl curl_fetch_memory
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file  setTxtProgressBar txtProgressBar
 #'
 #'@export
 WorldClim.CMIP_5.download <- function(save.location = "./",
@@ -792,7 +799,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                                  "2070" = "70",
                                  next
             )
-            temp.temp.save.location <- paste0(temp.save.location,"WorldClim_CMIP5_",
+            temp.temp.save.location <- paste0(temp.save.location,"/WorldClim_CMIP5_",
                                               parm.temp, "_", res,"_",
                                               gcm, "_", rcp, "_",year,"/")
             # if not already created, create new directory
@@ -809,8 +816,10 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
               URL.temp <- paste0(URL.1, URL.2, URL.4, parm.temp, year.temp, ".zip")
+              urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
               # check if URL is available
-              if(url.exists(URL.temp)){
+              # if(url.exists(URL.temp)){
+              if(urlCheck == 200){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 # download file to save location
@@ -1106,7 +1115,9 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils download.file unzip
+#'@importFrom utils download.file unzip setTxtProgressBar txtProgressBar
+#'@importFrom curl curl_fetch_memory
+
 
 #'@export
 WorldClim.CMIP_6.download <- function(save.location = "./",
@@ -1247,8 +1258,10 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
               URL.temp <- paste0(URL.1, URL.2,URL.3, ".zip")
+              urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
               # check if URL is available
-              if(url.exists(URL.temp)){
+              # if(url.exists(URL.temp)){
+              if(urlCheck == 200){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 # download file to save location

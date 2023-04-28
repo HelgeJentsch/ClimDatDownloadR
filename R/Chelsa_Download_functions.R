@@ -1,4 +1,4 @@
-#'@title Function for downloading the CHELSA climate dataset (1979-2013)
+#'@title Deprecated function for downloading the CHELSA climate dataset (1979-2013)
 #'@author Helge Jentsch
 #'@description This function supports the download, pre-processing and management of CHELSA climate data comprising of monthly precipitation sums in mm, monthly temperature (average, minimum, maximum) in degrees Celsius, and annual chracteristics (19 bioclimatic variables). The spatial resolution of the downloaded data is 30 arc-seconds.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 #'
@@ -35,24 +35,24 @@
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
-Chelsa.Clim.download <- function(save.location = "./",
-                                 parameter = c("prec", "temp", "tmax", "tmin", "bio"),
-                                 bio.var = c(1:19),
-                                 month.var = c(1:12),
-                                 version.var = c("1.2"),
-                                 clipping = FALSE,
-                                 clip.shapefile = NULL,
-                                 clip.extent = c(-180, 180, -90, 90),
-                                 buffer = 0,
-                                 convert.files.to.asc = FALSE,
-                                 stacking.data = FALSE,
-                                 combine.raw.zip = FALSE,
-                                 delete.raw.data  = FALSE,
-                                 save.bib.file = TRUE){
+Chelsa.Clim.download.deprecated<- function(save.location = "./",
+                                           parameter = c("prec", "temp", "tmax", "tmin", "bio"),
+                                           bio.var = c(1:19),
+                                           month.var = c(1:12),
+                                           version.var = c("1.2"),
+                                           clipping = FALSE,
+                                           clip.shapefile = NULL,
+                                           clip.extent = c(-180, 180, -90, 90),
+                                           buffer = 0,
+                                           convert.files.to.asc = FALSE,
+                                           stacking.data = FALSE,
+                                           combine.raw.zip = FALSE,
+                                           delete.raw.data  = FALSE,
+                                           save.bib.file = TRUE){
   gc()
   call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
@@ -70,20 +70,20 @@ Chelsa.Clim.download <- function(save.location = "./",
     # Padding of "one-digit" months with a 0
     month.var <- str_pad(month.var, 2, 'left', pad = "0")
   }
-
+  
   # analog to the if-clause before - here the parameter bio.var is checked.
   if(is.element("bio", parameter)){
     bio.var <- c(bio.var)
     if(!is.numeric(bio.var)) stop()
     bio.var <- str_pad(bio.var, 2, 'left', pad = "0")
   }
-
+  
   # Download: 1. work through all parameters -----------------------------------
   for(i in parameter){
-
+    
     # clear up the temporary directory
     unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+    
     # create intermediate strings for later use
     interm <- switch(i,
                      "prec" = "prec/",
@@ -92,7 +92,7 @@ Chelsa.Clim.download <- function(save.location = "./",
                      "tmin" = "tmin/",
                      "bio"  = "bio/",
                      stop())
-
+    
     variable.numbers <- switch(i,
                                "bio" = bio.var,
                                "tmin" = month.var,
@@ -107,16 +107,16 @@ Chelsa.Clim.download <- function(save.location = "./",
     # set the 1. order temporal save location to this directory
     # 1. Order -> parameter!
     temp.save.location <- paste0(save.location, "/", i, "/")
-
+    
     # Add "10" after parameter string for all parameters except precipitation
     if(i != "prec"){
       i <- paste0(i, "10")
     }
     ## Download: 2. Work through versions as given as initial parameter ---------
     for (version in version.var) {
-
+      
       if(version == "1.1") next
-
+      
       # create version string
       vers <- switch(version,
                      "1.1" = "",
@@ -135,11 +135,11 @@ Chelsa.Clim.download <- function(save.location = "./",
       if(!dir.exists(temp.temp.save.location)){
         dir.create(temp.temp.save.location)
       }
-
+      
       # normalize the path to make it work more easily
       # temp.temp.save.location <- normalizePath(temp.temp.save.location,
       #                                          winslash = "/")
-
+      
       ##### Download: 4. Check if bio is not requested -----------------------------
       if(i != "bio10"){
         # should years be added? necessary for the download function
@@ -182,13 +182,13 @@ Chelsa.Clim.download <- function(save.location = "./",
                             cacheOK = FALSE)
               if(i != "prec"){
                 raster.temp <- raster(dest.temp)
-
+                
                 gc()
                 raster.temp <- clamp(raster.temp, lower = -1000,
                                      useValues = FALSE)
                 gain(raster.temp) <- 0.1
                 gc()
-
+                
                 writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
@@ -304,21 +304,21 @@ Chelsa.Clim.download <- function(save.location = "./",
             if(url.exists(URL.temp)){
               # clear up the temporary directory
               unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+              
               # download file to save location
               download.file(url = URL.temp,
                             destfile = dest.temp,
                             overwrite = TRUE,
                             mode = 'wb',
                             quiet = FALSE)
-
+              
               if(bio <= 11){
                 raster.temp <- raster(dest.temp)
                 # raster.values <- values(raster.temp)
                 # raster.values[raster.values==-32768] <- NA
                 # values(raster.temp) <- raster.values
                 # rm(raster.values)
-
+                
                 gc()
                 raster.temp <- clamp(raster.temp, lower = -1000,
                                      useValues = FALSE)
@@ -347,7 +347,7 @@ Chelsa.Clim.download <- function(save.location = "./",
               warning(paste0("File does not exist. Did not download: \n", URL.temp),
                       call. = TRUE, immediate. = FALSE)
             }
-
+            
           }
           if(bio == bio.var[length(bio.var)] &
              length(list.files(temp.temp.save.location,
@@ -400,12 +400,12 @@ Chelsa.Clim.download <- function(save.location = "./",
       # given data.
       if(length(list.files(temp.temp.save.location,
                            include.dirs = TRUE)) == 0){
-
+        
         unlink(str_sub(temp.temp.save.location, 1,
                        end = str_length(temp.temp.save.location)-1),
                force = TRUE, recursive = TRUE)
       }
-
+      
     } # version for-loop END
     # Download END
   } # Parameters for-loop end
@@ -473,7 +473,7 @@ Chelsa.Clim.download <- function(save.location = "./",
 #'@import ncdf4
 #'@import raster
 #'@import httr
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -524,16 +524,16 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
   if(is.element("prec", parameter)|is.element("temp", parameter)|
      is.element("tmax", parameter)|is.element("tmin", parameter)){
     if(!is.numeric(month.var)) stop()
-
+    
   }
   if(is.element("bio", parameter)){
     if(!is.numeric(bio.var)) stop()
-
+    
   }
   for(i in parameter){
     # clear up the temporary directory
     unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+    
     variable.numbers <- switch(i,
                                "bio" = bio.var,
                                "tmin" = month.var,
@@ -541,7 +541,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                                "temp" = month.var,
                                "prec" = month.var,
                                stop())
-
+    
     for (time.interval in time.interval.var) {
       interm <- switch(i,
                        "prec" = paste0("cmip5/", time.interval,
@@ -563,193 +563,193 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
       # print(temp.save.location)
       for (model in model.var) {
         for (emission.scenario in emission.scenario.var) {
-            temp.temp.save.location <- paste0(temp.save.location,
-                                              str_replace_all(interm,
-                                                              pattern = "/",
-                                                              "_"),
-                                              model,"_",
-                                              emission.scenario, "/")
-            if(!dir.exists(str_sub(temp.temp.save.location,
-                                   end = str_length(temp.temp.save.location)-1))){
-              dir.create(str_sub(temp.temp.save.location,
-                                 end = str_length(temp.temp.save.location)-1))
-            }
-
-            if(i != "bio"){
-              for(month in month.var){
-                dest.temp <- paste0(temp.temp.save.location, "CHELSA_", model,
-                                    "_", emission.scenario, "_", i, "_", month,
-                                    "_", time.interval, ".tif")
-                if(!file.exists(dest.temp)){
-                  URL.temp <- paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/",
-                                     interm, model, "_", emission.scenario,
-                                     # "_r1i1p1_g025.nc_", month, "_", time.interval,
-                                     "_V1.2.tif")
-                  if(!http_error(URL.temp)){
-                    # clear up the temporary directory
-                    unlink(list.files(tempdir(), recursive = T, full.names=T))
-
-                    download.file(url = URL.temp,
-                                  destfile = dest.temp,
-                                  overwrite = TRUE,
-                                  mode = 'wb',
-                                  quiet = FALSE)
-                    if(i != "prec"){
-                      gc()
-                      raster.temp <- raster(dest.temp)
-                      raster.temp <- clamp(raster.temp, lower = -1000,
-                                           useValues = FALSE)
-                      gc()
-                      gain(raster.temp) <- 0.1
-                      gc()
-                      writeRaster(raster.temp,
-                                  dest.temp,
-                                  overwrite = TRUE)
-                      rm(raster.temp)
-                      gc()
-                    }
-                  }else{
-                    warning(paste0("File does not exist. Did not download: \n",
-                                   URL.temp), call. = TRUE, immediate. = FALSE)
-                  }
-                }
-                if(month.var[month] == month.var[length(month.var)] &
-                   length(list.files(temp.temp.save.location,
-                                     pattern = ".tif",
-                                     include.dirs = FALSE)) != 0){
-                  if(clipping == TRUE){
-                    clipping.tif(clip.save.location = temp.temp.save.location,
-                                 clip.shapefile = clip.shapefile,
-                                 clip.extent = clip.extent,
-                                 buffer = buffer,
-                                 convert.files.to.asc = convert.files.to.asc,
-                                 time.stamp.var = call.time)
-                  }
-                  if(convert.files.to.asc == TRUE){
-                    convert.to.asc(save.location = temp.temp.save.location,
-                                   time.stamp.var = call.time)
-                  }
-                  if(stacking.data == TRUE){
-                    if(clipping==TRUE){
-                      stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                               parameter.var = i,
-                                               variable.numbers = variable.numbers,
-                                               stack.clipped = TRUE,
-                                               time.stamp.var = call.time)
-                    }else{
-                      stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                               parameter.var = i,
-                                               variable.numbers = variable.numbers,
-                                               time.stamp.var = call.time)
-                    }
-                  }
-                  if(combine.raw.zip == TRUE){
-                    combine.raw.in.zip(save.location = temp.temp.save.location,
-                                       zip.name = paste0("CHELSACMIP5_", i, ""),
-                                       time.stamp.var = call.time)
-                  }
-                  if(delete.raw.data == TRUE){
-                    unlink(list.files(temp.temp.save.location,
-                                      pattern = ".tif",
-                                      include.dirs = FALSE, full.names = T), force = TRUE)
-                  }
-                }
-              }
-            }else{
-              for(bio in bio.var){
-                dest.temp <- paste0(temp.temp.save.location, "CHELSA_", model,
-                                    "_", emission.scenario, "_", i, "_", bio,
-                                    "_", time.interval,".tif")
-                if(!file.exists(dest.temp)){
+          temp.temp.save.location <- paste0(temp.save.location,
+                                            str_replace_all(interm,
+                                                            pattern = "/",
+                                                            "_"),
+                                            model,"_",
+                                            emission.scenario, "/")
+          if(!dir.exists(str_sub(temp.temp.save.location,
+                                 end = str_length(temp.temp.save.location)-1))){
+            dir.create(str_sub(temp.temp.save.location,
+                               end = str_length(temp.temp.save.location)-1))
+          }
+          
+          if(i != "bio"){
+            for(month in month.var){
+              dest.temp <- paste0(temp.temp.save.location, "CHELSA_", model,
+                                  "_", emission.scenario, "_", i, "_", month,
+                                  "_", time.interval, ".tif")
+              if(!file.exists(dest.temp)){
+                URL.temp <- paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/",
+                                   interm, model, "_", emission.scenario,
+                                   # "_r1i1p1_g025.nc_", month, "_", time.interval,
+                                   "_V1.2.tif")
+                if(!http_error(URL.temp)){
                   # clear up the temporary directory
                   unlink(list.files(tempdir(), recursive = T, full.names=T))
-
-                  URL.temp <- paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/",
-                                     interm, model, "_",
-                                     emission.scenario, "_r1i1p1_g025.nc_",
-                                     bio, "_", time.interval, "_V1.2.tif")
-                  if(!http_error(URL.temp)){
-                    download.file(url = URL.temp,
-                                  destfile = dest.temp,
-                                  overwrite = FALSE,
-                                  mode = 'wb',
-                                  quiet = FALSE)
-
+                  
+                  download.file(url = URL.temp,
+                                destfile = dest.temp,
+                                overwrite = TRUE,
+                                mode = 'wb',
+                                quiet = FALSE)
+                  if(i != "prec"){
+                    gc()
                     raster.temp <- raster(dest.temp)
-                    # raster.values <- values(raster.temp)
-                    # raster.values[raster.values==-32768] <- NA
-                    # values(raster.temp) <- raster.values
-                    # rm(raster.values); gc()
-                    raster.temp <- clamp(raster.temp,
-                                         lower = -1000,
+                    raster.temp <- clamp(raster.temp, lower = -1000,
                                          useValues = FALSE)
                     gc()
-                    if(bio <= 11){
-                      gc()
-                      gain(raster.temp) <- 0.1
-                    }
+                    gain(raster.temp) <- 0.1
+                    gc()
                     writeRaster(raster.temp,
                                 dest.temp,
                                 overwrite = TRUE)
                     rm(raster.temp)
                     gc()
+                  }
+                }else{
+                  warning(paste0("File does not exist. Did not download: \n",
+                                 URL.temp), call. = TRUE, immediate. = FALSE)
+                }
+              }
+              if(month.var[month] == month.var[length(month.var)] &
+                 length(list.files(temp.temp.save.location,
+                                   pattern = ".tif",
+                                   include.dirs = FALSE)) != 0){
+                if(clipping == TRUE){
+                  clipping.tif(clip.save.location = temp.temp.save.location,
+                               clip.shapefile = clip.shapefile,
+                               clip.extent = clip.extent,
+                               buffer = buffer,
+                               convert.files.to.asc = convert.files.to.asc,
+                               time.stamp.var = call.time)
+                }
+                if(convert.files.to.asc == TRUE){
+                  convert.to.asc(save.location = temp.temp.save.location,
+                                 time.stamp.var = call.time)
+                }
+                if(stacking.data == TRUE){
+                  if(clipping==TRUE){
+                    stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                             parameter.var = i,
+                                             variable.numbers = variable.numbers,
+                                             stack.clipped = TRUE,
+                                             time.stamp.var = call.time)
                   }else{
-                    warning(paste0("File does not exist. Did not download: \n", URL.temp),
-                            call.=TRUE, immediate. = FALSE)
+                    stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                             parameter.var = i,
+                                             variable.numbers = variable.numbers,
+                                             time.stamp.var = call.time)
                   }
                 }
-                if(bio == bio.var[length(bio.var)] &
-                   length(list.files(temp.temp.save.location,
-                                     pattern = ".tif",
-                                     include.dirs = FALSE)) != 0){
-                  if(clipping == TRUE){
-                    clipping.tif(clip.save.location = temp.temp.save.location,
-                                 clip.shapefile = clip.shapefile,
-                                 clip.extent = clip.extent,
-                                 buffer = buffer,
-                                 convert.files.to.asc = convert.files.to.asc,
-                                 time.stamp.var = call.time)
-                  }
-                  if(convert.files.to.asc == TRUE){
-                    convert.to.asc(save.location = temp.temp.save.location,
-                                   time.stamp.var = call.time)
-                  }
-                  if(stacking.data == TRUE){
-                    if(clipping==TRUE){
-                      stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                               parameter.var = i,
-                                               variable.numbers = variable.numbers,
-                                               stack.clipped = TRUE,
-                                               time.stamp.var = call.time)
-                    }else{
-                      stacking.downloaded.data(stack.save.location = temp.temp.save.location,
-                                               parameter.var = i,
-                                               variable.numbers = variable.numbers,
-                                               time.stamp.var = call.time)
-
-                    }
-                  }
-                  if(combine.raw.zip == TRUE){
-                    combine.raw.in.zip(save.location = temp.temp.save.location,
-                                       zip.name = paste0("CHELSACMIP5_", i, ""),
-                                       time.stamp.var = call.time)
-                  }
-                  if(delete.raw.data == TRUE){
-                    unlink(list.files(temp.temp.save.location,
-                                      pattern = ".tif",
-                                      include.dirs = FALSE, full.names = T), force = TRUE)
-                  }
+                if(combine.raw.zip == TRUE){
+                  combine.raw.in.zip(save.location = temp.temp.save.location,
+                                     zip.name = paste0("CHELSACMIP5_", i, ""),
+                                     time.stamp.var = call.time)
+                }
+                if(delete.raw.data == TRUE){
+                  unlink(list.files(temp.temp.save.location,
+                                    pattern = ".tif",
+                                    include.dirs = FALSE, full.names = T), force = TRUE)
                 }
               }
             }
-            if(length(list.files(temp.temp.save.location,
-                                 include.dirs = TRUE)) == 0){
-              unlink(str_sub(temp.temp.save.location, 1,
-                             end = str_length(temp.temp.save.location)-1),
-                     force = TRUE,
-                     recursive = TRUE)
+          }else{
+            for(bio in bio.var){
+              dest.temp <- paste0(temp.temp.save.location, "CHELSA_", model,
+                                  "_", emission.scenario, "_", i, "_", bio,
+                                  "_", time.interval,".tif")
+              if(!file.exists(dest.temp)){
+                # clear up the temporary directory
+                unlink(list.files(tempdir(), recursive = T, full.names=T))
+                
+                URL.temp <- paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/",
+                                   interm, model, "_",
+                                   emission.scenario, "_r1i1p1_g025.nc_",
+                                   bio, "_", time.interval, "_V1.2.tif")
+                if(!http_error(URL.temp)){
+                  download.file(url = URL.temp,
+                                destfile = dest.temp,
+                                overwrite = FALSE,
+                                mode = 'wb',
+                                quiet = FALSE)
+                  
+                  raster.temp <- raster(dest.temp)
+                  # raster.values <- values(raster.temp)
+                  # raster.values[raster.values==-32768] <- NA
+                  # values(raster.temp) <- raster.values
+                  # rm(raster.values); gc()
+                  raster.temp <- clamp(raster.temp,
+                                       lower = -1000,
+                                       useValues = FALSE)
+                  gc()
+                  if(bio <= 11){
+                    gc()
+                    gain(raster.temp) <- 0.1
+                  }
+                  writeRaster(raster.temp,
+                              dest.temp,
+                              overwrite = TRUE)
+                  rm(raster.temp)
+                  gc()
+                }else{
+                  warning(paste0("File does not exist. Did not download: \n", URL.temp),
+                          call.=TRUE, immediate. = FALSE)
+                }
+              }
+              if(bio == bio.var[length(bio.var)] &
+                 length(list.files(temp.temp.save.location,
+                                   pattern = ".tif",
+                                   include.dirs = FALSE)) != 0){
+                if(clipping == TRUE){
+                  clipping.tif(clip.save.location = temp.temp.save.location,
+                               clip.shapefile = clip.shapefile,
+                               clip.extent = clip.extent,
+                               buffer = buffer,
+                               convert.files.to.asc = convert.files.to.asc,
+                               time.stamp.var = call.time)
+                }
+                if(convert.files.to.asc == TRUE){
+                  convert.to.asc(save.location = temp.temp.save.location,
+                                 time.stamp.var = call.time)
+                }
+                if(stacking.data == TRUE){
+                  if(clipping==TRUE){
+                    stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                             parameter.var = i,
+                                             variable.numbers = variable.numbers,
+                                             stack.clipped = TRUE,
+                                             time.stamp.var = call.time)
+                  }else{
+                    stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+                                             parameter.var = i,
+                                             variable.numbers = variable.numbers,
+                                             time.stamp.var = call.time)
+                    
+                  }
+                }
+                if(combine.raw.zip == TRUE){
+                  combine.raw.in.zip(save.location = temp.temp.save.location,
+                                     zip.name = paste0("CHELSACMIP5_", i, ""),
+                                     time.stamp.var = call.time)
+                }
+                if(delete.raw.data == TRUE){
+                  unlink(list.files(temp.temp.save.location,
+                                    pattern = ".tif",
+                                    include.dirs = FALSE, full.names = T), force = TRUE)
+                }
+              }
             }
-
+          }
+          if(length(list.files(temp.temp.save.location,
+                               include.dirs = TRUE)) == 0){
+            unlink(str_sub(temp.temp.save.location, 1,
+                           end = str_length(temp.temp.save.location)-1),
+                   force = TRUE,
+                   recursive = TRUE)
+          }
+          
         }
       }
     }
@@ -805,7 +805,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
 #'@import RCurl
 #'@import ncdf4
 #'@import raster
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -844,7 +844,7 @@ Chelsa.lgm.download <- function(save.location = "./",
     if(!is.numeric(month.var)) stop("month.var needs to be a numeric vector")
     # month.var <- str_pad(month.var, 2, 'left', pad = "0")
   }
-
+  
   if(is.element("bio", parameter)){
     bio.var <- c(bio.var)
     if(!is.numeric(bio.var)) stop("bio.var needs to be a numeric vector")
@@ -852,13 +852,13 @@ Chelsa.lgm.download <- function(save.location = "./",
     bio.var <- str_pad(bio.var, 2, 'left', pad = "0")
     # print(bio.var)
   }
-
+  
   # through all given parameters --------------------------------------------
   # work through paramerters
   for(i in parameter){
     # clear up the temporary directory
     unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+    
     # create intermediate strings for later use
     interm <- switch(i,
                      "prec" = "prec/",
@@ -867,7 +867,7 @@ Chelsa.lgm.download <- function(save.location = "./",
                      "tmin" = "tmin/",
                      "bio"  = "bioclim/",
                      stop())
-
+    
     variable.numbers <- switch(i,
                                "bio" = bio.var,
                                "tmin" = month.var,
@@ -875,11 +875,11 @@ Chelsa.lgm.download <- function(save.location = "./",
                                "temp" = month.var,
                                "prec" = month.var,
                                stop())
-
+    
     # create new directory
     dir.create(paste0(save.location, "/", i))
     temp.save.location <- paste0(save.location, "/", i, "/")
-
+    
     for (model in model.var) {
       # download of the requested datasets -------------------------------------
       temp.temp.save.location <- paste0(temp.save.location,
@@ -890,10 +890,10 @@ Chelsa.lgm.download <- function(save.location = "./",
       if(!dir.exists(temp.temp.save.location)){
         dir.create(temp.temp.save.location)
       }
-
+      
       # temp.temp.save.location <- normalizePath(temp.temp.save.location,
       #                                          winslash = "/")
-
+      
       # Check if bio is not requested
       if(i != "bio"){
         if(i == "temp") {
@@ -901,12 +901,12 @@ Chelsa.lgm.download <- function(save.location = "./",
         }else{
           month.var <- as.integer(month.var)
         }
-
+        
         # work through every requested month
         for(month in 1:length(month.var)){
           # clear up the temporary directory
           unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+          
           dest.temp <- paste0(temp.temp.save.location, "CHELSA_PMIP_", model, "_",
                               i,"_",month.var[month],".tif")
           if(!file.exists(dest.temp)){
@@ -916,9 +916,9 @@ Chelsa.lgm.download <- function(save.location = "./",
                        interm, "CHELSA_PMIP_", model,"_",i,"_", month.var[month],"_1.tif")
             }else{
               if(model == "CCSM4"){
-              URL.temp <-
-                paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/pmip3/",
-                       interm, "CHELSA_PMIP_", model, "_tmean_", month.var[month],".tif")
+                URL.temp <-
+                  paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/pmip3/",
+                         interm, "CHELSA_PMIP_", model, "_tmean_", month.var[month],".tif")
               }else{
                 month.var <- as.integer(month.var)
                 URL.temp <-
@@ -936,16 +936,16 @@ Chelsa.lgm.download <- function(save.location = "./",
                             quiet = FALSE)
               if(i != "prec"){
                 raster.temp <- raster(dest.temp)
-
+                
                 raster.temp <- clamp(raster.temp, lower = -1000, useValues= FALSE)
                 gc()
-
+                
                 # Conversion Float
                 gain(raster.temp) <- 0.1
                 # umrechnung Kelvin - Celsius
                 gc()
                 offs(raster.temp) <- -273.15
-
+                
                 writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
@@ -1021,7 +1021,7 @@ Chelsa.lgm.download <- function(save.location = "./",
             URL.temp <-
               paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/pmip3/",
                      interm, "CHELSA_PMIP_", model, "_BIO_",bio,".tif")
-
+            
             # check if URL is available
             if(url.exists(URL.temp)){
               # download file to save location
@@ -1034,7 +1034,7 @@ Chelsa.lgm.download <- function(save.location = "./",
               raster.temp <- raster(dest.temp)
               raster.temp <- clamp(raster.temp, lower = -1000, useValues= FALSE)
               gc()
-
+              
               if(bio <= 11){
                 # values(raster.temp) <- as.numeric(values(raster.temp)/10)
                 gain(raster.temp) <- 0.1
@@ -1093,7 +1093,7 @@ Chelsa.lgm.download <- function(save.location = "./",
           }
         }
       }
-
+      
       if(length(list.files(temp.temp.save.location,
                            include.dirs = TRUE)) == 0){
         unlink(str_sub(temp.temp.save.location, 1, end = str_length(temp.temp.save.location)-1),
@@ -1116,7 +1116,7 @@ Chelsa.lgm.download <- function(save.location = "./",
                     quiet = FALSE)
     }
   }
-# Saving BIB File
+  # Saving BIB File
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "CHELSA")
 }
 
@@ -1163,7 +1163,7 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@import ncdf4
 #'@import raster
 #'@import httr
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -1209,7 +1209,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
   if(start.year.var == end.year.var){
     if(start.month.var > end.month.var) stop("End is before the start. Please correct the input!")
   }
-
+  
   ts_string <- seq.Date(as.Date(paste(start.year.var,
                                       start.month.var, "01", sep = "-")),
                         as.Date(paste(end.year.var,
@@ -1218,7 +1218,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
   ts_string <- format.Date(ts_string, format = "%Y_%m")
   # ts_string <- str_sub(ts_string, 1, end = str_length(ts_string)-3)
   # ts_string <- str_replace_all(ts_string, pattern = "-", replacement = "_")
-
+  
   if(length(include.month.var)!=12){
     ts.string.temp <- c()
     for (incl.month in include.month.var) {
@@ -1230,14 +1230,14 @@ Chelsa.timeseries.download <- function(save.location = "./",
     }
     ts_string <- ts.string.temp
   }
-
-
+  
+  
   # Parameter and directories -----------------------------------------------
   # work through paramerters
   for(i in parameter){
     # clear up the temporary directory
     unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+    
     # create intermediate strings for later use
     interm <- switch(i,
                      "prec"  = "prec/",
@@ -1246,7 +1246,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
                      "tmin"  = "tmin/",
                      # "bio"  = "bio/",
                      stop())
-
+    
     variable.numbers <- switch(i,
                                # "bio" = bio.var,
                                "tmin" = include.month.var,
@@ -1254,7 +1254,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
                                "temp" = include.month.var,
                                "prec" = include.month.var,
                                stop())
-
+    
     # create new directory
     if(!dir.exists(paste0(save.location, "/", i))){
       dir.create(paste0(save.location, "/", i), showWarnings = FALSE)
@@ -1270,7 +1270,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
     if(!dir.exists(temp.temp.save.location)){
       dir.create(str_sub(temp.temp.save.location, end=-2))
     }
-
+    
     # temp.temp.save.location <- normalizePath(temp.temp.save.location,
     #                                          winslash = "/")
     # if(i == "temp"){
@@ -1288,7 +1288,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
       if(!http_error(URL.temp)){
         # clear up the temporary directory
         unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+        
         dest.file <- paste0(temp.temp.save.location, "CHELSA_", i,
                             "_", year_month, "_V1.2.1.tif")
         if(!file.exists(dest.file)){
@@ -1298,29 +1298,29 @@ Chelsa.timeseries.download <- function(save.location = "./",
                         overwrite = TRUE,
                         mode = 'wb',
                         quiet = FALSE)
-
-
-        if(i != "prec"){
-          raster.temp <- raster(dest.file)
-          # raster.values <- values(raster.temp)
-          # raster.values[raster.values==-32768] <- NA
-          # values(raster.temp) <- raster.values
-          # rm(raster.values)
-
-          raster.temp <- clamp(raster.temp, lower = -1000, useValues = FALSE)
-          gc()
-
-          # values(raster.temp) <- as.numeric(values(raster.temp)/10)
-          # values(raster.temp) <- as.numeric(values(raster.temp)-273.15)
-          gain(raster.temp) <- 0.1
-          offs(raster.temp) <- -273.15
-
-          writeRaster(raster.temp,
-                      dest.file,
-                      overwrite = TRUE)
-          rm(raster.temp)
-          gc()
-        }
+          
+          
+          if(i != "prec"){
+            raster.temp <- raster(dest.file)
+            # raster.values <- values(raster.temp)
+            # raster.values[raster.values==-32768] <- NA
+            # values(raster.temp) <- raster.values
+            # rm(raster.values)
+            
+            raster.temp <- clamp(raster.temp, lower = -1000, useValues = FALSE)
+            gc()
+            
+            # values(raster.temp) <- as.numeric(values(raster.temp)/10)
+            # values(raster.temp) <- as.numeric(values(raster.temp)-273.15)
+            gain(raster.temp) <- 0.1
+            offs(raster.temp) <- -273.15
+            
+            writeRaster(raster.temp,
+                        dest.file,
+                        overwrite = TRUE)
+            rm(raster.temp)
+            gc()
+          }
         }
       }else{
         # Warning message
@@ -1373,10 +1373,10 @@ Chelsa.timeseries.download <- function(save.location = "./",
         }
       }
     }
-
+    
     # Clean up, if no data was downloaded. ------------------------------------
-
-
+    
+    
     if(length(list.files(temp.temp.save.location,
                          include.dirs = TRUE)) == 0){
       unlink(str_sub(temp.temp.save.location, 1, end = str_length(temp.temp.save.location)-1),
@@ -1432,7 +1432,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
 #'@import ncdf4
 #'@import raster
 #'@import httr
-#'@importFrom utils unzip download.file
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
 #'@export
@@ -1487,14 +1487,14 @@ Chelsa.CRUts.download <- function(save.location = "./",
       stop("End is before the start. Please correct the input!")
     }
   }
-
+  
   ts_string <- seq.Date(as.Date(paste(start.year.var,
                                       start.month.var, "01", sep = "-")),
                         as.Date(paste(end.year.var,
                                       end.month.var, "01", sep = "-")),
                         by = "month")
   ts_string <- format.Date(ts_string, format = "%m_%Y")
-
+  
   if(length(include.month.var)!=12){
     ts.string.temp <- c()
     for (incl.month in include.month.var) {
@@ -1506,17 +1506,17 @@ Chelsa.CRUts.download <- function(save.location = "./",
     }
     ts_string <- ts.string.temp
   }
-
+  
   ts_string <- as.Date(paste0(ts_string,"-01"), format = "%d_%Y-%m")
   ts_string <- format.Date(ts_string, format = "%e_%Y")
   ts_string <- str_remove(ts_string, pattern = " ")
-
+  
   # Parameter and directories -----------------------------------------------
   # work through paramerters
   for(i in parameter){
     # clear up the temporary directory
     unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+    
     # create intermediate strings for later use
     interm <- switch(i,
                      "prec"  = "prec/",
@@ -1544,13 +1544,13 @@ Chelsa.CRUts.download <- function(save.location = "./",
     if(!dir.exists(temp.temp.save.location)){
       dir.create(temp.temp.save.location)
     }
-
+    
     # temp.temp.save.location <- normalizePath(temp.temp.save.location,
     #                                          winslash = "/")
-
+    
     # Download ----------------------------------------------------------------
     for (year_month in ts_string){
-
+      
       output.year_month <- str_split(year_month, pattern = "_")
       output.year_month <- unlist(output.year_month)
       zero <- switch (as.character(str_length(paste0(output.year_month[2],
@@ -1568,13 +1568,13 @@ Chelsa.CRUts.download <- function(save.location = "./",
                "_V.1.0.tif")
       dest.temp <- paste0(temp.temp.save.location, "CHELSA_CRUts_", i,
                           "_",output.year_month, "_V_1_0.tif")
-
+      
       # check if URL is available
       if(!http_error(URL.temp)){
         gc()
         # clear up the temporary directory
         unlink(list.files(tempdir(), recursive = T, full.names=T))
-
+        
         if(!file.exists(dest.temp)){
           # download file to save location
           download.file(url = URL.temp,
@@ -1652,15 +1652,15 @@ Chelsa.CRUts.download <- function(save.location = "./",
         }
       }
     }
-
+    
     # Clean up, if no data was downloaded. ------------------------------------
-
+    
     if(length(list.files(temp.temp.save.location,
                          include.dirs = TRUE)) == 0){
       unlink(str_sub(temp.temp.save.location, 1, end = str_length(temp.temp.save.location)-1),
              force = T, recursive = TRUE)
     }
-
+    
   }
   # Saving BIB File
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "CHELSA")

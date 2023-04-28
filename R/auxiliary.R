@@ -41,6 +41,7 @@ clipping.tif  <- function(clip.save.location = "./",
                                 recursive = FALSE,
                                 pattern = ".tif")
   if(length(temp.list.files) == 0) stop(paste0("No files found at location: ", clip.save.location))
+  # print(temp.list.files)
   temp.list.file.names <- list.files(clip.save.location,
                                      full.names = FALSE,
                                      recursive = FALSE,
@@ -527,46 +528,85 @@ process.raster.int.doub <- function(raster.layer = NULL)
   if(class(raster.layer)[1] != "RasterLayer"){
     stop("raster.layer is not a 'RasterLayer'")
   }
-  extent_rasterfile <- extent(raster.layer)
-  # crop
-  tl <- crop(raster.layer, extent(extent_rasterfile@xmin,
-                                 (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-                                 (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
-                                 extent_rasterfile@ymax)
-  )
-  bl <- crop(raster.layer, extent(extent_rasterfile@xmin,
-                                 (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-                                 extent_rasterfile@ymin,
-                                 (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
-  )
-  tr <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-                                 extent_rasterfile@xmax,
-                                 (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
-                                 extent_rasterfile@ymax)
-  )
-  br <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-                                 extent_rasterfile@xmax,
-                                 extent_rasterfile@ymin,
-                                 (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
-  )
-  # recalculate like:
-  # values(raster.temp) <- as.numeric(values(raster.temp)/10)
-  # values(tl) <- as.numeric(values(tl)/10)
-  tl <- tl/10
-  # values(tr) <- as.numeric(values(tr)/10)
-  tr <- tr/10
-  # values(bl) <- as.numeric(values(bl)/10)
-  bl <- bl/10
-  # values(br) <- as.numeric(values(br)/10)
-  br <- br/10
-  # and mosaic:
+  # extent_rasterfile <- extent(raster.layer)
+  # # crop
+  # tl <- crop(raster.layer, extent(extent_rasterfile@xmin,
+  #                                (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
+  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
+  #                                extent_rasterfile@ymax)
+  # )
+  # bl <- crop(raster.layer, extent(extent_rasterfile@xmin,
+  #                                (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
+  #                                extent_rasterfile@ymin,
+  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
+  # )
+  # tr <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
+  #                                extent_rasterfile@xmax,
+  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
+  #                                extent_rasterfile@ymax)
+  # )
+  # br <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
+  #                                extent_rasterfile@xmax,
+  #                                extent_rasterfile@ymin,
+  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
+  # )
+  # # recalculate like:
+  # # values(raster.temp) <- as.numeric(values(raster.temp)/10)
+  # # values(tl) <- as.numeric(values(tl)/10)
+  # tl <- tl/10
+  # # values(tr) <- as.numeric(values(tr)/10)
+  # tr <- tr/10
+  # # values(bl) <- as.numeric(values(bl)/10)
+  # bl <- bl/10
+  # # values(br) <- as.numeric(values(br)/10)
+  # br <- br/10
+  # # and mosaic:
+  # gc()
+  # top <- mosaic(tl,tr, fun = "mean")
+  # rm(tl, tr)
+  # gc()
+  # bottom <- mosaic(bl,br, fun = "mean")
+  # rm(bl, br)
+  # gc()
+  # raster.layer <- mosaic(top, bottom, fun = "mean")
+  
+  raster.temp <- raster.layer
+  gain(raster.temp) <- 0.1
   gc()
-  top <- mosaic(tl,tr, fun = "mean")
-  rm(tl, tr)
-  gc()
-  bottom <- mosaic(bl,br, fun = "mean")
-  rm(bl, br)
-  gc()
-  raster.layer <- mosaic(top, bottom, fun = "mean")
-  return(raster.layer)
+  return(raster.temp)
+}
+
+
+#' @title Get Download Size
+#' @author Helge Jentsch
+#' @description Helper function that returns the download size of a vector of URLs
+#' 
+#' @param URLVector Character vector. Multiple vectors of valid URLs.
+#' 
+#' @return Download size as double numeric value
+#' @import httr
+#' @export
+getDownloadSize <- function(URLVector){
+  # helper-function by Allan Cameron (https:\/\/stackoverflow.com\/a\/63852321)
+  download_size <- function(url){
+    as.numeric(httr::HEAD(url)$headers$`content-length`)
+  }
+  filesizes <- NULL
+  for(i in URLVector){
+    # collect file sizes
+    fileISize <- download_size(i)
+    # and add to another
+    filesizes <- sum(filesizes,fileISize)
+    # return(Downloadsize)
+  }
+  return(round(filesizes*0.000001, 2))
+  # Download size in MB
+
+  # get duration by calculating with https:\/\/gitlab.com\/hrbrmstr\/speedtest
+    # config <- spd_config()
+    # servers <- spd_servers(config=config)
+    # closest_servers <- spd_closest_servers(servers, config=config)
+    # speed <- spd_download_test(close_servers[1,], config=config)
+    # medspeed <- speed$median
+    # cat("Download-Zeit: \n", downloadSize/medspeed, "s \n")
 }
