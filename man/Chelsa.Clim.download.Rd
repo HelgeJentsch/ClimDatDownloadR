@@ -9,7 +9,7 @@ Chelsa.Clim.download(
   parameter = c("prec", "temp", "tmax", "tmin", "bio"),
   bio.var = c(1:19),
   month.var = c(1:12),
-  version.var = c("1.2"),
+  version.var = c("1.2", "2.1"),
   clipping = FALSE,
   clip.shapefile = NULL,
   clip.extent = c(-180, 180, -90, 90),

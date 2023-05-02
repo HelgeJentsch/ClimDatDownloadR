@@ -11,13 +11,20 @@
 #'
 #'@return This function returns, depending on the parameter \code{convert.files.to.asc} whether it is ASCII or tif format, clipped raster files to a new directory. This directory is automatically created.
 #'
-#'@import raster
 #'@import stringr
-#'@import sp
 #'@import sf
+#'@import terra
 #'
 #' @examples
-#' clipping.tif(clip.save.location = system.file("pictures/", package = "rgdal"))
+#' \dontrun{
+#' clipping.tif(clip.save.location = terra::rast(
+#'                                           paste(
+#'                                               system.file("ex/meuse.tif", 
+#'                                               package = "terra")
+#'                                               )
+#'                                               )
+#'                                               )
+#'}
 #'
 #'@export
 clipping.tif  <- function(clip.save.location = "./",
@@ -28,85 +35,82 @@ clipping.tif  <- function(clip.save.location = "./",
                           time.stamp.var = str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
 ){
   gc()
-  # requireNamespace("raster")
-  # requireNamespace("stringr")
-  # requireNamespace("sp")
-  global.crs <- raster::crs(
-    raster::projection("+proj=longlat +datum=WGS84 +no_defs")
-  )
+  
+  # global.crs <- raster::crs(
+  #   raster::projection("+proj=longlat +datum=WGS84 +no_defs")
+  # )
+  # global.crs<- terra::crs("+proj=longlat +datum=WGS84 +no_defs")
+  global.crs <- "+proj=longlat +datum=WGS84 +no_defs"
+  
   if((length(clip.extent) != 4) & !is.null(clip.extent)) stop("Please enter a extent as shown in the help! E.g. c(0, 30, 25, 80)")
   if((is.null(clip.shapefile) & is.null(clip.extent))) stop("Please provide a valid extent or shapefile to which the files should be clipped!")
+  
   temp.list.files <- list.files(clip.save.location,
                                 full.names = TRUE,
                                 recursive = FALSE,
                                 pattern = ".tif")
+  
   if(length(temp.list.files) == 0) stop(paste0("No files found at location: ", clip.save.location))
   # print(temp.list.files)
+  
   temp.list.file.names <- list.files(clip.save.location,
                                      full.names = FALSE,
                                      recursive = FALSE,
                                      pattern = ".tif")
-  temp.list.file.names <- str_remove(temp.list.file.names,
-                                     pattern = ".tif")
+  
+  temp.list.file.names <- stringr::str_remove(temp.list.file.names,
+                                              pattern = ".tif")
+  
   dir.create(paste0(clip.save.location,"/clipped_",time.stamp.var),
              showWarnings = FALSE)
+  
   if(!is.null(clip.shapefile)){
-    temp.shp <- st_read(clip.shapefile, quiet = TRUE)
-    temp.shp.crs <- as.character(st_crs(temp.shp$geometry)[[1]])
-    if(is.na(temp.shp.crs)){
-      # print(temp.shp)
+    # temp.shp <- st_read(clip.shapefile, quiet = TRUE)
+    temp.shp <- terra::vect(clip.shapefile)
+    # temp.shp.crs <- as.character(st_crs(temp.shp$geometry)[[1]])
+    if(is.na(terra::is.lonlat(temp.shp))){
       stop(paste0("No spatial reference was found. \n",
                   "Please set the spatial reference of the shapefile and restart!"), )
     }
-    if(temp.shp.crs != "GCS"){
+    if(!terra::is.lonlat(temp.shp)){
       warning("Shapefile is not in GCS! It will be transformed in the next step.",
               immediate. = T)
-      crs_wgs84 <- sp::CRS("+proj=longlat +datum=WGS84 +no_defs")
-      new.extent <- as.numeric(st_bbox(obj = st_transform(x = temp.shp,
-                                                          crs = crs_wgs84))[c(1,3,2,4)])
-      temp.clip.extent <- raster::extent(x = new.extent)
+      temp.clip.extent <- terra::ext(x = terra::project(temp.shp, global.crs))
     }else{
-      temp.clip.extent <- raster::extent(as.numeric(st_bbox(temp.shp)[c(1,3,2,4)]))
+      temp.clip.extent <- terra::ext(x = temp.shp)
     }
-    rm(temp.shp.crs, temp.shp)
+    rm(temp.shp)
     gc()
   }else{
-    temp.clip.extent <- extent(clip.extent)
+    temp.clip.extent <- terra::ext(clip.extent)
   }
-  # print(temp.clip.extent)
   for (temp.file in 1:length(temp.list.files)) {
     gc()
-    temp.raster <- raster(temp.list.files[temp.file])
-    # print(crs(temp.raster))
-    # reproject raster if it is not in GCS
-    # if(as.character(crs(temp.raster)) != as.character(global.crs)){
-    #   # warning("Raster is not in GCS! It will be transformed in the next step.",
-    #   # call. = TRUE,
-    #   # immediate. = TRUE)
-    #   temp.raster <- projectRaster(from = temp.raster, crs = global.crs)
-    # }
-    if(!is.null(intersect(x = extent(temp.raster),y = temp.clip.extent+buffer))){
+    temp.raster <- terra::rast(temp.list.files[temp.file])
+    if(!is.null(terra::intersect(x = terra::ext(temp.raster), 
+                                 y = temp.clip.extent+buffer))){
       # if there is a buffer
       if(buffer > 0){
-        temp.raster.extent <- extent(temp.clip.extent)+buffer
-        if(temp.raster.extent > extent(temp.raster)){
-          temp.raster.extent <- extent(temp.raster)
-          warning("New extent was bigger than the original. So the max extent was used",
+        temp.raster.extent <- temp.clip.extent+buffer
+        if(temp.raster.extent > terra::ext(temp.raster)){
+          temp.raster.extent <- terra::ext(temp.raster)
+          warning("New extent was bigger than the original. So the max extent was used.",
                   call. = TRUE,
                   immediate. = TRUE)
         }
-        temp.raster <- crop(temp.raster, temp.raster.extent)
+        temp.raster <- terra::crop(temp.raster, temp.raster.extent)
       }else{
         if(buffer == 0){
-          if(temp.clip.extent > extent(temp.raster)){
-            temp.clip.extent <- extent(temp.raster)
-            warning("New extent was bigger than the original. So the max extent was used",
+          if(temp.clip.extent > terra::ext(temp.raster)){
+            temp.clip.extent <- terra::ext(temp.raster)
+            warning("New extent was bigger than the original. So the max extent was used.",
                     call. = TRUE,
                     immediate. = TRUE)
           }
-          temp.raster <- crop(temp.raster, temp.clip.extent)
+          temp.raster <- terra::crop(temp.raster, temp.clip.extent)
         }else{
-          warning("Buffer is negative. Please consider adjusting the extent",
+          warning(paste0("Buffer is negative. Please consider adjusting the extent. The current clipping extent was: ", 
+                         stringr::str_c(as.list(temp.clip.extent), collapse =  " ")),
                   call. = TRUE,
                   immediate. = TRUE)
         }
@@ -127,15 +131,17 @@ clipping.tif  <- function(clip.save.location = "./",
                                      "/clipped_",time.stamp.var,"/",
                                      temp.list.file.names[temp.file],
                                      "_clipped.tif")
-      writeRaster(temp.raster, raster.save.location,
-                  overwrite = TRUE)
+      terra::writeRaster(x = temp.raster, 
+                         filename = raster.save.location,
+                         overwrite = TRUE)
     }else{
       raster.save.location <- paste0(clip.save.location,
                                      "/clipped_",time.stamp.var,"/",
                                      temp.list.file.names[temp.file],
                                      "_clipped.asc")
-      writeRaster(temp.raster, raster.save.location,
-                  format = "ascii", overwrite = TRUE)
+      terra::writeRaster(x = temp.raster, 
+                         filename = raster.save.location,
+                         overwrite = TRUE)
     }
     gc()
   }
@@ -150,39 +156,41 @@ clipping.tif  <- function(clip.save.location = "./",
 #'
 #'@return This function returns ASCII-format raster files to a new directory. This directory is dynamically created.
 #'
-#'@import raster
 #'@import stringr
+#'@import terra
 #'
 #'@examples
+#'\dontrun{
 #'convert.to.asc(save.location = system.file("pictures/", package = "rgdal"))
+#'}
 #'@export
 convert.to.asc <- function(save.location = "./",
                            time.stamp.var = str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
 ){
   gc()
-  # requireNamespace("raster")
-  # requireNamespace("stringr")
   temp.save.location <- normalizePath(save.location, winslash = "/")
   file.path.list <- list.files(temp.save.location, pattern=".tif", full.names = T)
-  temp.save.location <- paste0(temp.save.location, "/")
-
-  if(!dir.exists(paste0(temp.save.location, "ASCII_files_",time.stamp.var))){
-    dir.create(paste0(temp.save.location, "ASCII_files_",time.stamp.var))
+  temp.save.location <- base::paste0(temp.save.location, "/")
+  
+  if(!base::dir.exists(base::paste0(temp.save.location, "ASCII_files_",time.stamp.var))){
+    base::dir.create(base::paste0(temp.save.location, "ASCII_files_",time.stamp.var))
   }
-  temp.save.location <- paste0(temp.save.location, "ASCII_files_",time.stamp.var,"/")
+  temp.save.location <- base::paste0(temp.save.location, "ASCII_files_",time.stamp.var,"/")
   # print(file.path.list)
-  file.list <- str_remove(file.path.list,
-                          pattern = paste0(
-                            normalizePath(save.location, winslash = "/"), "/"))
-  file.list <- str_remove(file.list, pattern = ".tif")
+  file.list <- stringr::str_remove(file.path.list,
+                                   pattern = base::paste0(
+                                     base::normalizePath(save.location, winslash = "/"), "/"))
+  file.list <- stringr::str_remove(file.list, pattern = ".tif")
   if(length(file.list) >= 1){
     for (layer in 1:length(file.list)) {
       # print(file.list[layer])
       # print(file.path.list[layer])
-      temp.raster <- raster(file.path.list[layer])
+      temp.raster <- terra::rast(file.path.list[layer])
       # temp.raster <- crop(temp.raster, extent(c(5,20,40,55)))
-      writeRaster(temp.raster,paste0(temp.save.location, file.list[layer], ".asc"),
-                  format = "ascii", overwrite = TRUE)
+      terra::writeRaster(x = temp.raster,
+                         filename = paste0(temp.save.location, file.list[layer], ".asc"),
+                         # format = "ascii", 
+                         overwrite = TRUE)
       gc()
     }
   }else{
@@ -202,9 +210,9 @@ convert.to.asc <- function(save.location = "./",
 #'@param time.series string (vector). String input of timeseries vector. \cr Default: \code{NULL}
 #'@param time.stamp.var string. Timestamp to create unique directories for multiple run outputs.\cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}
 #'
-#'@import raster
-#'@import stringr
 #'@import ncdf4
+#'@import stringr
+#'@import terra
 #'
 #'@export
 stacking.downloaded.data <- function(stack.save.location = "./",
@@ -221,15 +229,15 @@ stacking.downloaded.data <- function(stack.save.location = "./",
        is.element("tmax", parameter.var)|is.element("tmin", parameter.var)|
        is.element("srad", parameter.var)|is.element("wind", parameter.var)|
        is.element("vapr", parameter.var)|is.element("bio10", parameter.var)|
-       is.element("bio", parameter.var))|
+       base::is.element("bio", parameter.var))|
      !(length(c(parameter.var))==1)){
     print(parameter.var)
   }
-
+  
   if(stack.time.series == TRUE & is.null(time.series)){
     stop("A timeseries should be stacked but no timeseries vector is given.")
   }
-
+  
   # units
   var.units <- NULL
   if(parameter.var == "bio"){
@@ -237,23 +245,23 @@ stacking.downloaded.data <- function(stack.save.location = "./",
   }else{
     var.units <- "Month"
   }
-
+  
   temp.list.files <- list.files(stack.save.location,
                                 full.names = TRUE,
                                 recursive = FALSE,
                                 pattern = ".tif")
-  if(length(temp.list.files)==0) stop()
+  if(length(temp.list.files)==0) stop("No Data found!")
   temp.list.file.names <- list.files(stack.save.location,
                                      full.names = FALSE,
                                      recursive = FALSE,
                                      pattern = ".tif")
-  temp.list.file.names <- str_remove(temp.list.file.names,
-                                     pattern = ".tif")
-
+  temp.list.file.names <- stringr::str_remove(temp.list.file.names,
+                                              pattern = ".tif")
+  
   if(stack.clipped == TRUE){
     if(dir.exists(paste0(stack.save.location,"/clipped_", time.stamp.var))){
-      stack.save.location <- c( paste0(stack.save.location,"/clipped_",time.stamp.var)
-                                # , stack.save.location
+      stack.save.location <- c(base::paste0(stack.save.location,
+                                            "/clipped_",time.stamp.var)
       )
     }else{
       stop(paste0("No clipped data found at: '",
@@ -263,10 +271,7 @@ stacking.downloaded.data <- function(stack.save.location = "./",
                   "' and set the parameter 'stack.clipped' to FALSE."))
     }
   }
-  # print(stack.save.location)
   for (directory in stack.save.location) {
-    # print(directory)
-
     temp.stack.files <- list.files(path = directory, full.names = TRUE,
                                    recursive = FALSE,
                                    pattern = ".tif")
@@ -280,8 +285,8 @@ stacking.downloaded.data <- function(stack.save.location = "./",
                                         full.names = FALSE,
                                         recursive = FALSE,
                                         pattern = ".tif")
-    temp.stack.file.names <- str_remove(temp.stack.file.names,
-                                        pattern = ".tif")
+    temp.stack.file.names <- stringr::str_remove(temp.stack.file.names,
+                                                 pattern = ".tif")
     if(length(temp.stack.files)==0){
       temp.stack.file.names <- list.files(path = directory,
                                           full.names = FALSE,
@@ -290,81 +295,54 @@ stacking.downloaded.data <- function(stack.save.location = "./",
       temp.stack.file.names <- str_remove(temp.stack.file.names,
                                           pattern = ".asc")
     }
-
+    
     if(length(temp.stack.files)!=length(time.series)){
       file.name <- basename(temp.stack.files)
-      file.name <- str_sub(file.name, end = str_length(file.name)-4)
+      file.name <- stringr::str_sub(file.name, end = stringr::str_length(file.name)-4)
       time.series <- gsub(".*([0-9]{4}.[0-9]{2}).*",replacement = "\\1", x = file.name)
+      # print(time.series)
     }
-
     if(stack.time.series==FALSE){
-      for (layer in 1:length(temp.stack.files)){
-
-        if(layer != 1){
-          gc()
-          temp.raster <- raster(x = temp.stack.files[layer])
-          temp.raster.stack <- addLayer(temp.raster.stack, temp.raster)
-          rm(temp.raster)
-          gc()
-
-        }else{
-          gc()
-          temp.raster <- raster(x = temp.stack.files[layer])
-          temp.raster.stack <- stack(temp.raster)
-          rm(temp.raster)
-          gc()
-        }
-        if(layer == length(temp.stack.files)){
-
-          ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
-          gc()
-          writeRaster(x = temp.raster.stack,
+      temp.raster <- lapply(temp.stack.files, terra::rast)
+      temp.raster.stack <- terra::rast(temp.raster)
+      rm(temp.raster)
+      gc()
+      ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
+      gc()
+      terra::writeCDF(x = temp.raster.stack,
                       filename = ncfname,
                       varname = as.character(parameter.var),
-                      xname = "Longitude",
-                      yname = "Latitude",
                       zname = as.character(var.units),
+                      compression = 5,
                       overwrite = TRUE
-          )
-          gc()
-          nc <- nc_open(ncfname, write = TRUE)
-          ncvar_put(nc = nc, varid = as.character(var.units), vals = as.integer(variable.numbers))
-          nc_close(nc)
-        }
-      }
+                      
+      )
+      gc()
+      nc <- ncdf4::nc_open(ncfname, write = TRUE)
+      ncdf4::ncvar_put(nc = nc, varid = as.character(var.units), vals = as.integer(variable.numbers))
+      ncdf4::nc_close(nc)
+      rm(nc)
+      gc()
     }else{
-      for (layer in 1:length(temp.stack.files)){
-        if(layer != 1){
-          gc()
-          temp.raster <- raster(x = temp.stack.files[layer])
-          temp.raster.stack <- addLayer(temp.raster.stack, temp.raster)
-          rm(temp.raster)
-          gc()
-
-        }else{
-          gc()
-          temp.raster <- raster(x = temp.stack.files[layer])
-          temp.raster.stack <- stack(temp.raster)
-          rm(temp.raster)
-          gc()
-        }
-        if(layer == length(temp.stack.files)){
-          ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
-          gc()
-          writeRaster(x = temp.raster.stack,
+      temp.raster <- lapply(temp.stack.files, terra::rast)
+      temp.raster.stack <- terra::rast(temp.raster)
+      rm(temp.raster)
+      gc()
+      ncfname <-  paste0(directory,"/stacked", time.stamp.var, ".nc")
+      gc()
+      terra::writeCDF(x = temp.raster.stack,
                       filename = ncfname,
                       varname = as.character(parameter.var),
-                      xname = "Longitude",
-                      yname = "Latitude",
                       zname = as.character(var.units),
+                      compression = 5,
                       overwrite = TRUE
-          )
-          gc()
-          nc <- nc_open(ncfname, write = TRUE)
-          ncvar_put(nc, as.character(var.units), as.integer(str_remove_all(time.series, pattern = "_")))
-          nc_close(nc)
-        }
-      }
+      )
+      gc()
+      nc <- ncdf4::nc_open(ncfname, write = TRUE)
+      ncdf4::ncvar_put(nc, as.character(var.units), as.integer(str_remove_all(time.series, pattern = "_")))
+      ncdf4::nc_close(nc)
+      rm(nc)
+      gc()
     }
   }
 }
@@ -399,16 +377,17 @@ save.citation <- function(save.location = "./",
   gc()
   # requireNamespace("RefManageR")
   save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
-
+  
   if(dataSetName == "CHELSA"){
+    print(cat("\n"))
     print("Please regard 'https://chelsa-climate.org/downloads/' for correct citations.")
     if(!file.exists(paste0(save.location, "chelsa_citation.bib"))){
       # citation_  <- RefManageR::ReadCrossRef("")
-
+      
       citation_paper <- RefManageR::ReadCrossRef("10.1038/sdata.2017.122")
       citation_CHELSA_cmip5_ts <- RefManageR::ReadCrossRef("10.1038/s41597-020-00587-y")
       citation_PBCOR <- RefManageR::ReadCrossRef("10.1175/JCLI-D-19-0332.1")
-
+      
       # Data
       citation_data <- RefManageR::ReadCrossRef("10.5061/dryad.kd1d4")
       utils::download.file("https://www.envidat.ch/dataset/eur11/export/bibtex.bib",
@@ -423,11 +402,11 @@ save.citation <- function(save.location = "./",
                            destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
       citation_CHELSA_cmip5_ts_data  <-  RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
       unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
-
+      
       # Old versions
       citation_Version1.0  <- RefManageR::ReadCrossRef("10.1594/WDCC/CHELSA_v1")
       citation_Version1.1  <- RefManageR::ReadCrossRef("10.1594/WDCC/CHELSA_v1_1")
-
+      
       eval(parse(text = paste0("print(c(", paste(ls(pattern = "citation_"), collapse = ","),"))")))
       eval(parse(text = paste0("RefManageR::WriteBib(bib = c(",
                                paste(ls(pattern = "citation_"), collapse = ","),
@@ -435,6 +414,7 @@ save.citation <- function(save.location = "./",
     }
   }
   if (dataSetName == "WorldClim1.4") {
+    print(cat("\n"))
     print("Please regard 'www.worldclim.org' for correct citations.")
     if(!file.exists(paste0(save.location, "Worldclim14_citation.bib"))){
       citation_WC14 <- RefManageR::ReadCrossRef("10.1002/joc.1276")
@@ -444,11 +424,12 @@ save.citation <- function(save.location = "./",
     }
   }
   if (dataSetName == "WorldClim2.1") {
+    print(cat("\n"))
     print("Please regard 'www.worldclim.org' for correct citations.")
     if(!file.exists(paste0(save.location, "WorldClim21_citation.bib"))){
       citation_WC21_hist_Clim_Monthly <- RefManageR::ReadCrossRef("10.1002/joc.5086")
       citation_WC21_CRUTS403 <- RefManageR::ReadCrossRef("10.1002/joc.3711")
-
+      
       print(c(citation_WC21_hist_Clim_Monthly, citation_WC21_CRUTS403))
       RefManageR::WriteBib(bib = c(citation_WC21_hist_Clim_Monthly, citation_WC21_CRUTS403),
                            file = paste0(save.location, "WorldClim21_citation.bib"))
@@ -465,9 +446,10 @@ save.citation <- function(save.location = "./",
 #'@param unique.name logical. Should the .zip-file be named uniquely? If TRUE the current system time is added as a timestamp to create unique directories for multiple run outputs. \cr Default: \code{TRUE}
 #'@param time.stamp.var string. Input of current system time or, if called within another function the initial time of the execution. \cr Default: \code{stringr::str_replace_all(stringr::str_replace_all(paste0(} \cr \code{Sys.time()),pattern = ":",replacement = "-"))}
 #'
-#'@importFrom utils zip
-#'@importFrom utils sessionInfo
 #'@import stringr
+#'@importFrom utils sessionInfo
+#'@importFrom utils zip
+#'
 #'@export
 combine.raw.in.zip <- function(save.location = "./",
                                zip.name = "RAWDATA",
@@ -485,12 +467,12 @@ combine.raw.in.zip <- function(save.location = "./",
       stop("'unique.name' must be logical", call. = TRUE)
     }
   }
-  reset.wd <- getwd()
-  temp.save.location <- paste0(normalizePath(save.location, winslash = "/"), "/")
-  setwd(temp.save.location)
-  file.path.list <- list.files(temp.save.location, pattern=".tif", full.names = T)
+  reset.wd <- base::getwd()
+  temp.save.location <- base::paste0(normalizePath(save.location, winslash = "/"), "/")
+  base::setwd(temp.save.location)
+  file.path.list <- base::list.files(temp.save.location, pattern=".tif", full.names = T)
   file.path.list <- stringr::str_replace(file.path.list, pattern = getwd(), replacement = ".")
-
+  
   if(!str_detect(utils::sessionInfo()$platform, pattern = "linux")){
     if(length(file.path.list) >= 1){
       utils::zip(paste0(zip.name, temp.time.stamp.var,".zip"), file.path.list)
@@ -510,71 +492,56 @@ combine.raw.in.zip <- function(save.location = "./",
 
 #'@title Preprocessing data to get real values
 #'@author Helge Jentsch
-#'@description Takes input RasterLayer, crops it, processes the integer values into double values, mosaiks the cropped and processed data, and returns the mosaiked Rasterfile
+#'@description Takes input SpatRaster, processes the integer values into double values, and returns the SpatRaster.
 #'
-#'@param raster.layer RasterLayer to be processed
+#'@param raster.layer SpatRaster to be processed
 #'
-#'@return RasterLayer
+#'@return SpatRaster
 #'
-#'@import raster
 #'@import sp
+#'@import terra
 #'
-process.raster.int.doub <- function(raster.layer = NULL)
-{
+#'@export
+process.raster.int.doub <- function(raster.layer = NULL){
   gc()
   if(is.null(raster.layer)){
     stop("raster.layer is NULL")
   }
-  if(class(raster.layer)[1] != "RasterLayer"){
-    stop("raster.layer is not a 'RasterLayer'")
+  if(class(raster.layer)[1] != "SpatRaster"){
+    stop("raster.layer is not a 'SpatRaster'")
   }
-  # extent_rasterfile <- extent(raster.layer)
-  # # crop
-  # tl <- crop(raster.layer, extent(extent_rasterfile@xmin,
-  #                                (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
-  #                                extent_rasterfile@ymax)
-  # )
-  # bl <- crop(raster.layer, extent(extent_rasterfile@xmin,
-  #                                (extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-  #                                extent_rasterfile@ymin,
-  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
-  # )
-  # tr <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-  #                                extent_rasterfile@xmax,
-  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2,
-  #                                extent_rasterfile@ymax)
-  # )
-  # br <- crop(raster.layer, extent((extent_rasterfile@xmin+extent_rasterfile@xmax)/2,
-  #                                extent_rasterfile@xmax,
-  #                                extent_rasterfile@ymin,
-  #                                (extent_rasterfile@ymin+extent_rasterfile@ymax)/2)
-  # )
-  # # recalculate like:
-  # # values(raster.temp) <- as.numeric(values(raster.temp)/10)
-  # # values(tl) <- as.numeric(values(tl)/10)
-  # tl <- tl/10
-  # # values(tr) <- as.numeric(values(tr)/10)
-  # tr <- tr/10
-  # # values(bl) <- as.numeric(values(bl)/10)
-  # bl <- bl/10
-  # # values(br) <- as.numeric(values(br)/10)
-  # br <- br/10
-  # # and mosaic:
-  # gc()
-  # top <- mosaic(tl,tr, fun = "mean")
-  # rm(tl, tr)
-  # gc()
-  # bottom <- mosaic(bl,br, fun = "mean")
-  # rm(bl, br)
-  # gc()
-  # raster.layer <- mosaic(top, bottom, fun = "mean")
-  
-  raster.temp <- raster.layer
-  gain(raster.temp) <- 0.1
+  terra::scoff(raster.layer)[[1]] <- 0.1
   gc()
-  return(raster.temp)
+  return(raster.layer)
 }
+
+
+#'@title Preprocessing data to undo offsetting values
+#'@author Helge Jentsch
+#'@description Takes input SpatRaster, deletes offset, and returns the SpatRaster.
+#'
+#'@param raster.layer SpatRaster to be processed.
+#'@param offset Numerical value to be offsetted. Default: -273.15.
+#'
+#'@return SpatRaster
+#'
+#'@import sp
+#'@import terra
+#'
+#'@export
+process.raster.offset <- function(raster.layer = NULL, offset = -273.15){
+  gc()
+  if(is.null(raster.layer)){
+    stop("raster.layer is NULL")
+  }
+  if(class(raster.layer)[1] != "SpatRaster"){
+    stop("raster.layer is not a 'SpatRaster'")
+  }
+  terra::scoff(raster.layer)[[2]] <- offset
+  gc()
+  return(raster.layer)
+}
+
 
 
 #' @title Get Download Size
@@ -601,12 +568,12 @@ getDownloadSize <- function(URLVector){
   }
   return(round(filesizes*0.000001, 2))
   # Download size in MB
-
+  
   # get duration by calculating with https:\/\/gitlab.com\/hrbrmstr\/speedtest
-    # config <- spd_config()
-    # servers <- spd_servers(config=config)
-    # closest_servers <- spd_closest_servers(servers, config=config)
-    # speed <- spd_download_test(close_servers[1,], config=config)
-    # medspeed <- speed$median
-    # cat("Download-Zeit: \n", downloadSize/medspeed, "s \n")
+  # config <- spd_config()
+  # servers <- spd_servers(config=config)
+  # closest_servers <- spd_closest_servers(servers, config=config)
+  # speed <- spd_download_test(close_servers[1,], config=config)
+  # medspeed <- speed$median
+  # cat("Download-Zeit: \n", downloadSize/medspeed, "s \n")
 }

@@ -22,7 +22,9 @@ This function returns ASCII-format raster files to a new directory. This directo
 This function converts and saves all .tif-raster files to ASCII-file format to a specified location and creates a new folder named "ASCII_files" with a unique timestamp of the current system time.
 }
 \examples{
+\dontrun{
 convert.to.asc(save.location = system.file("pictures/", package = "rgdal"))
+}
 }
 \author{
 Helge Jentsch

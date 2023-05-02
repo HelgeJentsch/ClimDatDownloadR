@@ -114,3 +114,5 @@ WorldClim.HistClim.download(
   save.bib.file = TRUE
 )
 ```
+
+To get more information, please proceed [here](./articles/ClimDatDownloadR.html). 

@@ -1,22 +1,25 @@
 Package: ClimDatDownloadR
 Type: Package
 Title: Downloads Climate Data from Chelsa and WorldClim
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: c(person("Helge", "Jentsch", 
   email = "helge.marc.ole.jentsch@uni-hamburg.de", 
-  role = c("aut", "cre")),
+  role = c("aut", "cre"),
+  comment = c(ORCID = "0000-0003-4955-8358")),
   person("Maria", "Bobrowski", 
   email = "maria.bobrowski@uni-hamburg.de", 
-  role = c("aut")),
+  role = c("aut"),
+  comment = c(ORCID = "0000-0002-9660-1614")),
   person("Johannes", "Weidinger", 
   email = "johannes.weidinger@uni-hamburg.de", 
-  role = c("aut")), 
+  role = c("aut"),
+  comment = c(ORCID = "0000-0003-4354-7711")), 
   person("Nadine", "Kaul", 
-  email = "nadine.kaul@studium.uni-hamburg.de", 
+  email = "nadine.kaul@uni-hamburg.de", 
   role = c("ctb")))
 Maintainer: Helge Jentsch <helge.marc.ole.jentsch@uni-hamburg.de>
 Description: This package `ClimDatDownloadR` provides functions to download, pre-process and 
-    manage CHELSA and Worldclim climate data sets in respective available 
+    manage CHELSA and WorldClim climate data sets in respective available 
     spatial and temporal resolutions. The output is provided as GEOTIFF, 
     ASCII, or netCDF format. The package's main purpose is to simplify and 
     automate the downloading and pre-processing workflows. 
@@ -27,20 +30,19 @@ Description: This package `ClimDatDownloadR` provides functions to download, pre
     and Fick and Hijmans (2017) <doi:10.1002/joc.5086> (WorldClim 2.1). 
     A applied comparison of the two data sets is given by 
     Bobrowski & Schickhoff 2017 <doi:10.1016/j.ecolmodel.2017.05.021>.
-YEAR: 2021
+YEAR: 2021-2023
 License: MIT + file LICENSE
 Encoding: UTF-8
-Depends: R (>= 3.6), raster (>= 3.1-5)
-Imports: curl (>= 4.3.2), gdalUtils(>= 2.0.3.2), httr (>= 1.4.1), ncdf4
-        (>= 1.17), qpdf (>= 1.1), RCurl (>= 1.98), RefManageR (>=
-        1.2.12), rgdal (>= 1.5-10), stringr (>= 1.4.0), sf (>= 0.9-4),
-        sp (>= 1.4-1), svMisc (>= 1.1.0), utils
-RoxygenNote: 7.1.2
+Depends: R (>= 3.6), terra (>= 1.7-18)
+Imports: curl (>= 4.3.2), httr (>= 1.4.1), ncdf4 (>= 1.17), RCurl (>=
+        1.98), raster (>= 3.1-5), RefManageR (>= 1.2.12), stringr (>=
+        1.4.0), sf (>= 0.9-4), sp (>= 1.4-1), utils
+RoxygenNote: 7.2.3
 Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2021-11-03 12:10:35 UTC; helge
+Packaged: 2023-05-02 05:43:04 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],

@@ -758,6 +758,8 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "CHELSA")
 }
 
+
+
 #'@title Function for downloading CHELSA Last Glacial Maximum datasets
 #'@author Helge Jentsch
 #'@description This function supports a download of the CHELSA Last Glacial Maximum Climate datasets (21.000 BP). This includes monthly precipitation sums in mm, monthly temperature (average, maximum, minimum) in degree Celsius, annual characteristics (19 bioclimatic parameters), and a global digital elevation model. For further information, please regard \url{http://chelsa-climate.org/last-glacial-maximum-climate/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
@@ -1589,7 +1591,7 @@ Chelsa.CRUts.download <- function(save.location = "./",
                                                           winslash = "/",
                                                           mustWork = T),
                                             "/temp_gdalwarped.tif")
-            gdalUtils::gdalwarp(dest.temp, raster.temp.file.dest)
+            # gdalUtils::gdalwarp(dest.temp, raster.temp.file.dest)
             raster.temp <- raster(raster.temp.file.dest)
             raster.temp <- clamp(raster.temp, lower = -1000, useValues = FALSE)
             gain(raster.temp) <- 0.1

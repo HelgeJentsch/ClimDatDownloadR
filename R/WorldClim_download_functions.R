@@ -45,7 +45,7 @@
 #'@importFrom curl curl_fetch_memory
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'@export
@@ -66,21 +66,26 @@ WorldClim.HistClim.download <- function(save.location = "./",
                                         keep.raw.zip = FALSE,
                                         delete.raw.data  = FALSE,
                                         save.bib.file = TRUE){
-  requireNamespace("stringr")
-  requireNamespace("RCurl")
-  requireNamespace("ncdf4")
-  requireNamespace("raster")
+  # requireNamespace("stringr")
+  # requireNamespace("RCurl")
+  # requireNamespace("ncdf4")
+  # requireNamespace("raster")
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(
+    stringr::str_replace_all(paste0(Sys.time()), 
+                             pattern = ":", 
+                             replacement = "-"), 
+    pattern = " ", 
+    replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
-  save.location <- normalizePath(save.location, winslash = "/")
+  save.location <- base::normalizePath(save.location, winslash = "/")
   # Check which parameters are put in and if the connected
   # month/bio-variables are correctly input
-  if(is.element("prec", parameter)|is.element("temp", parameter)|
-     is.element("tmax", parameter)|is.element("tmin", parameter)|
-     is.element("srad", parameter)|is.element("wind", parameter)|
-     is.element("vapr", parameter)
+  if(base::is.element("prec", parameter)| base::is.element("temp", parameter)|
+     base::is.element("tmax", parameter)| base::is.element("tmin", parameter)|
+     base::is.element("srad", parameter)| base::is.element("wind", parameter)|
+     base::is.element("vapr", parameter)
   ){
     # if month.var is just a single numeric input it is here casted into
     # a vector for comparabilities
@@ -106,19 +111,19 @@ WorldClim.HistClim.download <- function(save.location = "./",
   for(vers in version.var){
     URL.1 <- switch (vers,
                      "1.4" = "https://biogeo.ucdavis.edu/data/climate/worldclim/1_4/grid/cur/",
-                     "2.1" = "https://biogeo.ucdavis.edu/data/worldclim/v2.1/base/wc2.1_",
+                     "2.1" = "https://geodata.ucdavis.edu/climate/worldclim/2_1/base/wc2.1_",
                      stop()
     )
 
     # Second: Work through paramters ------------------------------------------
     for(parm in parameter){
       # if not already created, create new directory
-      if (!dir.exists(paste0(save.location, "/", parm))){
-        dir.create(paste0(save.location, "/", parm))
+      if (!base::dir.exists(base::paste0(save.location, "/", parm))){
+        base::dir.create(base::paste0(save.location, "/", parm))
       }
       # set the 1. order temporal save location to this directory
       # 1. Order -> parameter!
-      temp.save.location <- paste0(save.location, "/", parm, "/")
+      temp.save.location <- base::paste0(save.location, "/", parm, "/")
 
       # Version Control
       if(vers == "1.4"){
@@ -159,7 +164,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
                                  stop())
       # Thrid: Through resolution -----------------------------------------------
       for (res in resolution) {
-        temp.temp.save.location <- paste0(temp.save.location,"/WorldClim_",
+        temp.temp.save.location <- base::paste0(temp.save.location,"/WorldClim_",
                                           vers, "_", parm.temp, "_", res, "/")
         # if not already created, create new directory
         if(!dir.exists(temp.temp.save.location)){
@@ -193,10 +198,9 @@ WorldClim.HistClim.download <- function(save.location = "./",
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
               URL.temp <- paste0(URL.1 , parm.temp, "_", res.temp, "_bil.zip")
-              urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
               # check if URL is available
               # if(url.exists(URL.temp)){
-              if(urlCheck == 200){
+              if(RCurl::url.exists(url = URL.temp)){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 # download file to save location
@@ -212,7 +216,8 @@ WorldClim.HistClim.download <- function(save.location = "./",
                               # \n line endings to \r\n (aka ‘CRLF’).
                               mode = 'wb',
                               # to show progression bar
-                              quiet = FALSE)
+                              quiet = TRUE,
+                              cacheOK = FALSE)
               }else{
                 # Error message if file is not available
                 warning(paste0("File does not exist. Did not download: \n",
@@ -384,7 +389,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
             # create a variable for the later requested Download-URL to avoid
             # requireing multiple changes, if the link changes.
             URL.temp <- paste0(URL.1, res.temp, "_", parm.temp, ".zip")
-            urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
+            urlCheck <- curl::curl_fetch_memory(url = URL.temp)$status_code
             # check if URL is available
             # if(url.exists(URL.temp)){
             if(urlCheck == 200){
@@ -564,7 +569,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
       }
     }
   }
-}
+ }
 
 
 #'@title Function for downloading the WorldClim v1.4 CMIP5 future climate dataset
@@ -655,7 +660,13 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
   # requireNamespace("ncdf4")
   # requireNamespace("raster")
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")  # initial check -----------------------------------------------------------
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(
+    paste0(Sys.time()), 
+    pattern = ":",
+    replacement = "-"), 
+    pattern = " ", 
+    replacement = "_")  
+  # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
   # Check which parameters are put in and if the connected
@@ -684,10 +695,10 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 
   # First: Set URL Root --------------------------------------------------------
 
-  URL.1 <- "https://biogeo.ucdavis.edu/data/climate/cmip5/"
+  URL.1 <- "http://biogeo.ucdavis.edu/data/climate/cmip5/"
 
   # Second: Parameters ---------------------------------------------------------
-  for(parm in parameter){
+  for(parm in parameter){ #parm <- parameter[1]
     # if not already created, create new directory
     if (!dir.exists(paste0(save.location, "/", parm))){
       dir.create(paste0(save.location, "/", parm))
@@ -709,7 +720,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                                "prec" = month.var,
                                stop())
     # Third: Through resolution ------------------------------------------------
-    for (res in resolution) {
+    for (res in resolution) { # res <- resolution[4]
       res.temp <- switch (res,
                           "10min" = "10m",
                           "5min" = "5m",
@@ -717,7 +728,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                           "30s" = "30s",
                           "10m" = "10m",
                           "5m" = "5m",
-                          "2.5m" = "2.5m",
+                          "2.5m" = "2_5m",
                           "30s" = "30s",
                           next
       )
@@ -729,7 +740,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
       }
       URL.2 <- paste0(res.temp, "/")
       # Forth: Global Circulation Model --------------------------------------
-      for(gcm in model.var){
+      for(gcm in model.var){ # gcm = model.var[1]
         # GCM;OnlyNonCommercialUse
         # AC;TRUE
         # BC;FALSE
@@ -780,10 +791,10 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                   call. = TRUE,
                   immediate. = TRUE)
         }
-        URL.3 <- str_to_lower(gcm.temp)
+        URL.3 <- stringr::str_to_lower(gcm.temp)
 
         # Fifth: Relative Concentration Pathways ---------------------------------
-        for(rcp in emission.scenario.var){
+        for(rcp in emission.scenario.var){ # rcp = "rcp45"
           rcp.temp <- switch (rcp,
                               "rcp26" = "26",
                               "rcp45" = "45",
@@ -793,13 +804,13 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
           )
           URL.4 <- paste0(URL.3, rcp.temp)
           # Sixth: Time interval -----------------------------------------------
-          for(year in time.interval.var) {
+          for(year in time.interval.var) { #year <- time.interval.var[1]
             year.temp <- switch (year,
                                  "2050" = "50",
                                  "2070" = "70",
                                  next
             )
-            temp.temp.save.location <- paste0(temp.save.location,"/WorldClim_CMIP5_",
+            temp.temp.save.location <- paste0(temp.save.location,"WorldClim_CMIP5_",
                                               parm.temp, "_", res,"_",
                                               gcm, "_", rcp, "_",year,"/")
             # if not already created, create new directory
@@ -816,10 +827,8 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
               URL.temp <- paste0(URL.1, URL.2, URL.4, parm.temp, year.temp, ".zip")
-              urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
               # check if URL is available
-              # if(url.exists(URL.temp)){
-              if(urlCheck == 200){
+              if(RCurl::url.exists(url = URL.temp)){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 # download file to save location
@@ -1153,7 +1162,7 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
   # requireNamespace("ncdf4")
   # requireNamespace("raster")
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(as.character(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
@@ -1222,14 +1231,14 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                           "30s" = "30s",
                           next
       )
-      if(res.temp == "30s") {
-        warning(
-          # "Processing might take a while since 30s resolution is downloaded for the whole world",
-          "30 second data is not yet available. Please check WorldClim website. Skipping 30s data!",
-          call. = TRUE,
-          immediate. = TRUE)
-        next
-      }
+      # if(res.temp == "30s") {
+      #   warning(
+      #     # "Processing might take a while since 30s resolution is downloaded for the whole world",
+      #     "30 second data is not yet available. Please check WorldClim website. Skipping 30s data!",
+      #     call. = TRUE,
+      #     immediate. = TRUE)
+      #   next
+      # }
       URL.2 <- paste0(res.temp, "/")
       # Forth: Global Circulation Model --------------------------------------
       for(gcm in model.var){
@@ -1258,10 +1267,9 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
               URL.temp <- paste0(URL.1, URL.2,URL.3, ".zip")
-              urlCheck <- curl_fetch_memory(url = URL.temp)$status_code
               # check if URL is available
               # if(url.exists(URL.temp)){
-              if(urlCheck == 200){
+              if(RCurl::url.exists(url = URL.temp)){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 # download file to save location
@@ -1293,9 +1301,9 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                                      full.names = T)
             for (file in files.list) {
               unzip(file,
-                    exdir = str_sub(temp.temp.save.location,
+                    exdir = stringr::str_sub(temp.temp.save.location,
                                     start = 0,
-                                    end = str_length(temp.temp.save.location)-1)
+                                    end = stringr::str_length(temp.temp.save.location)-1)
               )
               file.copy(from = paste0(list.files(temp.temp.save.location,
                                                  pattern = paste0(URL.3, ".tif"),
@@ -1429,9 +1437,9 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
             if(length(list.files(temp.temp.save.location,
                                  include.dirs = TRUE)) == 0){
 
-              unlink(str_sub(temp.temp.save.location,
+              unlink(stringr::str_sub(temp.temp.save.location,
                              start = 0,
-                             end = str_length(temp.temp.save.location)-1),
+                             end = stringr::str_length(temp.temp.save.location)-1),
                      force = TRUE, recursive = TRUE)
             }
             # Saving BIB File ---------------------------------------------------------

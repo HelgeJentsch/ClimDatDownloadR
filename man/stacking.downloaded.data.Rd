@@ -11,8 +11,7 @@ stacking.downloaded.data(
   variable.numbers = c(1:length(list.files("./", pattern = ".tif"))),
   stack.time.series = FALSE,
   time.series = NULL,
- 
-    time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),
+  time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),
     pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
 )
 }

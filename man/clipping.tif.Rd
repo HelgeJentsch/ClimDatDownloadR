@@ -34,7 +34,15 @@ This function returns, depending on the parameter \code{convert.files.to.asc} wh
 This function clips all .tif-raster files at a defined extent (e.g., shapefile or coordinates). Additionally, a buffer can be specified and added to the clipping extent. For user convenience, clipped rasters will be saved to a specified directory (clip.save.location). Furthermore, an option for conversion to ASCII format is given.
 }
 \examples{
-clipping.tif(clip.save.location = system.file("pictures/", package = "rgdal"))
+\dontrun{
+clipping.tif(clip.save.location = terra::rast(
+                                          paste(
+                                              system.file("ex/meuse.tif", 
+                                              package = "terra")
+                                              )
+                                              )
+                                              )
+}
 
 }
 \author{
