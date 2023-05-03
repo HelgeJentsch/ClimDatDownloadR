@@ -58,6 +58,8 @@ This function supports the download, pre-processing and management of CHELSA cli
 }
 \note{
 Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+
+Citations not yet updated.Please check Chelsa Website for current citation!
 }
 \examples{
 \dontrun{

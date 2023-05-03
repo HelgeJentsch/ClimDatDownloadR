@@ -19,6 +19,7 @@
 #'@return CHELSA climate datasets for the period of 1979 - 2013
 #'
 #'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+#'@note Citations not yet updated.Please check Chelsa Website for current citation!
 #'
 #'@references D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
 #'@references D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
@@ -305,6 +306,7 @@ Chelsa.Clim.download <- function(save.location = "./",
         rm(tempFilePath)
         gc()
       }
+      rm(rescale_i)
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
   }
@@ -326,6 +328,7 @@ Chelsa.Clim.download <- function(save.location = "./",
         rm(tempFilePath)
         gc()
       }
+      rm(rescale_i)
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
     offsetDF_V21 <- dataDF[dataDF$version == "2.1" & 
@@ -351,6 +354,7 @@ Chelsa.Clim.download <- function(save.location = "./",
         rm(tempFilePath)
         gc()
       }
+      rm(rescale_i)
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
   }
@@ -491,6 +495,7 @@ Chelsa.Clim.download <- function(save.location = "./",
 #'
 #'@note Specifications: <URL: https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf>
 #'@note More information on Shared Socioeconomic Pathways under <URL: https://www.dkrz.de/en/communication/climate-simulations/cmip6-en/the-ssp-scenarios?set_language=en>
+#'@note Citations not yet updated.Please check Chelsa Website for current citation!
 #'
 #'@examples
 #' \dontrun{
