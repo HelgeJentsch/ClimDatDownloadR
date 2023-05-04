@@ -5,16 +5,16 @@ To get started please proceed further down under the update section.
 
 _This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany._
 
-## Update 09.03.2021
+## Update 04.05.2023
 
-As of today a new alpha version is released. 
+As of today a new version of the ClimDatDownloadR is released. 
 If you want to test the ClimDatDownloadR-package please feel free to install the package via
 
 `install.packages("https://gitlab.rrz.uni-hamburg.de/helgejentsch/climdatdownloadr/-/archive/master/climdatdownloadr-master.tar.gz", repos = NULL, type = "source")`
 
 and if you need the dependencies via 
 
-`install.packages(c("gdalUtils", "httr", "ncdf4", "qpdf", "raster", "RCurl", "RefManageR", "rgdal", "stringr", "sf", "sp", "svMisc", "utils"), dependencies = TRUE)`
+`install.packages(c("gdalUtils", "httr", "ncdf4", "qpdf", "raster", "RCurl", "RefManageR", "rgdal", "stringr", "sf", "sp", "svMisc", "terra", "utils"), dependencies = TRUE)`
 
 
 I would appreciate your feedback and possible bug reports. 
@@ -29,7 +29,7 @@ Hello and welcome to the ClimDatDownloadR R-package.
 With this package **cli**mate **dat**asets provided by [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**.  
 To start, you'll have to install the package and it's dependencies first, if not already done. Then you can activate the package with the `library`-function.  
 ```{r setup}
-# install.packages(c("gdalUtils", "httr", "ncdf4", "qpdf", "raster", "RCurl", "RefManageR", "rgdal", "stringr", "sf", "sp", "svMisc", "utils"), dependencies = TRUE)
+# install.packages(c("gdalUtils", "httr", "ncdf4", "qpdf", "raster", "RCurl", "RefManageR", "rgdal", "stringr", "sf", "sp", "svMisc", "terra", "utils"), dependencies = TRUE)
 # install.packages("https://gitlab.rrz.uni-hamburg.de/helgejentsch/climdatdownloadr/-/archive/master/climdatdownloadr-master.tar.gz", repos = NULL, type = "source")
 library(ClimDatDownloadR)
 ```
@@ -114,3 +114,5 @@ WorldClim.HistClim.download(
   save.bib.file = TRUE
 )
 ```
+
+To get more information, please proceed [here](./articles/ClimDatDownloadR.html). 

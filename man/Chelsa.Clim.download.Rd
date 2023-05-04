@@ -9,7 +9,7 @@ Chelsa.Clim.download(
   parameter = c("prec", "temp", "tmax", "tmin", "bio"),
   bio.var = c(1:19),
   month.var = c(1:12),
-  version.var = c("1.2"),
+  version.var = c("1.2", "2.1"),
   clipping = FALSE,
   clip.shapefile = NULL,
   clip.extent = c(-180, 180, -90, 90),
@@ -69,9 +69,11 @@ Chelsa.Clim.download(parameter = "prec", month.var = c(1,12))
 
 }
 \references{
-D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Climatologies at high resolution for the earth's land surface areas_. In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
 
 D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
+
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Climatologies at high resolution for the earth’s land surface areas_ EnviDat. (2021) DOI: 10.16904/envidat.228. <URL: https://www.doi.org/10.16904/envidat.228>.
 }
 \author{
 Helge Jentsch

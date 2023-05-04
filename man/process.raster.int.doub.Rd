@@ -7,13 +7,13 @@
 process.raster.int.doub(raster.layer = NULL)
 }
 \arguments{
-\item{raster.layer}{RasterLayer to be processed}
+\item{raster.layer}{SpatRaster to be processed}
 }
 \value{
-RasterLayer
+SpatRaster
 }
 \description{
-Takes input RasterLayer, crops it, processes the integer values into double values, mosaiks the cropped and processed data, and returns the mosaiked Rasterfile
+Takes input SpatRaster, processes the integer values into double values, and returns the SpatRaster.
 }
 \author{
 Helge Jentsch

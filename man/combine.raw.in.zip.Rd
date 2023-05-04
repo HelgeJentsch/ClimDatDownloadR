@@ -8,8 +8,7 @@ combine.raw.in.zip(
   save.location = "./",
   zip.name = "RAWDATA",
   unique.name = TRUE,
- 
-    time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),
+  time.stamp.var = stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()),
     pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
 )
 }
