@@ -385,23 +385,49 @@ save.citation <- function(save.location = "./",
       # citation_  <- RefManageR::ReadCrossRef("")
       
       citation_paper <- RefManageR::ReadCrossRef("10.1038/sdata.2017.122")
+      
       citation_CHELSA_cmip5_ts <- RefManageR::ReadCrossRef("10.1038/s41597-020-00587-y")
       citation_PBCOR <- RefManageR::ReadCrossRef("10.1175/JCLI-D-19-0332.1")
       
+      # citation_envidat.332  <- RefManageR::ReadCrossRef("10.16904/envidat.332") #doi.org/10.16904/envidat.332
+      utils::download.file("https://www.envidat.ch/dataset/bioclim_plus/export/bibtex.bib",
+                           destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
+      citation_envidat.332 <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
+      unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      
+      # citation_envidat.228.v2.1  <- RefManageR::ReadCrossRef("10.16904/envidat.228.v2.1") # doi.org/10.16904/envidat.228.v2.1
+      utils::download.file("https://www.envidat.ch/dataset/chelsa-climatologies/export/bibtex.bib",
+                           destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
+      citation_envidat.228.v2.1 <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
+      unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      
+      # citation_essd2022212  <- RefManageR::ReadCrossRef("10.5194/essd-2022-212") #doi.org/10.5194/essd-2022-212
+      utils::download.file("https://essd.copernicus.org/articles/14/5573/2022/essd-14-5573-2022.bib",
+                           destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
+      citation_essd2022212 <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
+      unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      
+
+      citation_sdata.2017.122 <- RefManageR::ReadCrossRef("10.1038/sdata.2017.122") # 10.1038/sdata.2017.122
       # Data
       citation_data <- RefManageR::ReadCrossRef("10.5061/dryad.kd1d4")
+      
       utils::download.file("https://www.envidat.ch/dataset/eur11/export/bibtex.bib",
                            destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
       citation_EUR11 <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
       unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      
       utils::download.file("https://www.envidat.ch/dataset/chelsacruts/export/bibtex.bib",
                            destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
       citation_CHELSAcruts_data   <- RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
       unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      
       utils::download.file("https://www.envidat.ch/dataset/chelsa_cmip5_ts/export/bibtex.bib",
                            destfile = paste0(tempdir(),"/bib_chelsa.bib"), quiet = T)
       citation_CHELSA_cmip5_ts_data  <-  RefManageR::ReadBib(paste0(tempdir(),"/bib_chelsa.bib"))
       unlink(x = paste0(tempdir(),"/bib_chelsa.bib"))
+      
+      
       
       # Old versions
       citation_Version1.0  <- RefManageR::ReadCrossRef("10.1594/WDCC/CHELSA_v1")

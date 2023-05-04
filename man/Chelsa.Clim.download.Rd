@@ -58,8 +58,6 @@ This function supports the download, pre-processing and management of CHELSA cli
 }
 \note{
 Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
-
-Citations not yet updated.Please check Chelsa Website for current citation!
 }
 \examples{
 \dontrun{
@@ -71,9 +69,11 @@ Chelsa.Clim.download(parameter = "prec", month.var = c(1,12))
 
 }
 \references{
-D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Climatologies at high resolution for the earth's land surface areas_. In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
 
 D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
+
+D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Climatologies at high resolution for the earth’s land surface areas_ EnviDat. (2021) DOI: 10.16904/envidat.228. <URL: https://www.doi.org/10.16904/envidat.228>.
 }
 \author{
 Helge Jentsch

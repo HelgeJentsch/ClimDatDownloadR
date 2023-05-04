@@ -72,8 +72,6 @@ Please note that the downloaded data for temperature and the therefore also the 
 Specifications: <URL: https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf>
 
 More information on Shared Socioeconomic Pathways under <URL: https://www.dkrz.de/en/communication/climate-simulations/cmip6-en/the-ssp-scenarios?set_language=en>
-
-Citations not yet updated.Please check Chelsa Website for current citation!
 }
 \examples{
 \dontrun{
