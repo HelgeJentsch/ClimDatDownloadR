@@ -16,6 +16,7 @@ Authors@R: c(person("Helge", "Jentsch",
   comment = c(ORCID = "0000-0003-4354-7711")), 
   person("Nadine", "Kaul", 
   email = "nadine.kaul@uni-hamburg.de", 
+  comment = c(ORCID = "0009-0002-0271-8019"),
   role = c("ctb")))
 Maintainer: Helge Jentsch <helge.marc.ole.jentsch@uni-hamburg.de>
 Description: This package `ClimDatDownloadR` provides functions to download, pre-process and 
@@ -30,6 +31,8 @@ Description: This package `ClimDatDownloadR` provides functions to download, pre
     and Fick and Hijmans (2017) <doi:10.1002/joc.5086> (WorldClim 2.1). 
     A applied comparison of the two data sets is given by 
     Bobrowski & Schickhoff 2017 <doi:10.1016/j.ecolmodel.2017.05.021>.
+URL: https://doi.org/10.5281/zenodo.7924343,
+        https://gitlab.rrz.uni-hamburg.de/helgejentsch/climdatdownloadr
 YEAR: 2021-2023
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -42,7 +45,7 @@ Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2023-05-04 08:24:48 UTC; helge
+Packaged: 2023-05-11 12:43:21 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],

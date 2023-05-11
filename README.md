@@ -1,9 +1,5 @@
-## Welcome to the help-page of ClimDatDownloadR
-
-To get started please proceed further down under the update section. 
-
-
-_This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany._
+## Welcome to the ClimDatDownloadR 
+This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany. 
 
 ## Update 04.05.2023
 
@@ -16,11 +12,13 @@ and if you need the dependencies via
 
 `install.packages(c("gdalUtils", "httr", "ncdf4", "qpdf", "raster", "RCurl", "RefManageR", "rgdal", "stringr", "sf", "sp", "svMisc", "terra", "utils"), dependencies = TRUE)`
 
-
 I would appreciate your feedback and possible bug reports. 
 If you find anything, please send an email to [helge.marc.ole.jentsch@uni-hamburg.de](<mailto:helge.marc.ole.jentsch@uni-hamburg.de>)
 
 Thank you very much for using ClimDatDownloadR! 
+
+If you want to cite ClimDatDownloadR you can find the package on Zenodo via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7924343.svg)](https://doi.org/10.5281/zenodo.7924343)
+
 
 ## A warm welcome
 
