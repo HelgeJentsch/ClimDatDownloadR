@@ -1135,9 +1135,20 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                                       bio.var = c(1:19),
                                       month.var = c(1:12),
                                       resolution = c("10min", "5min", "2.5min", "30s"),
-                                      model.var = c("BCC-CSM2-MR", "CNRM-CM6-1",
+                                      model.var = c("ACCESS-CM2",
+                                                    "BCC-CSM2-MR", "CMCC-ESM2",
+                                                    "CNRM-CM6-1",
                                                     "CNRM-ESM2-1", "CanESM5",
-                                                    "GFDL-ESM4", "IPSL-CM6A-LR",
+                                                    "EC-Earth3-Veg",
+                                                    "FIO-ESM-2-0",
+                                                    "GFDL-ESM4", 
+                                                    "GISS-E2-1-G",
+                                                    "HadGEM3-GC31-LL",
+                                                    "INM-CM5-0",
+                                                    "IPSL-CM6A-LR",
+                                                    "MPI-ESM1-2-HR",
+                                                    "MRI-ESM2-0",
+                                                    "UKESM1-0-LL",
                                                     "MIROC-ES2L", "MIROC6",
                                                     "MRI-ESM2-0"),
                                       emission.scenario.var = c("ssp126",
@@ -1193,8 +1204,8 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
 
 
   # First: Set URL Root --------------------------------------------------------
-
-  URL.1 <- "http://biogeo.ucdavis.edu/data/worldclim/v2.1/fut/"
+ # https://geodata.ucdavis.edu/cmip6/30s/ACCESS-CM2/ssp126/wc2.1_30s_tmin_ACCESS-CM2_ssp126_2021-2040.tif
+  URL.1 <- "https://geodata.ucdavis.edu/cmip6/"
 
   # Second: Parameters ---------------------------------------------------------
   for(parm in parameter){
@@ -1258,15 +1269,17 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
             # temp.temp.save.location <- normalizePath(temp.temp.save.location,
             #                                          winslash = "/")
             dest.temp <- paste0(temp.temp.save.location, "WC_", res, "_",
-                                gcm, "_", rcp.temp, "_", year.temp, "_Bulk.zip")
-
-            URL.3 <- paste0("wc2.1_",res.temp,"_",parm.temp, "_", gcm, "_",
-                            rcp.temp, "_", year.temp)
+                                gcm, "_", rcp.temp, "_", year.temp, "_Bulk.tif")
+            
+            URL.3 <- paste0("",gcm, "/",rcp.temp, "/",
+                            "wc2.1_",res.temp,"_",parm.temp, "_", gcm, "_", rcp.temp, "_", year.temp)
             print(URL.3)
             if(!file.exists(dest.temp)){
               # create a variable for the later requested Download-URL to avoid
               # requireing multiple changes, if the link changes.
-              URL.temp <- paste0(URL.1, URL.2,URL.3, ".zip")
+              URL.temp <- paste0(URL.1, 
+                                 URL.2, 
+                                 URL.3, ".tif")
               # check if URL is available
               # if(url.exists(URL.temp)){
               if(RCurl::url.exists(url = URL.temp)){
@@ -1295,63 +1308,89 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                 next()
               }
             }
-            # Unzip the files of the Bulk-Download-Zip-File
-            files.list <- list.files(temp.temp.save.location,
-                                     pattern = ".zip",
-                                     full.names = T)
-            for (file in files.list) {
-              unzip(file,
-                    exdir = stringr::str_sub(temp.temp.save.location,
-                                    start = 0,
-                                    end = stringr::str_length(temp.temp.save.location)-1)
-              )
-              file.copy(from = paste0(list.files(temp.temp.save.location,
-                                                 pattern = paste0(URL.3, ".tif"),
-                                                 recursive = TRUE,
-                                                 full.names = TRUE))[1],
-                        to = paste0(temp.temp.save.location,
-                                    URL.3,"_stacked_RAW.tif"),
-                        overwrite = TRUE)
-              if(dir.exists(paste0(temp.temp.save.location,"//share"))){
-                unlink(paste0(temp.temp.save.location,"//share"),
-                       recursive = TRUE)
-
-              }
-              tif.list <- list.files(temp.temp.save.location,
-                                     pattern = "stacked_RAW.tif",
-                                     recursive = TRUE,
-                                     full.names = TRUE)
-              print(tif.list)
-              if (!is.null(tif.list)){
-                if(length(tif.list)==1){
-                  raster.temp <- raster::unstack(raster::stack(tif.list))
-                  if(parm != "bio"){
-                    for(layer.month in month.var){
-                      writeRaster(x = raster.temp[[layer.month]],
-                                  filename = paste0(temp.temp.save.location,
-                                                    URL.3,"_",layer.month,".tif"),
-                                  overwrite = TRUE
-                      )
-                    }
-                  }else{
-                    for(layer.bio in bio.var){
-                      writeRaster(x = raster.temp[[layer.bio]],
-                                  filename = paste0(temp.temp.save.location,
-                                                    URL.3,"_",layer.bio,".tif"),
-                                  overwrite = TRUE
-                      )
-                    }
-                  }
-                }
-                unlink(tif.list)
-              }
-              if(keep.raw.zip == FALSE){
-                print(file)
-                unlink(file)
-              }
+            # # Unzip the files of the Bulk-Download-Zip-File
+            # files.list <- list.files(temp.temp.save.location,
+            #                          pattern = ".zip",
+            #                          full.names = T)
+            # for (file in files.list) {
+            #   unzip(file,
+            #         exdir = stringr::str_sub(temp.temp.save.location,
+            #                         start = 0,
+            #                         end = stringr::str_length(temp.temp.save.location)-1)
+            #   )
+            #   file.copy(from = paste0(list.files(temp.temp.save.location,
+            #                                      pattern = paste0(URL.3, ".tif"),
+            #                                      recursive = TRUE,
+            #                                      full.names = TRUE))[1],
+            #             to = paste0(temp.temp.save.location,
+            #                         URL.3,"_stacked_RAW.tif"),
+            #             overwrite = TRUE)
+            #   if(dir.exists(paste0(temp.temp.save.location,"//share"))){
+            #     unlink(paste0(temp.temp.save.location,"//share"),
+            #            recursive = TRUE)
+            # 
+            #   }
+            #   tif.list <- list.files(temp.temp.save.location,
+            #                          pattern = "stacked_RAW.tif",
+            #                          recursive = TRUE,
+            #                          full.names = TRUE)
+            #   print(tif.list)
+            #   if (!is.null(tif.list)){
+            #     if(length(tif.list)==1){
+            #       raster.temp <- raster::unstack(raster::stack(tif.list))
+            #       if(parm != "bio"){
+            #         for(layer.month in month.var){
+            #           writeRaster(x = raster.temp[[layer.month]],
+            #                       filename = paste0(temp.temp.save.location,
+            #                                         URL.3,"_",layer.month,".tif"),
+            #                       overwrite = TRUE
+            #           )
+            #         }
+            #       }else{
+            #         for(layer.bio in bio.var){
+            #           writeRaster(x = raster.temp[[layer.bio]],
+            #                       filename = paste0(temp.temp.save.location,
+            #                                         URL.3,"_",layer.bio,".tif"),
+            #                       overwrite = TRUE
+            #           )
+            #         }
+            #       }
+            #     }
+            #     unlink(tif.list)
+            #   }
+            #   if(keep.raw.zip == FALSE){
+            #     print(file)
+            #     unlink(file)
+            #   }
+            # }
+            temp.bulkfile <- list.files(path = temp.temp.save.location, 
+                                        pattern = "Bulk.tif", 
+                                        full.names = T)
+            temp.rast <- rast(temp.bulkfile)
+            if(parm == "bio"){
+              temp.rast <- temp.rast[[bio.var]]
+            }else{
+              temp.rast <- temp.rast[[month.var]]
             }
-
-            # print(ls())
+            
+            for(lyr.temp in seq(1, terra::nlyr(temp.rast), 1)){
+              lyrName <- names(temp.rast[[lyr.temp]])
+              lyrName <- paste0(stringr::str_sub(temp.bulkfile, end = -9), 
+                                lyrName,
+                                ".tif")
+              terra::writeRaster(temp.rast[[lyr.temp]], 
+                                 filename = lyrName,
+                                 overwrite = TRUE)
+            }
+            
+            if(!dir.exists(paths = paste0(temp.temp.save.location, "/Bulk/"))){
+              dir.create(paste0(temp.temp.save.location, "/Bulk/"))
+            }
+            
+            file.copy(from = temp.bulkfile, 
+                      to = paste0(temp.temp.save.location, "/Bulk/", basename(temp.bulkfile)))
+            unlink(temp.bulkfile, 
+                   force = T)
 
             # Hier weiter mit alle-betreffenden Bearbeitungen
             # print(list.files(temp.temp.save.location, pattern = ".tif", full.names = FALSE))
@@ -1430,6 +1469,8 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                                 include.dirs = FALSE,
                                 full.names = T),
                      force = TRUE)
+              unlink(x = paste0(temp.temp.save.location,"/Bulk/"), 
+                     recursive = T)
             }
             # if no subdirectories and files are to be found in the 2nd order
             # subdirectory the directory will be deleted for a better overview of
