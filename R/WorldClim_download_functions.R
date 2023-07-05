@@ -1266,14 +1266,15 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
               # if(url.exists(URL.temp)){
               # if(RCurl::urlExists(url = URL.temp)){
               URLstatus <- curl::curl_fetch_memory(url = URL.temp)$status
+              # print(URLstatus)
               if(URLstatus == 200){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
                 if(res.temp == "30s"){
                   options(timeout = max(2400, getOption("timeout")))
                 }else{
-                  if(getOption("timeout") != 60){
-                    options(timeout = max(60, getOption("timeout")))
+                  if(getOption("timeout") != 300){
+                    options(timeout = max(300, getOption("timeout")))
                   }
                 }
                 # download file to save location
