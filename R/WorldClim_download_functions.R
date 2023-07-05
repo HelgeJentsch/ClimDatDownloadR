@@ -288,43 +288,42 @@ WorldClim.HistClim.download <- function(save.location = "./",
             for (month in month.var) {
               if(parm.temp != "prec"){
                 if(res.temp != "30s"){
-                  raster.temp <- raster(
+                  raster.temp <- terra::rast(
                     list.files(path = temp.temp.save.location,
                                pattern = paste0(parm.temp, month,".bil"),
                                full.names = T)
                   )
                 }else{
-                  raster.temp <- raster(
+                  raster.temp <- terra::rast(
                     list.files(path = temp.temp.save.location,
                                pattern = paste0(parm.temp, "_", month,".bil"),
                                full.names = T)
                   )
                 }
                 gc()
-                gain(raster.temp) <- 0.1
+                raster.temp <- process.raster.int.doub(raster.temp)
                 gc()
               }else{
                 if(res.temp != "30s"){
-                  raster.temp <- raster(
+                  raster.temp <- terra::rast(
                     list.files(path = temp.temp.save.location,
                                pattern = paste0(parm.temp, month,".bil"),
                                full.names = T)
                   )
                 }else{
-                  raster.temp <- raster(
+                  raster.temp <- terra::rast(
                     list.files(path = temp.temp.save.location,
                                pattern = paste0(parm.temp, "_", month,".bil"),
                                full.names = T)
                   )
                 }
               }
-              writeRaster(raster.temp,
+              terra::writeRaster(raster.temp,
                           filename = paste0(temp.temp.save.location,
                                             "WC_",vers, "_",
                                             res, "_", parm.temp, "_",
                                             str_pad(c(1:12)[month], 2, 'left', pad = "0"),
                                             ".tif"),
-                          format = "GTiff",
                           overwrite = TRUE)
             }
             unlink(c(list.files(temp.temp.save.location, pattern = ".bil",
@@ -333,7 +332,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
                                 full.names = TRUE)))
           }else{
             for (bio in bio.var) {
-              raster.temp <- raster(
+              raster.temp <- terra::rast(
                 list.files(temp.temp.save.location,
                            pattern = paste0(parm.temp, bio, ".bil"),
                            full.names = T)
@@ -341,22 +340,21 @@ WorldClim.HistClim.download <- function(save.location = "./",
               if(bio <= 11){
                 if(res.temp != "30s"){
                   gc()
-                  gain(raster.temp) <- 0.1
+                raster.temp <- process.raster.int.doub(raster.temp)
                   gc()
                 }else{
                   # crop
                   gc()
-                  gain(raster.temp) <- 0.1
+                raster.temp <- process.raster.int.doub(raster.temp)
                   gc()
                 }
               }
-              writeRaster(raster.temp,
+              terra::writeRaster(raster.temp,
                           filename = paste0(temp.temp.save.location,
                                             "WC_",vers, "_",
                                             res, "_", parm.temp, "_",
                                             str_pad(c(1:19)[bio], 2, 'left', pad = "0"),
                                             ".tif"),
-                          format = "GTiff",
                           overwrite = TRUE)
             }
             unlink(c(list.files(temp.temp.save.location, pattern = ".bil",
@@ -623,7 +621,7 @@ WorldClim.HistClim.download <- function(save.location = "./",
 #'@importFrom curl curl_fetch_memory
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@importFrom utils unzip download.file  setTxtProgressBar txtProgressBar
 #'
 #'@export
@@ -895,22 +893,22 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
               if(parm.temp != "prec"){
                 for (file.conversion.num in 1:length(keep.files)) {
                   if(res.temp != "30s"){
-                    raster.temp <- raster(keep.files[file.conversion.num])
+                    raster.temp <- terra::rast(keep.files[file.conversion.num])
                     gc()
-                    gain(raster.temp) <- .1
-                    writeRaster(x = raster.temp,
+                    raster.temp <- process.raster.int.doub(raster.temp)
+                    terra::writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
                     rm(raster.temp)
                     gc()
                   }else{
-                    raster.temp <- raster(keep.files[file.conversion.num])
+                    raster.temp <- terra::rast(keep.files[file.conversion.num])
                     # crop
                     gc()
-                    gain(raster.temp) <- .1
+                    raster.temp <- process.raster.int.doub(raster.temp)
                     gc()
                     # save
-                    writeRaster(x = raster.temp,
+                    terra::writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
                     rm(raster.temp)
@@ -960,22 +958,19 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
                 print(file.conversion.temp)
                 if(file.conversion.temp <= 11){
                   if(res.temp != "30s"){
+                    raster.temp <- terra::rast(keep.files[file.conversion.num])
                     gc()
-                    raster.temp <- raster(keep.files[file.conversion.num])
-                    gain(raster.temp) <- .1
-                    writeRaster(x = raster.temp,
+                    raster.temp <- process.raster.int.doub(raster.temp)
+                    terra::writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
                     rm(raster.temp)
                     gc()
                   }else{
-                    raster.temp <- raster(keep.files[file.conversion.num])
-                    # crop
+                    raster.temp <- terra::rast(keep.files[file.conversion.num])
                     gc()
-                    gain(raster.temp) <- .1
-                    gc()
-                    # save
-                    writeRaster(x = raster.temp,
+                    raster.temp <- process.raster.int.doub(raster.temp)
+                    terra::writeRaster(x = raster.temp,
                                 filename = keep.files[file.conversion.num],
                                 overwrite = TRUE)
                     rm(raster.temp)
@@ -1123,7 +1118,7 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@importFrom utils download.file unzip setTxtProgressBar txtProgressBar
 #'@importFrom curl curl_fetch_memory
 
@@ -1197,11 +1192,6 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
     # if(!is.numeric(bio.var)) stop()
     # bio.var <- str_pad(bio.var, 2, 'left', pad = "0")
   }
-  if(is.element("30s", resolution)){
-    warning("Data at 30-seconds spatial resolution is expected to be available soon.", call. = TRUE, immediate. = TRUE)
-  }
-  # analog the elevation can be regarded.
-
 
   # First: Set URL Root --------------------------------------------------------
  # https://geodata.ucdavis.edu/cmip6/30s/ACCESS-CM2/ssp126/wc2.1_30s_tmin_ACCESS-CM2_ssp126_2021-2040.tif
@@ -1242,14 +1232,6 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                           "30s" = "30s",
                           next
       )
-      # if(res.temp == "30s") {
-      #   warning(
-      #     # "Processing might take a while since 30s resolution is downloaded for the whole world",
-      #     "30 second data is not yet available. Please check WorldClim website. Skipping 30s data!",
-      #     call. = TRUE,
-      #     immediate. = TRUE)
-      #   next
-      # }
       URL.2 <- paste0(res.temp, "/")
       # Forth: Global Circulation Model --------------------------------------
       for(gcm in model.var){
@@ -1282,9 +1264,18 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
                                  URL.3, ".tif")
               # check if URL is available
               # if(url.exists(URL.temp)){
-              if(RCurl::url.exists(url = URL.temp)){
+              # if(RCurl::urlExists(url = URL.temp)){
+              URLstatus <- curl::curl_fetch_memory(url = URL.temp)$status
+              if(URLstatus == 200){
                 # clear up the temporary directory
                 unlink(list.files(tempdir(), recursive = T, full.names=T))
+                if(res.temp == "30s"){
+                  options(timeout = max(2400, getOption("timeout")))
+                }else{
+                  if(getOption("timeout") != 60){
+                    options(timeout = max(60, getOption("timeout")))
+                  }
+                }
                 # download file to save location
                 download.file(url = URL.temp,
                               destfile = dest.temp,

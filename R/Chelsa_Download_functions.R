@@ -34,11 +34,10 @@
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
-#'@export
 Chelsa.Clim.download.deprecated<- function(save.location = "./",
                                            parameter = c("prec", "temp", "tmax", "tmin", "bio"),
                                            bio.var = c(1:19),
@@ -181,15 +180,14 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
                             quiet = FALSE,
                             cacheOK = FALSE)
               if(i != "prec"){
-                raster.temp <- raster(dest.temp)
-                
+                raster.temp <- terra::rast(dest.temp)
                 gc()
-                raster.temp <- clamp(raster.temp, lower = -1000,
+                raster.temp <- terra::clamp(raster.temp, lower = -1000,
                                      useValues = FALSE)
-                gain(raster.temp) <- 0.1
+                raster.temp <- process.raster.int.doub(raster.temp)
                 gc()
                 
-                writeRaster(raster.temp,
+                terra::writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
                 rm(raster.temp)
@@ -313,29 +311,29 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
                             quiet = FALSE)
               
               if(bio <= 11){
-                raster.temp <- raster(dest.temp)
+                raster.temp <- terra::rast(dest.temp)
                 # raster.values <- values(raster.temp)
                 # raster.values[raster.values==-32768] <- NA
                 # values(raster.temp) <- raster.values
                 # rm(raster.values)
                 
                 gc()
-                raster.temp <- clamp(raster.temp, lower = -1000,
+                raster.temp <- terra::clamp(raster.temp, lower = -1000,
                                      useValues = FALSE)
-                gain(raster.temp) <- 0.1
-                writeRaster(raster.temp,
+                raster.temp <- process.raster.int.doub(raster.temp)
+                terra::writeRaster(raster.temp,
                             dest.temp,
                             overwrite = TRUE)
                 rm(raster.temp)
                 gc()
               }else{
-                raster.temp <- raster(paste0(temp.temp.save.location, "CHELSA_",
+                raster.temp <- terra::rast(paste0(temp.temp.save.location, "CHELSA_",
                                              i, "_", bio, vers, ".tif"))
                 gc()
-                raster.temp <- clamp(raster.temp, lower = -1000,
+                raster.temp <- terra::clamp(raster.temp, lower = -1000,
                                      useValues = FALSE)
                 gc()
-                writeRaster(raster.temp,
+                terra::writeRaster(raster.temp,
                             paste0(temp.temp.save.location, "CHELSA_",
                                    i, "_", bio, vers, ".tif"),
                             overwrite = TRUE)
@@ -471,7 +469,7 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@import httr
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
@@ -596,15 +594,15 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                                 quiet = FALSE)
                   if(i != "prec"){
                     gc()
-                    raster.temp <- raster(dest.temp)
-                    raster.temp <- clamp(raster.temp, lower = -1000,
+                    raster.temp <- terra::rast(dest.temp)
+                    raster.temp <- terra::clamp(raster.temp, lower = -1000,
                                          useValues = FALSE)
                     gc()
-                    gain(raster.temp) <- 0.1
+                    raster.temp <- process.raster.int.doub(dest.temp)
                     gc()
-                    writeRaster(raster.temp,
-                                dest.temp,
-                                overwrite = TRUE)
+                    terra::writeRaster(x = raster.temp,
+                                       filename = dest.temp,
+                                       overwrite = TRUE)
                     rm(raster.temp)
                     gc()
                   }
@@ -675,22 +673,22 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                                 mode = 'wb',
                                 quiet = FALSE)
                   
-                  raster.temp <- raster(dest.temp)
+                  raster.temp <- terra::rast(dest.temp)
                   # raster.values <- values(raster.temp)
                   # raster.values[raster.values==-32768] <- NA
                   # values(raster.temp) <- raster.values
                   # rm(raster.values); gc()
-                  raster.temp <- clamp(raster.temp,
+                  raster.temp <- terra::clamp(raster.temp,
                                        lower = -1000,
                                        useValues = FALSE)
                   gc()
                   if(bio <= 11){
                     gc()
-                    gain(raster.temp) <- 0.1
+                  raster.temp <- process.raster.int.doub(raster.temp) 
                   }
-                  writeRaster(raster.temp,
-                              dest.temp,
-                              overwrite = TRUE)
+                    terra::writeRaster(x = raster.temp,
+                                       filename = dest.temp,
+                                       overwrite = TRUE)
                   rm(raster.temp)
                   gc()
                 }else{
@@ -806,7 +804,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
@@ -937,30 +935,30 @@ Chelsa.lgm.download <- function(save.location = "./",
                             mode = 'wb',
                             quiet = FALSE)
               if(i != "prec"){
-                raster.temp <- raster(dest.temp)
+                raster.temp <- terra::rast(dest.temp)
                 
-                raster.temp <- clamp(raster.temp, lower = -1000, useValues= FALSE)
+                raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues= FALSE)
                 gc()
                 
                 # Conversion Float
-                gain(raster.temp) <- 0.1
+                raster.temp <- process.raster.int.doub(raster.temp)
                 # umrechnung Kelvin - Celsius
                 gc()
-                offs(raster.temp) <- -273.15
-                
-                writeRaster(raster.temp,
-                            dest.temp,
+                raster.temp <- process.raster.offset(raster.layer= raster.temp)                
+                terra::writeRaster(x = raster.temp,
+                            filename = dest.temp,
                             overwrite = TRUE)
                 rm(raster.temp)
                 gc()
               }else{
                 # for precipitation as http://chelsa-climate.org/last-glacial-maximum-climate/ says
-                raster.temp <- raster(dest.temp)
-                raster.temp <- clamp(raster.temp, upper = 30000, useValues= FALSE)
+                raster.temp <- terra::rast(dest.temp)
+                raster.temp <- terra::clamp(raster.temp, upper = 30000, useValues= FALSE)
                 gc()
-                gain(raster.temp) <- 0.1
-                writeRaster(raster.temp,
-                            dest.temp,
+                raster.temp <- process.raster.int.doub(raster.temp)
+                
+                terra::writeRaster(x = raster.temp,
+                            filename = dest.temp,
                             overwrite = TRUE)
                 rm(raster.temp)
                 gc()
@@ -1033,17 +1031,17 @@ Chelsa.lgm.download <- function(save.location = "./",
                             mode = 'wb',
                             quiet = FALSE)
               # Casting into floats and deleting NA values
-              raster.temp <- raster(dest.temp)
-              raster.temp <- clamp(raster.temp, lower = -1000, useValues= FALSE)
+                raster.temp <- terra::rast(dest.temp)
+                raster.temp <- terra::clamp(raster.temp, upper = -1000, useValues= FALSE)
               gc()
               
               if(bio <= 11){
                 # values(raster.temp) <- as.numeric(values(raster.temp)/10)
-                gain(raster.temp) <- 0.1
+                raster.temp <- process.raster.int.doub(raster.temp)
               }
-              writeRaster(raster.temp,
-                          dest.temp,
-                          overwrite = TRUE)
+              terra::writeRaster(x = raster.temp,
+                                 filename = dest.temp,
+                                 overwrite = TRUE)
               rm(raster.temp)
               gc()
             }else{
@@ -1163,7 +1161,7 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@import httr
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
@@ -1303,22 +1301,16 @@ Chelsa.timeseries.download <- function(save.location = "./",
           
           
           if(i != "prec"){
-            raster.temp <- raster(dest.file)
-            # raster.values <- values(raster.temp)
-            # raster.values[raster.values==-32768] <- NA
-            # values(raster.temp) <- raster.values
-            # rm(raster.values)
+            raster.temp <- terra::rast(dest.file)
             
-            raster.temp <- clamp(raster.temp, lower = -1000, useValues = FALSE)
+            raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues = FALSE)
             gc()
             
-            # values(raster.temp) <- as.numeric(values(raster.temp)/10)
-            # values(raster.temp) <- as.numeric(values(raster.temp)-273.15)
-            gain(raster.temp) <- 0.1
-            offs(raster.temp) <- -273.15
+            raster.temp <- process.raster.int.doub(raster.temp)
+            raster.temp <- process.raster.offset(raster.layer = raster.temp)
             
-            writeRaster(raster.temp,
-                        dest.file,
+            terra::writeRaster(x = raster.temp,
+                          filename = dest.file,
                         overwrite = TRUE)
             rm(raster.temp)
             gc()
@@ -1432,7 +1424,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
 #'@import stringr
 #'@import RCurl
 #'@import ncdf4
-#'@import raster
+#'@import terra
 #'@import httr
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
@@ -1592,11 +1584,11 @@ Chelsa.CRUts.download <- function(save.location = "./",
                                                           mustWork = T),
                                             "/temp_gdalwarped.tif")
             # gdalUtils::gdalwarp(dest.temp, raster.temp.file.dest)
-            raster.temp <- raster(raster.temp.file.dest)
-            raster.temp <- clamp(raster.temp, lower = -1000, useValues = FALSE)
-            gain(raster.temp) <- 0.1
-            writeRaster(raster.temp,
-                        dest.temp,
+            raster.temp <- terra::rast(raster.temp.file.dest)
+            raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues = FALSE)
+            raster.temp <- process.raster.int.doub(raster.temp)
+            terra::writeRaster(x = raster.temp,
+                        filename = dest.temp,
                         overwrite = TRUE)
             rm(raster.temp)
             gc()
