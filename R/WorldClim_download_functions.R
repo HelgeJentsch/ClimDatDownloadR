@@ -1223,7 +1223,7 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
     for (res in resolution) {
       res.temp <- switch (res,
                           "10min" = "10m",
-                          "5mmin" = "5m",
+                          "5min" = "5m",
                           "2.5min" = "2.5m",
                           "30s" = "30s",
                           "10m" = "10m",
