@@ -53,7 +53,7 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
                                            delete.raw.data  = FALSE,
                                            save.bib.file = TRUE){
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
@@ -126,7 +126,7 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
       # set the 2nd order temporal save location to create a
       # managable directory tree in the 1st order directory
       temp.temp.save.location <- paste0(temp.save.location,
-                                        str_replace_all(interm,
+                                        stringr::str_replace_all(interm,
                                                         pattern = "/",
                                                         "_"),
                                         vers_path, "/")
@@ -517,7 +517,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
   # requireNamespace("ncdf4")
   gc()
   save.location <- normalizePath(save.location, winslash = "/")
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # the build of this function is very similar to the Chelsa.Clim.download function.
   if(is.element("prec", parameter)|is.element("temp", parameter)|
      is.element("tmax", parameter)|is.element("tmin", parameter)){
@@ -562,7 +562,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
       for (model in model.var) {
         for (emission.scenario in emission.scenario.var) {
           temp.temp.save.location <- paste0(temp.save.location,
-                                            str_replace_all(interm,
+                                            stringr::str_replace_all(interm,
                                                             pattern = "/",
                                                             "_"),
                                             model,"_",
@@ -832,7 +832,7 @@ Chelsa.lgm.download <- function(save.location = "./",
   # requireNamespace("RCurl")
   # requireNamespace("ncdf4")
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
@@ -883,7 +883,7 @@ Chelsa.lgm.download <- function(save.location = "./",
     for (model in model.var) {
       # download of the requested datasets -------------------------------------
       temp.temp.save.location <- paste0(temp.save.location,
-                                        str_replace_all(interm,
+                                        stringr::str_replace_all(interm,
                                                         pattern = "/",
                                                         "_"),
                                         "LGM_PMIP_", model, "/")
@@ -1188,7 +1188,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
   # requireNamespace("RCurl")
   # requireNamespace("ncdf4")
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
@@ -1262,7 +1262,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
     temp.save.location <- paste0(save.location, "/", i, "/")
     # to go analog to the functions before
     temp.temp.save.location <- paste0(temp.save.location,
-                                      str_replace_all(interm,
+                                      stringr::str_replace_all(interm,
                                                       pattern = "/",
                                                       "_"),
                                       "timeseries","/")
@@ -1447,12 +1447,12 @@ Chelsa.CRUts.download <- function(save.location = "./",
                                   combine.raw.zip = FALSE,
                                   delete.raw.data = FALSE,
                                   save.bib.file = TRUE
-){
+                                  ){
   # requireNamespace("stringr")
   # requireNamespace("RCurl")
   # requireNamespace("ncdf4")
   gc()
-  call.time <- str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
@@ -1531,7 +1531,7 @@ Chelsa.CRUts.download <- function(save.location = "./",
     temp.save.location <- paste0(save.location, "/", i, "/")
     # to go analog to the functions before
     temp.temp.save.location <- paste0(temp.save.location,
-                                      str_replace_all(interm,
+                                      stringr::str_replace_all(interm,
                                                       pattern = "/",
                                                       "_"),
                                       "CRU_timeseries","/")
@@ -1584,8 +1584,9 @@ Chelsa.CRUts.download <- function(save.location = "./",
                                                           mustWork = T),
                                             "/temp_gdalwarped.tif")
             # gdalUtils::gdalwarp(dest.temp, raster.temp.file.dest)
-            raster.temp <- terra::rast(raster.temp.file.dest)
-            raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues = FALSE)
+            # raster.temp <- terra::rast(raster.temp.file.dest)
+            raster.temp <- terra::rast(dest.temp)
+            raster.temp <- terra::clamp(raster.temp, lower = -1000)
             raster.temp <- process.raster.int.doub(raster.temp)
             terra::writeRaster(x = raster.temp,
                         filename = dest.temp,
@@ -1659,3 +1660,4 @@ Chelsa.CRUts.download <- function(save.location = "./",
   # Saving BIB File
   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "CHELSA")
 }
+
