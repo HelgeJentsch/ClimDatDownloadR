@@ -592,6 +592,10 @@ getDownloadSize <- function(URLVector){
     filesizes <- sum(filesizes,fileISize)
     # return(Downloadsize)
   }
+  availDiscSpaceMB <- as.numeric(stringr::str_remove(base::system("wmic logicaldisk get freespace", inter=TRUE)[2], pattern = "  \r"))/1024/1024
+  # if(availDiscSpaceMB < round(filesizes*0.000001, 2)){
+  #   print(paste0(round(filesizes*0.000001, 2),"MB will be downloaded. These is only ", availDiscSpaceMB, "MB available. Please consider another download location."))
+  #   }
   return(round(filesizes*0.000001, 2))
   # Download size in MB
   

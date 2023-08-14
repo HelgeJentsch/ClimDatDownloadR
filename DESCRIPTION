@@ -1,7 +1,7 @@
 Package: ClimDatDownloadR
 Type: Package
 Title: Downloads Climate Data from Chelsa and WorldClim
-Version: 0.1.7-3
+Version: 0.1.7-4
 Authors@R: c(person("Helge", "Jentsch", 
   email = "helge.marc.ole.jentsch@uni-hamburg.de", 
   role = c("aut", "cre"),
@@ -45,7 +45,7 @@ Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2023-07-18 09:50:31 UTC; helge
+Packaged: 2023-08-14 18:54:05 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],

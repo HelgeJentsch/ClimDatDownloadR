@@ -1138,7 +1138,6 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@param clip.extent numeric (vector). Input vector with four numeric values. This is following the input order c("xleft", "xright", "ybottom", "ytop").\cr Default: \code{c(-180, 180, -90, 90)}
 #'@param buffer numeric. Input of decimal degrees of buffer around the shapefile and/or extent. \cr Default: \code{0}
 #'@param convert.files.to.asc logical. Input whether files should be converted into the ASCII format.\cr If \code{TRUE}: a new subdirectory is created and the rawdata is saved there. \cr If \code{clipping} is \code{TRUE}: the clipped raster files are also saved as ASCII grids. \cr  Default: \code{FALSE}
-#'@param stacking.data logical. Input whether the downloaded data should be stacked as a netCDF-rasterstack. \cr Default: \code{FALSE}
 #'@param combine.raw.zip logical. Should the downloaded raw-data be "zipped". \cr Default: \code{FALSE}
 #'@param delete.raw.data  logical. Should the downloaded raw-data be deleted. If \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}
 #'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
@@ -1166,7 +1165,7 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
 #'
 #'
-#'@export
+#'
 Chelsa.timeseries.download <- function(save.location = "./",
                                        parameter = c("prec", "tmax", "tmin"),
                                        start.year.var = 1979,
