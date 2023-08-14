@@ -875,3 +875,649 @@ Chelsa.CMIP_6.download <- function(save.location = "./",
   # delete all temporary files
   unlink(list.files(tempdir(), recursive = T, full.names =T))
 }
+
+#'@title CHELSA Timeseries Download
+#'@author Helge Jentsch
+#'@description This function supports a download of the CHELSA Timeseries dataset (Jan. 1979 - Dec. 2013). This includes precipitation sums (mm) and temperature (average, maximum, minimum; °C) parameters. For further information, please regard \url{http://chelsa-climate.org/timeseries/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'
+#'@note Please note that the downloaded data for temperature are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+#'
+#'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
+#'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "tmax", "tmin")}
+#'@param start.year.var integer. Input year the download timeseries starts. \cr Default: 1979 (minimum)
+#'@param start.month.var integer. Input month the download timeseries starts. \cr Default: 1 (minimum)
+#'@param end.year.var integer. Input year the download timeseries ends. \cr Default: 2013 (maximum)
+#'@param end.month.var integer. Input month the download timeseries ends. \cr Default: 12 (maximum)
+#'@param include.month.var integer (vector). Input which monthly data should be downloaded. \cr Default: \code{c(1:12)}
+#'@param version.var string (vector). Input which version of the dataset should be downloaded. Multiple selection is _not_ possible. Select between version _1.2_ and _2.1_.\cr Default:  \code{c("1.2")}
+#'@param clipping logical. Input whether the downloaded data should be clipped.\cr If \code{FALSE}: \code{clip.shapefile}, \code{buffer}, \code{clip.extent} will be ignored. \cr Default: \code{FALSE}
+#'@param clip.shapefile string. Input which shapefile should be used for clipping. \cr Default: \code{NULL}
+#'@param clip.extent numeric (vector). Input vector with four numeric values. This is following the input order c("xleft", "xright", "ybottom", "ytop").\cr Default: \code{c(-180, 180, -90, 90)}
+#'@param buffer numeric. Input of decimal degrees of buffer around the shapefile and/or extent. \cr Default: \code{0}
+#'@param convert.files.to.asc logical. Input whether files should be converted into the ASCII format.\cr If \code{TRUE}: a new subdirectory is created and the rawdata is saved there. \cr If \code{clipping} is \code{TRUE}: the clipped raster files are also saved as ASCII grids. \cr  Default: \code{FALSE}
+#'@param combine.raw.zip logical. Should the downloaded raw-data be "zipped". \cr Default: \code{FALSE}
+#'@param delete.raw.data  logical. Should the downloaded raw-data be deleted. If \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}
+#'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
+#'
+#'@return Custom dataset of CHELSA Timeseries for a chosen timeseries.
+#'
+#'@references D. N. Karger, O. Conrad, J. B{\"o}hner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
+#'@references D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
+#'
+#'@examples
+#' \dontrun{
+#' Chelsa.timeseries.download(parameter = "prec",
+#'                             start.year.var = 2000,
+#'                             start.month.var = 1,
+#'                             end.year.var = 2002,
+#'                             end.month.var = 12,
+#'                             version.var = "1.2",
+#'                             include.month.var = c(1,12))
+#' }
+#'
+#'@import stringr
+#'@import RCurl
+#'@import ncdf4
+#'@import terra
+#'@import httr
+#'@importFrom utils unzip download.file setTxtProgressBar txtProgressBar
+#'
+#'
+#'@export
+Chelsa.timeseries.download <- function(save.location = "./",
+                                       parameter = c("prec", "temp", "tmax", "tmin"),
+                                       start.year.var = 1979,
+                                       start.month.var = 1,
+                                       end.year.var = 2013,
+                                       end.month.var = 12,
+                                       include.month.var = c(1:12),
+                                       version.var = c("1.2"),
+                                       clipping = FALSE,
+                                       clip.shapefile = NULL,
+                                       buffer = 0,
+                                       clip.extent = c(-180, 180, -90, 90),
+                                       convert.files.to.asc = FALSE,
+                                       combine.raw.zip = FALSE,
+                                       delete.raw.data  = FALSE,
+                                       save.bib.file = TRUE){
+  gc()
+  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), 
+                                                                 pattern = ":", 
+                                                                 replacement = "-"), 
+                                        pattern = " ", 
+                                        replacement = "_")
+  # initial check -----------------------------------------------------------
+  # normalize Path for easier application later
+  save.location <- normalizePath(save.location, 
+                                 winslash = "/")
+  if(length(version.var) != 1) stop("Version variable 'version.var' should only have either '1.2' or '2.1'.")
+  if(!is.null(version.var) & version.var == "1.2"){
+    # Check which parameters are put in and if the connected
+    # month/bio-variables are correctly input
+    if(is.element("prec", parameter)|
+       is.element("tmax", parameter)|
+       is.element("temp", parameter)|
+       is.element("tmin", parameter)){
+      include.month.var <- c(include.month.var)
+      if(!is.numeric(include.month.var)) stop()
+      include.month.var <- str_pad(include.month.var,
+                                   2,
+                                   'left', 
+                                   pad = "0")
+      # print(include.month.var)
+    }
+    if(start.year.var < 1979 | end.year.var > 2013 | end.year.var < 1979 | start.year.var > 2013) {
+      stop("Timeseries only available from 01.1979 to 12.2013. \n Please check input!")
+    }
+    # check for consistent timeseries
+    if(end.year.var < start.year.var) stop("Endyear is before the startyear. Please correct the input!")
+    if(start.year.var == end.year.var){
+      if(start.month.var > end.month.var) stop("End is before the start. Please correct the input!")
+    }
+    
+    ts_string <- seq.Date(as.Date(paste(start.year.var,
+                                        start.month.var, "01", sep = "-")),
+                          as.Date(paste(end.year.var,
+                                        end.month.var, "01", sep = "-")),
+                          by = "month")
+    ts_string <- format.Date(ts_string, format = "%Y_%m")
+    # ts_string <- str_sub(ts_string, 1, end = str_length(ts_string)-3)
+    # ts_string <- str_replace_all(ts_string, pattern = "-", replacement = "_")
+    
+    if(length(include.month.var)!=12){
+      ts.string.temp <- c()
+      for (incl.month in include.month.var) {
+        # print(incl.month)
+        ts.string.temp <- c(ts.string.temp,
+                            ts_string[grep(pattern = paste0("_", incl.month)
+                                           , ts_string)]
+        )
+      }
+      ts_string <- ts.string.temp
+    }
+  }
+  if(!is.null(version.var) & version.var == "2.1"){
+    # Check which parameters are put in and if the connected
+    # month/bio-variables are correctly input
+    if(is.element("prec", parameter)|
+       is.element("tmax", parameter)|
+       is.element("temp", parameter)|
+       is.element("tmin", parameter)){
+      include.month.var <- c(include.month.var)
+      if(!is.numeric(include.month.var)) stop()
+      include.month.var <- str_pad(include.month.var,
+                                   2,
+                                   'left', 
+                                   pad = "0")
+      # print(include.month.var)
+    }
+    if(start.year.var < 1979 | end.year.var > 2019 | end.year.var < 1979 | start.year.var > 2019) {
+      stop("Timeseries only available from 02.1979 to 12.2019. \n Please check input!")
+    }
+    # check for consistent timeseries
+    if(end.year.var < start.year.var) stop("Endyear is before the startyear. Please correct the input!")
+    if(start.year.var == end.year.var){
+      if(start.month.var > end.month.var) stop("End is before the start. Please correct the input!")
+    }
+    
+    ts_string <- seq.Date(as.Date(paste(start.year.var,
+                                        start.month.var, "01", sep = "-")),
+                          as.Date(paste(end.year.var,
+                                        end.month.var, "01", sep = "-")),
+                          by = "month")
+    ts_string <- format.Date(ts_string, format = "%m_%Y")
+    # ts_string <- str_sub(ts_string, 1, end = str_length(ts_string)-3)
+    # ts_string <- str_replace_all(ts_string, pattern = "-", replacement = "_")
+    
+    if(length(include.month.var)!=12){
+      ts.string.temp <- c()
+      for (incl.month in include.month.var) {
+        # print(incl.month)
+        ts.string.temp <- c(ts.string.temp,
+                            ts_string[grep(pattern = paste0("_", incl.month)
+                                           , ts_string)]
+        )
+      }
+      ts_string <- ts.string.temp
+    }
+  }
+  
+  # Preparations ------------------------------------------------------------
+  # parameter
+  parameter <- base::sort(parameter)
+  DLTparameter <- c(base::rep(parameter[parameter!="bio"], 
+                              base::length(ts_string)))
+  DLTparameter <- base::sort(DLTparameter)
+  # variables 
+  DLTvariable <- NULL
+  for(parm in parameter){
+    DLTvariable <- c(DLTvariable, 
+                     switch(parm, 
+                            "prec" = ts_string,
+                            "tmax" = ts_string,
+                            "temp" = ts_string,
+                            "tmin" = ts_string, 
+                            stop()
+                     )
+    ) 
+  }
+  # Combine search into large dataframe -------------------------------------
+  dataDF <- data.frame("parameter" = base::sort(DLTparameter), 
+                       "variable" = DLTvariable
+  )
+  if(length(version.var)==1){
+    dataDF$version <- base::rep(version.var, length(DLTvariable))
+  }
+
+  # v1.2
+  if(is.element("1.2", dataDF$version)){  
+    # dataDF$parmLong[dataDF$version == "1.2"] <- base::paste0(dataDF$parameter[dataDF$version == "1.2"],"10")
+    
+    dataDF$parmLong[dataDF$version == "1.2"] <- 
+      base::paste0(dataDF$parameter[dataDF$version == "1.2"])
+    dataDF$parmLong[dataDF$version == "1.2" & dataDF$parameter == "prec"] <- 
+      base::paste0("prec")
+    dataDF$parmLong[dataDF$version == "1.2" & dataDF$parameter == "tmean"] <- 
+      base::paste0("tmean")
+    dataDF$parmLong[dataDF$version == "1.2" & dataDF$parameter == "tmax"] <- 
+      base::paste0("tmax")
+    dataDF$parmLong[dataDF$version == "1.2" & dataDF$parameter == "tmin"] <- 
+      base::paste0("tmin")
+    
+    dataDF$parameter[dataDF$version == "1.2" & dataDF$parameter == "temp"] <- base::paste0("tmean")
+    # dataDF$years[dataDF$version =="1.2"] <- "_1979-2013"
+    # dataDF$years[dataDF$version == "1.2" & 
+    #                (dataDF$parameter == "prec" | dataDF$parameter == "bio")] <- base::paste0("")
+
+    # Adding the URL stings
+    # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/timeseries/tmax/CHELSA_tmax_1979_01_V1.2.1.tif
+    dataDF$URL[dataDF$version == "1.2" & dataDF$parameter != "bio"]  <-  
+      # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/timeseries/
+      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/timeseries/",
+             # tmax
+             dataDF$parameter[dataDF$version == "1.2" & dataDF$parameter != "bio"], 
+             # /CHELSA_
+             "/CHELSA_", 
+             # tmax
+             dataDF$parameter[dataDF$version == "1.2" & dataDF$parameter != "bio"], 
+             # _
+             "_", 
+             # 1979_01
+             dataDF$variable[dataDF$version == "1.2" & dataDF$parameter != "bio"], 
+             #_V1.2.1.tif
+             "_V1.2.1.tif")
+  }
+  
+  # v2.1
+  if(is.element("2.1", dataDF$version)){ 
+    dataDF$parmLong[dataDF$version == "2.1" & 
+                      dataDF$parameter == "prec"] <- base::paste0("pr")
+    dataDF$parmLong[dataDF$version == "2.1" & 
+                      dataDF$parameter == "temp"] <- base::paste0("tas")
+    dataDF$parmLong[dataDF$version == "2.1" & 
+                      dataDF$parameter == "tmin"] <- base::paste0("tasmin")
+    dataDF$parmLong[dataDF$version == "2.1" & 
+                      dataDF$parameter == "tmax"] <- base::paste0("tasmax")
+    # dataDF$years[dataDF$version =="2.1"] <- "_1981-2010"
+    
+    
+    # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/tas/CHELSA_tas_11_2007_V.2.1.tif
+    dataDF$URL[dataDF$version == "2.1" & dataDF$parameter != "bio"]  <-
+      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/",
+             dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio"],
+             "/CHELSA_", 
+             dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio"],
+             "_", 
+             dataDF$variable[dataDF$version == "2.1" & dataDF$parameter != "bio"],
+             "_V.2.1.tif")
+  }
+  write.table(x = dataDF, 
+              file = normalizePath(paste0(save.location, "/", call.time, "_downloadDataframe.csv"), winslash = "/"), 
+              sep = ";", 
+              dec = ".", 
+              row.names = F, 
+              append = F)
+  # Check if URL exists!
+  for(urlexists in dataDF$URL){ # loop through all URLs
+    if(!RCurl::url.exists(urlexists)){ # if not, print warning!
+      cat(paste(urlexists, 
+                " does not exist, please check the website of Chelsa. \n")
+      )
+      if(urlexists == dataDF$URL[1]){
+        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helge.marc.ole.jentsch@uni-hamburg.de\n")
+        )}
+      next 
+    }
+  }
+  # print the amount of data to be downloaded and processed.
+  print(paste0(getDownloadSize(dataDF$URL), " MB will be downloaded."))
+  # Progressbar setup
+  PGBsum <- nrow(dataDF) + length(unique(dataDF$parameter)) + 1
+  PGB <- utils::txtProgressBar(min = 0, max = PGBsum, style = 3)
+  PGBstate <- 0
+  # Preparation of save location stack 
+  locationSack <- NULL
+  # loop through every instance and save the location. 
+  # HINT FOR RUNTIME IMPROVEMENT!!!
+  for(parm in dataDF$parameter){
+    if (!dir.exists(paste0(save.location, "/", parm))){
+      dir.create(paste0(save.location, "/", parm))
+    }
+    if("1.2" %in% dataDF$version){
+      if (!dir.exists(paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries"))){
+        dir.create(paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries"))
+      }
+      locationSack <- c(locationSack, paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries/"))
+    }
+    if("2.1" %in% dataDF$version){
+      if (!dir.exists(paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries"))){
+        dir.create(paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries"))
+      }
+      locationSack <- c(locationSack, paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries/"))
+    }
+  }
+  print(locationSack)
+
+  dataDF$filepath[dataDF$version == "1.2"]  <- 
+    paste0(save.location,"/",
+           dataDF$parameter, "/ChelsaV1.2Timeseries", 
+           "/CHELSA_", dataDF$parmLong , "_", dataDF$variable, dataDF$years,
+           "_V1.2.tif")
+  dataDF$filepath[dataDF$version == "2.1"]  <- 
+    paste0(save.location,"/",
+           dataDF$parameter, "/ChelsaV2.1Timeseries", 
+           "/CHELSA_", dataDF$parmLong , "_", dataDF$variable, dataDF$years,
+           "_V2.1.tif")
+  # check for file existance - if not already present - download file 
+  for(fileexists in dataDF$filepath){
+    if(!file.exists(fileexists)){
+      unlink(list.files(tempdir(), recursive = TRUE, full.names = TRUE))
+      download.file(url = dataDF$URL[dataDF$filepath == fileexists],
+                    destfile = fileexists,
+                    # overwrite is TRUE otherwise a error is caused
+                    overwrite = TRUE,
+                    # From the description file:
+                    # The choice of binary transfer (mode = "wb" or "ab")
+                    # is important on Windows, since unlike Unix-alikes
+                    # it does distinguish between text and binary files and
+                    # for text transfers changes
+                    # \n line endings to \r\n (aka ‘CRLF’).
+                    mode = 'wb',
+                    # to show progression bar
+                    quiet = TRUE,
+                    cacheOK = FALSE)
+    }
+    setTxtProgressBar(PGB, PGBstate+1)
+    PGBstate <- PGBstate+1
+  }
+  
+  
+  if(is.element("1.2", dataDF$version)){ 
+    # https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf
+    rescaleDF_V12 <- dataDF[dataDF$version == "1.2" & 
+                              dataDF$parameter != "prec"
+                            ,]
+    
+    if(nrow(rescaleDF_V12)>0){
+      for(rescale_i in 1:nrow(rescaleDF_V12)){
+        gc()
+        tempRast <- terra::rast(rescaleDF_V12$filepath[rescale_i])
+        tempRast <- process.raster.int.doub(tempRast)
+        tempFilePath <- tempfile(tmpdir = tempdir(), fileext = ".tif")
+        terra::writeRaster(x = tempRast,
+                           filename = tempFilePath
+        )
+        terra::writeRaster(x = terra::rast(x = tempFilePath),
+                           filename = rescaleDF_V12$filepath[rescale_i], 
+                           overwrite = TRUE)
+        rm(tempFilePath)
+        gc()
+      }
+      rm(rescale_i)
+      unlink(list.files(tempdir(), recursive = T, full.names =T))
+    }
+  }
+  if(is.element("2.1", dataDF$version)){ 
+    # https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf
+    rescaleDF_V21 <- dataDF[dataDF$version == "2.1",]
+    if(nrow(rescaleDF_V21)>0){
+      for(rescale_i in 1:nrow(rescaleDF_V21)){
+        gc()
+        tempRast <- terra::rast(rescaleDF_V21$filepath[rescale_i])
+        tempRast <- process.raster.int.doub(tempRast)
+        tempFilePath <- tempfile(tmpdir = tempdir(), fileext = ".tif")
+        terra::writeRaster(x = tempRast,
+                           filename = tempFilePath
+        )
+        terra::writeRaster(x = terra::rast(x = tempFilePath),
+                           filename = rescaleDF_V21$filepath[rescale_i], 
+                           overwrite = TRUE)
+        rm(tempFilePath)
+        gc()
+      }
+      rm(rescale_i)
+      unlink(list.files(tempdir(), recursive = T, full.names =T))
+    }
+    offsetDF_V21 <- dataDF[dataDF$version == "2.1" & 
+                             dataDF$parameter != "prec"]
+    if(nrow(offsetDF_V21)>0){
+      for(rescale_i in 1:nrow(offsetDF_V21)){
+        gc()
+        tempRast <- terra::rast(offsetDF_V21$filepath[rescale_i])
+        tempRast <- process.raster.offset(tempRast)
+        tempFilePath <- tempfile(tmpdir = tempdir(), fileext = ".tif")
+        terra::writeRaster(x = tempRast,
+                           filename = tempFilePath
+        )
+        terra::writeRaster(x = terra::rast(x = tempFilePath),
+                           filename = offsetDF_V21$filepath[rescale_i], 
+                           overwrite = TRUE)
+        rm(tempFilePath)
+        gc()
+      }
+      rm(rescale_i)
+      unlink(list.files(tempdir(), recursive = T, full.names =T))
+    }
+  }
+  locationSack <- unique(locationSack)
+  for (temp.temp.save.location in locationSack) {
+    run <- grep(temp.temp.save.location, locationSack)
+    for(i in run){
+      # print(ls())
+      # variable.numbers <- dataDF$variable[dataDF$parameter == parameter[i]]
+      # stop()
+      # if clipping is TRUE ...
+      if(clipping == TRUE){
+        # the function "clipping.tif" (found in the auxiliary.R-File)
+        # is executed. The clip.save.location is the same location as the
+        # "current" save location
+        clipping.tif(clip.save.location = temp.temp.save.location,
+                     # the clip-shapefile is passed
+                     # default "NULL" does not produce error
+                     clip.shapefile = clip.shapefile,
+                     # Clip.extent is passed
+                     # default "c(-180, 180, -90, 90)" does not produce errors
+                     # simply clips the whole world.
+                     clip.extent = clip.extent,
+                     # buffer is passed
+                     # default: 0. Unit is arc-degrees
+                     buffer = buffer,
+                     # conversion to ASCII format here integrated into the
+                     # clipping function. Since it can be assumed that
+                     # they should be converted lateron anyway.
+                     convert.files.to.asc = convert.files.to.asc,
+                     time.stamp.var = call.time)
+      }
+      # if converting.files.to.asc is TRUE ...
+      if(convert.files.to.asc == TRUE){
+        # the function "convert.to.asc" (found in the auxiliary.R-File)
+        # is executed. The save.location is the same location as the
+        # "current" save location. Also another new subdirectory will
+        # be created with the name "ASCII" .
+        convert.to.asc(save.location = temp.temp.save.location,
+                       time.stamp.var = call.time)
+      }
+      # if stacking.data is TRUE ...
+      # if(stacking.data == TRUE){
+      #   # the function "stacking.downloaded.data"
+      #   # (found in the auxiliary.R-File) is executed.
+      #   # The save.location is the same location as the
+      #   # "current" save location.
+      #   if(clipping==TRUE){
+      #     stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+      #                              parameter.var = parameter[i],
+      #                              variable.numbers = variable.numbers,
+      #                              stack.clipped = TRUE,
+      #                              time.stamp.var = call.time)
+      #   }else{
+      #     stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+      #                              parameter.var = parameter[i],
+      #                              variable.numbers = variable.numbers,
+      #                              stack.clipped = FALSE,
+      #                              time.stamp.var = call.time)
+      #   }
+      # }
+      # if combine.raw.zip is TRUE ...
+      if(combine.raw.zip == TRUE){
+        # the function "combine.raw.in.zip"
+        # (found in the auxiliary.R-File) is executed.
+        # The save.location is the same location as the
+        # "current" save location. The name of the zip-file is also
+        # passed with the current parameter in it.
+        combine.raw.in.zip(save.location = temp.temp.save.location,
+                           zip.name = paste0("CHELSAClim_", parameter[i], ""),
+                           time.stamp.var = call.time)
+      }
+      # if delete.raw.data is TRUE ...
+      if(delete.raw.data == TRUE){
+        # All .tif raster files in the current 2nd order subdirectory are
+        # unlinked (deleted).
+        unlink(list.files(temp.temp.save.location,
+                          pattern = ".tif",
+                          include.dirs = FALSE,
+                          full.names = T),
+               force = TRUE)
+      }
+    }
+    # delete all temporary files
+    unlink(list.files(tempdir(), recursive = T, full.names =T))
+    setTxtProgressBar(PGB, PGBstate+1)
+    PGBstate <- PGBstate+1
+  }
+  if(save.bib.file == TRUE) {
+    save.citation(save.location = save.location, dataSetName = "CHELSA")
+  }
+  setTxtProgressBar(PGB, PGBstate+1)
+  close(PGB)
+  # delete all temporary files
+  unlink(list.files(tempdir(), recursive = T, full.names =T))
+}
+#   stop()
+#   # Parameter and directories -----------------------------------------------
+#   # work through paramerters
+#   for(i in parameter){
+#     # clear up the temporary directory
+#     unlink(list.files(tempdir(), recursive = T, full.names=T))
+#     
+#     # create intermediate strings for later use
+#     interm <- switch(i,
+#                      "prec"  = "prec/",
+#                      "temp"  = "tmean/",
+#                      "tmax"  = "tmax/",
+#                      "tmin"  = "tmin/",
+#                      # "bio"  = "bio/",
+#                      stop())
+#     
+#     variable.numbers <- switch(i,
+#                                # "bio" = bio.var,
+#                                "tmin" = include.month.var,
+#                                "tmax" = include.month.var,
+#                                "temp" = include.month.var,
+#                                "prec" = include.month.var,
+#                                stop())
+#     
+#     # create new directory
+#     if(!dir.exists(paste0(save.location, "/", i))){
+#       dir.create(paste0(save.location, "/", i), showWarnings = FALSE)
+#     }
+#     temp.save.location <- paste0(save.location, "/", i, "/")
+#     # to go analog to the functions before
+#     temp.temp.save.location <- paste0(temp.save.location,
+#                                       stringr::str_replace_all(interm,
+#                                                                pattern = "/",
+#                                                                "_"),
+#                                       "timeseries","/")
+#     # print(str_sub(temp.temp.save.location, end=-2))
+#     if(!dir.exists(temp.temp.save.location)){
+#       dir.create(str_sub(temp.temp.save.location, end=-2))
+#     }
+#     
+#     # temp.temp.save.location <- normalizePath(temp.temp.save.location,
+#     #                                          winslash = "/")
+#     # if(i == "temp"){
+#     #   i <- "tmean"
+#     # }
+#     # print(interm)
+#     # Download ----------------------------------------------------------------
+#     # if(i != "bio"){
+#     for (year_month in ts_string){
+#       URL.temp <-
+#         paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/timeseries/",
+#                interm, "CHELSA_", i,"_",year_month,
+#                "_V1.2.1.tif")
+#       # check if URL is available
+#       if(!http_error(URL.temp)){
+#         # clear up the temporary directory
+#         unlink(list.files(tempdir(), recursive = T, full.names=T))
+#         
+#         dest.file <- paste0(temp.temp.save.location, "CHELSA_", i,
+#                             "_", year_month, "_V1.2.1.tif")
+#         if(!file.exists(dest.file)){
+#           # download file to save location
+#           download.file(url = URL.temp,
+#                         destfile = dest.file,
+#                         overwrite = TRUE,
+#                         mode = 'wb',
+#                         quiet = FALSE)
+#           
+#           
+#           if(i != "prec"){
+#             raster.temp <- terra::rast(dest.file)
+#             
+#             raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues = FALSE)
+#             gc()
+#             
+#             raster.temp <- process.raster.int.doub(raster.temp)
+#             raster.temp <- process.raster.offset(raster.layer = raster.temp)
+#             
+#             terra::writeRaster(x = raster.temp,
+#                                filename = dest.file,
+#                                overwrite = TRUE)
+#             rm(raster.temp)
+#             gc()
+#           }
+#         }
+#       }else{
+#         # Warning message
+#         warning(paste0("File does not exist. Did not download: \n", URL.temp, "\n\n"),
+#                 call. = TRUE, immediate. = FALSE)
+#       }
+#       if(year_month == ts_string[length(ts_string)] &
+#          length(list.files(temp.temp.save.location,
+#                            pattern = ".tif",
+#                            include.dirs = FALSE)) != 0){
+#         if(clipping == TRUE){
+#           clipping.tif(clip.save.location = temp.temp.save.location,
+#                        clip.shapefile = clip.shapefile,
+#                        clip.extent = clip.extent,
+#                        convert.files.to.asc = convert.files.to.asc,
+#                        buffer = buffer,
+#                        time.stamp.var = call.time)
+#         }
+#         if(convert.files.to.asc == TRUE){
+#           convert.to.asc(temp.temp.save.location,
+#                          time.stamp.var = call.time)
+#         }
+#         if(stacking.data == TRUE){
+#           if(clipping==TRUE){
+#             stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+#                                      parameter.var = i,
+#                                      variable.numbers = variable.numbers,
+#                                      stack.clipped = TRUE,
+#                                      stack.time.series = TRUE,
+#                                      time.series = ts_string,
+#                                      time.stamp.var = call.time)
+#           }else{
+#             stacking.downloaded.data(stack.save.location = temp.temp.save.location,
+#                                      parameter.var = i,
+#                                      variable.numbers = variable.numbers,
+#                                      stack.time.series = TRUE,
+#                                      time.series = ts_string,
+#                                      time.stamp.var = call.time)
+#           }
+#         }
+#         if(combine.raw.zip == TRUE){
+#           combine.raw.in.zip(save.location = temp.temp.save.location,
+#                              zip.name = paste0("CHELSATimeseries_", i, ""),
+#                              time.stamp.var = call.time)
+#         }
+#         if(delete.raw.data == TRUE){
+#           unlink(list.files(temp.temp.save.location,
+#                             pattern = ".tif",
+#                             include.dirs = FALSE, full.names = T), force = TRUE)
+#         }
+#       }
+#     }
+#     
+#     # Clean up, if no data was downloaded. ------------------------------------
+#     
+#     
+#     if(length(list.files(temp.temp.save.location,
+#                          include.dirs = TRUE)) == 0){
+#       unlink(str_sub(temp.temp.save.location, 1, end = str_length(temp.temp.save.location)-1),
+#              force = T, recursive = TRUE)
+#     }
+#   }
+#   # Saving BIB File
+#   if(save.bib.file == TRUE) save.citation(save.location = save.location, dataSetName = "CHELSA")
+# }
