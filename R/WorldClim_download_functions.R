@@ -72,11 +72,14 @@ WorldClim.HistClim.download <- function(save.location = "./",
   # requireNamespace("raster")
   gc()
   call.time <- stringr::str_replace_all(
-    stringr::str_replace_all(paste0(Sys.time()), 
-                             pattern = ":", 
-                             replacement = "-"), 
+    stringr::str_replace_all(
+      stringr::str_split(string = paste0(Sys.time()), 
+                         pattern = "\\.")[[1]][1], 
+      pattern = ":",
+      replacement = "-"), 
     pattern = " ", 
     replacement = "_")
+  
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- base::normalizePath(save.location, winslash = "/")
@@ -658,12 +661,15 @@ WorldClim.CMIP_5.download <- function(save.location = "./",
   # requireNamespace("ncdf4")
   # requireNamespace("raster")
   gc()
-  call.time <- stringr::str_replace_all(stringr::str_replace_all(
-    paste0(Sys.time()), 
-    pattern = ":",
-    replacement = "-"), 
+  call.time <- stringr::str_replace_all(
+    stringr::str_replace_all(
+      stringr::str_split(string = paste0(Sys.time()), 
+                         pattern = "\\.")[[1]][1], 
+      pattern = ":",
+      replacement = "-"), 
     pattern = " ", 
-    replacement = "_")  
+    replacement = "_")
+  
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
@@ -1168,7 +1174,14 @@ WorldClim.CMIP_6.download <- function(save.location = "./",
   # requireNamespace("ncdf4")
   # requireNamespace("raster")
   gc()
-  call.time <- stringr::str_replace_all(stringr::str_replace_all(as.character(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+  call.time <- stringr::str_replace_all(
+    stringr::str_replace_all(
+      stringr::str_split(string = paste0(Sys.time()), 
+                         pattern = "\\.")[[1]][1], 
+      pattern = ":",
+      replacement = "-"), 
+    pattern = " ", 
+    replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, winslash = "/")
