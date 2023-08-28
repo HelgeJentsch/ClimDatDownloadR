@@ -56,9 +56,11 @@ Chelsa.Clim.download <- function(save.location = "./",
                                  save.bib.file = TRUE){
   gc()
   call.time <- stringr::str_replace_all(
-    stringr::str_replace_all(paste0(Sys.time()), 
-                             pattern = ":",
-                             replacement = "-"), 
+    stringr::str_replace_all(
+      stringr::str_split(string = paste0(Sys.time()), 
+                         pattern = "\\.")[[1]][1], 
+      pattern = ":",
+      replacement = "-"), 
     pattern = " ", 
     replacement = "_")
   # initial check -----------------------------------------------------------
@@ -544,9 +546,11 @@ Chelsa.CMIP_6.download <- function(save.location = "./",
 ){
   gc()
   call.time <- stringr::str_replace_all(
-    stringr::str_replace_all(as.character(Sys.time()), 
-                             pattern = ":",
-                             replacement = "-"), 
+    stringr::str_replace_all(
+      stringr::str_split(string = paste0(Sys.time()), 
+                         pattern = "\\.")[[1]][1], 
+      pattern = ":",
+      replacement = "-"), 
     pattern = " ", 
     replacement = "_")
   
@@ -941,11 +945,15 @@ Chelsa.timeseries.download <- function(save.location = "./",
                                        delete.raw.data  = FALSE,
                                        save.bib.file = TRUE){
   gc()
-  call.time <- stringr::str_replace_all(stringr::str_replace_all(paste0(Sys.time()), 
-                                                                 pattern = ":", 
-                                                                 replacement = "-"), 
-                                        pattern = " ", 
-                                        replacement = "_")
+  call.time <- stringr::str_replace_all(
+                  stringr::str_replace_all(
+                    stringr::str_split(string = paste0(Sys.time()), 
+                                       pattern = "\\.")[[1]][1], 
+                    pattern = ":",
+                    replacement = "-"), 
+                  pattern = " ", 
+                  replacement = "_")
+  # stringr::str_replace_all(stringr::str_replace_all(stringr::str_split(string = paste0(Sys.time()), pattern = "\."), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
   save.location <- normalizePath(save.location, 
@@ -1009,7 +1017,6 @@ Chelsa.timeseries.download <- function(save.location = "./",
                                    2,
                                    'left', 
                                    pad = "0")
-      # print(include.month.var)
     }
     if(start.year.var < 1979 | end.year.var > 2019 | end.year.var < 1979 | start.year.var > 2019) {
       stop("Timeseries only available from 02.1979 to 12.2019. \n Please check input!")
@@ -1028,13 +1035,12 @@ Chelsa.timeseries.download <- function(save.location = "./",
     ts_string <- format.Date(ts_string, format = "%m_%Y")
     # ts_string <- str_sub(ts_string, 1, end = str_length(ts_string)-3)
     # ts_string <- str_replace_all(ts_string, pattern = "-", replacement = "_")
-    
     if(length(include.month.var)!=12){
       ts.string.temp <- c()
       for (incl.month in include.month.var) {
         # print(incl.month)
         ts.string.temp <- c(ts.string.temp,
-                            ts_string[grep(pattern = paste0("_", incl.month)
+                            ts_string[grep(pattern = paste0(incl.month, "_")
                                            , ts_string)]
         )
       }
