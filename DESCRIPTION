@@ -3,7 +3,7 @@ Type: Package
 Title: Downloads Climate Data from Chelsa and WorldClim
 Version: 0.1.7-4
 Authors@R: c(person("Helge", "Jentsch", 
-  email = "helge.marc.ole.jentsch@uni-hamburg.de", 
+  email = "helgejentsch.research@gmail.com", 
   role = c("aut", "cre"),
   comment = c(ORCID = "0000-0003-4955-8358")),
   person("Maria", "Bobrowski", 
@@ -18,7 +18,7 @@ Authors@R: c(person("Helge", "Jentsch",
   email = "nadine.kaul@uni-hamburg.de", 
   comment = c(ORCID = "0009-0002-0271-8019"),
   role = c("ctb")))
-Maintainer: Helge Jentsch <helge.marc.ole.jentsch@uni-hamburg.de>
+Maintainer: Helge Jentsch <helgejentsch.research@gmail.com>
 Description: This package `ClimDatDownloadR` provides functions to download, pre-process and 
     manage CHELSA and WorldClim climate data sets in respective available 
     spatial and temporal resolutions. The output is provided as GEOTIFF, 
@@ -32,7 +32,7 @@ Description: This package `ClimDatDownloadR` provides functions to download, pre
     A applied comparison of the two data sets is given by 
     Bobrowski & Schickhoff 2017 <doi:10.1016/j.ecolmodel.2017.05.021>.
 URL: https://doi.org/10.5281/zenodo.7924343,
-        https://gitlab.rrz.uni-hamburg.de/helgejentsch/climdatdownloadr
+        https://github.com/HelgeJentsch/ClimDatDownloadR
 YEAR: 2021-2023
 License: MIT + file LICENSE
 Encoding: UTF-8
