@@ -103,8 +103,8 @@ This R-package was developed as a student project for the masters programm Geogr
 
 Feedback, support, and ideas for improving your user experience are apprechiated at **helgejentsch.research@gmail.com**. 
 
-If you want to cite ClimDatDownloadR you can find the package on Zenodo via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7924343.svg)](https://doi.org/10.5281/zenodo.7924343)
+If you want to cite ClimDatDownloadR you can find the package on Zenodo via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8319614.svg)](https://doi.org/10.5281/zenodo.8319614)
 
 We would like to be cited as:
 
-Jentsch, Helge, Weidinger, Johannes, & Bobrowski, Maria. (_current year e.g. 2023_). ClimDatDownloadR: Downloads Climate Data from Chelsa and WorldClim (_current version e.g. 0.1.7-4_). Zenodo. DOI: [10.5281/zenodo.7924343](http://doi.org/10.5281/zenodo.7924343). URL: https://github.com/HelgeJentsch/ClimDatDownloadR. 
+Jentsch, Helge, Weidinger, Johannes, & Bobrowski, Maria. (_current year e.g. 2023_). ClimDatDownloadR: Downloads Climate Data from Chelsa and WorldClim (_current version e.g. 0.1.7-4_). Zenodo. DOI: [10.5281/zenodo.8319614](https://doi.org/10.5281/zenodo.8319614). URL: https://github.com/HelgeJentsch/ClimDatDownloadR. 
