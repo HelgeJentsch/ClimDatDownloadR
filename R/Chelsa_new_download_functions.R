@@ -16,9 +16,10 @@
 #'@param combine.raw.zip logical. Should the downloaded raw-data be "zipped". \cr Default: \code{FALSE}
 #'@param delete.raw.data  logical. Should the downloaded raw-data be deleted.\cr If \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}
 #'@param save.bib.file logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}
+#'@param save.download.table logical. Whether a table containing the download infos should be saved. \cr Default: \code{TRUE}
 #'@return CHELSA climate datasets for the period of 1979 - 2013
 #'
-#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+#'@note Please note that the downloaded data for temperature and the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time. 
 #'
 #'@references D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Climatologies at high resolution for the earth's land surface areas_. In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
 #'@references D. N. Karger, O. Conrad, J. B{\"o}hner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
@@ -53,7 +54,8 @@ Chelsa.Clim.download <- function(save.location = "./",
                                  stacking.data = FALSE,
                                  combine.raw.zip = FALSE,
                                  delete.raw.data  = FALSE,
-                                 save.bib.file = TRUE){
+                                 save.bib.file = TRUE, 
+                                 save.download.table = TRUE){
   gc()
   call.time <- stringr::str_replace_all(
     stringr::str_replace_all(
@@ -174,7 +176,7 @@ Chelsa.Clim.download <- function(save.location = "./",
     
     dataDF$years[dataDF$version =="2.1"] <- "_1981-2010"
     
-    print(dataDF[dataDF$version == "2.1" & dataDF$parameter != "bio", ])
+    # print(dataDF[dataDF$version == "2.1" & dataDF$parameter != "bio", ])
     
     dataDF$URL[dataDF$version == "2.1" & dataDF$parameter != "bio"]  <-
       paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/climatologies/1981-2010/",
@@ -196,12 +198,14 @@ Chelsa.Clim.download <- function(save.location = "./",
              "_V.2.1.tif")
   }
   
-  write.table(x = dataDF, 
-              file = normalizePath(paste0(save.location, "/", call.time, "_downloadDataframe.csv"), winslash = "/"), 
-              sep = ";", 
-              dec = ".", 
-              row.names = F, 
-              append = F)
+  if(save.download.table){
+    write.table(x = dataDF, 
+                file = paste0(normalizePath(save.location, winslash = "/"), "/", call.time, "_downloadDataframe.csv"), 
+                sep = ";", 
+                dec = ".", 
+                row.names = F, 
+                append = F)
+  }
   # Check if URL exists!
   for(urlexists in dataDF$URL){ # loop through all URLs
     if(!RCurl::url.exists(urlexists)){ # if not, print warning!
@@ -209,7 +213,7 @@ Chelsa.Clim.download <- function(save.location = "./",
                 " does not exist, please check the website of Chelsa. \n")
       )
       if(urlexists == dataDF$URL[1]){
-        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helge.marc.ole.jentsch@uni-hamburg.de\n")
+        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helgejentsch.research@gmail.com \n")
         )}
       next 
     }
@@ -254,10 +258,13 @@ Chelsa.Clim.download <- function(save.location = "./",
            "/CHELSA_", dataDF$parmLong , "_", dataDF$variable, dataDF$years,
            "_V2.1.tif")
   
-  # check for file existance - if not already present - download file 
+  dataDF$fileExisted <- FALSE
+  
+    # check for file existance - if not already present - download file 
   for(fileexists in dataDF$filepath){
     if(!file.exists(fileexists)){
       unlink(list.files(tempdir(), recursive = TRUE, full.names = TRUE))
+      warning("If download fails reset the timeout option trough your console: e.g. options(timeout=3600)")
       download.file(url = dataDF$URL[dataDF$filepath == fileexists],
                     destfile = fileexists,
                     # overwrite is TRUE otherwise a error is caused
@@ -272,9 +279,21 @@ Chelsa.Clim.download <- function(save.location = "./",
                     # to show progression bar
                     quiet = TRUE,
                     cacheOK = FALSE)
+    }else{
+      dataDF$fileExisted[dataDF$filepath == fileexists] <- TRUE
     }
+    unlink(list.files(tempdir(), recursive = TRUE, full.names = TRUE))
     setTxtProgressBar(PGB, PGBstate+1)
     PGBstate <- PGBstate+1
+  }
+  
+  if(save.download.table){
+    write.table(x = dataDF, 
+                file = paste0(normalizePath(save.location, winslash = "/"), "/", call.time, "_downloadDataframe.csv"), 
+                sep = ";", 
+                dec = ".", 
+                row.names = F, 
+                append = F)
   }
   
   # processing of raster into double conversion! 
@@ -287,7 +306,8 @@ Chelsa.Clim.download <- function(save.location = "./",
   if(is.element("1.2", dataDF$version)){ 
     # https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf
     rescaleDF_V12 <- dataDF[dataDF$version == "1.2" & 
-                              dataDF$parameter != "prec"
+                              dataDF$parameter != "prec" &
+                              !dataDF$fileExisted
                             ,]
     rescaleDF_V12 <- rescaleDF_V12[!(rescaleDF_V12$parameter == "bio" & 
                                        as.numeric(rescaleDF_V12$variable) > 12)
@@ -307,6 +327,7 @@ Chelsa.Clim.download <- function(save.location = "./",
                            overwrite = TRUE)
         rm(tempFilePath)
         gc()
+      unlink(list.files(tempdir(), recursive = T, full.names =T))
       }
       rm(rescale_i)
       unlink(list.files(tempdir(), recursive = T, full.names =T))
@@ -314,7 +335,10 @@ Chelsa.Clim.download <- function(save.location = "./",
   }
   if(is.element("2.1", dataDF$version)){ 
     # https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf
-    rescaleDF_V21 <- dataDF[dataDF$version == "2.1",]
+    
+    # rescale
+    rescaleDF_V21 <- dataDF[dataDF$version == "2.1"&
+                              !dataDF$fileExisted,]
     if(nrow(rescaleDF_V21)>0){
       for(rescale_i in 1:nrow(rescaleDF_V21)){
         gc()
@@ -327,14 +351,18 @@ Chelsa.Clim.download <- function(save.location = "./",
         terra::writeRaster(x = terra::rast(x = tempFilePath),
                            filename = rescaleDF_V21$filepath[rescale_i], 
                            overwrite = TRUE)
+        unlink(tempFilePath)
         rm(tempFilePath)
         gc()
       }
       rm(rescale_i)
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
+    
+    # offset
     offsetDF_V21 <- dataDF[dataDF$version == "2.1" & 
-                             dataDF$parameter != "prec"]
+                             dataDF$parameter != "prec"&
+                             !dataDF$fileExisted,]
     offsetDF_V21 <- offsetDF_V21[
       !(offsetDF_V21$parameter == "bio" &
           is.element(set = c(2:4,7,12:19), 
@@ -345,7 +373,7 @@ Chelsa.Clim.download <- function(save.location = "./",
       for(rescale_i in 1:nrow(offsetDF_V21)){
         gc()
         tempRast <- terra::rast(offsetDF_V21$filepath[rescale_i])
-        tempRast <- process.raster.offset(tempRast)
+        tempRast <- process.raster.offset(tempRast, offset = 0)
         tempFilePath <- tempfile(tmpdir = tempdir(), fileext = ".tif")
         terra::writeRaster(x = tempRast,
                            filename = tempFilePath
@@ -353,6 +381,7 @@ Chelsa.Clim.download <- function(save.location = "./",
         terra::writeRaster(x = terra::rast(x = tempFilePath),
                            filename = offsetDF_V21$filepath[rescale_i], 
                            overwrite = TRUE)
+        unlink(tempFilePath)
         rm(tempFilePath)
         gc()
       }
@@ -360,6 +389,7 @@ Chelsa.Clim.download <- function(save.location = "./",
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
   }
+
   locationSack <- unique(locationSack)
   for (temp.temp.save.location in locationSack) {
     run <- grep(temp.temp.save.location, locationSack)
@@ -716,7 +746,7 @@ Chelsa.CMIP_6.download <- function(save.location = "./",
                 " does not exist, please check the website of Chelsa. \n")
       )
       if(urlexists == dataDF$URL[1]){
-        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helge.marc.ole.jentsch@uni-hamburg.de\n")
+        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helgejentsch.research@gmail.com\n")
         )}
       next 
     }
@@ -946,13 +976,13 @@ Chelsa.timeseries.download <- function(save.location = "./",
                                        save.bib.file = TRUE){
   gc()
   call.time <- stringr::str_replace_all(
-                  stringr::str_replace_all(
-                    stringr::str_split(string = paste0(Sys.time()), 
-                                       pattern = "\\.")[[1]][1], 
-                    pattern = ":",
-                    replacement = "-"), 
-                  pattern = " ", 
-                  replacement = "_")
+    stringr::str_replace_all(
+      stringr::str_split(string = paste0(Sys.time()), 
+                         pattern = "\\.")[[1]][1], 
+      pattern = ":",
+      replacement = "-"), 
+    pattern = " ", 
+    replacement = "_")
   # stringr::str_replace_all(stringr::str_replace_all(stringr::str_split(string = paste0(Sys.time()), pattern = "\."), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
   # initial check -----------------------------------------------------------
   # normalize Path for easier application later
@@ -1074,7 +1104,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
   if(length(version.var)==1){
     dataDF$version <- base::rep(version.var, length(DLTvariable))
   }
-
+  
   # v1.2
   if(is.element("1.2", dataDF$version)){  
     # dataDF$parmLong[dataDF$version == "1.2"] <- base::paste0(dataDF$parameter[dataDF$version == "1.2"],"10")
@@ -1094,7 +1124,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
     # dataDF$years[dataDF$version =="1.2"] <- "_1979-2013"
     # dataDF$years[dataDF$version == "1.2" & 
     #                (dataDF$parameter == "prec" | dataDF$parameter == "bio")] <- base::paste0("")
-
+    
     # Adding the URL stings
     # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/timeseries/tmax/CHELSA_tmax_1979_01_V1.2.1.tif
     dataDF$URL[dataDF$version == "1.2" & dataDF$parameter != "bio"]  <-  
@@ -1150,7 +1180,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
                 " does not exist, please check the website of Chelsa. \n")
       )
       if(urlexists == dataDF$URL[1]){
-        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helge.marc.ole.jentsch@uni-hamburg.de\n")
+        cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helgejentsch.research@gmail.com\n")
         )}
       next 
     }
@@ -1183,7 +1213,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
     }
   }
   print(locationSack)
-
+  
   dataDF$filepath[dataDF$version == "1.2"]  <- 
     paste0(save.location,"/",
            dataDF$parameter, "/ChelsaV1.2Timeseries", 

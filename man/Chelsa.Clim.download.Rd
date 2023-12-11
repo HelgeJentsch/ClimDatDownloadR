@@ -18,7 +18,8 @@ Chelsa.Clim.download(
   stacking.data = FALSE,
   combine.raw.zip = FALSE,
   delete.raw.data = FALSE,
-  save.bib.file = TRUE
+  save.bib.file = TRUE,
+  save.download.table = TRUE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ Chelsa.Clim.download(
 \item{delete.raw.data}{logical. Should the downloaded raw-data be deleted.\cr If \code{combine.raw.zip} is \code{TRUE}: raw-data is still available in the zipped file. \cr Default: \code{FALSE}}
 
 \item{save.bib.file}{logical. Whether a BibTex-citation file of the dataset should be provided in the Working directory. \cr Default: \code{TRUE}}
+
+\item{save.download.table}{logical. Whether a table containing the download infos should be saved. \cr Default: \code{TRUE}}
 }
 \value{
 CHELSA climate datasets for the period of 1979 - 2013
@@ -57,7 +60,7 @@ CHELSA climate datasets for the period of 1979 - 2013
 This function supports the download, pre-processing and management of CHELSA climate data comprising of monthly precipitation sums in mm, monthly temperature (average, minimum, maximum) in degrees Celsius, and annual chracteristics (19 bioclimatic variables). The spatial resolution of the downloaded data is 30 arc-seconds.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \note{
-Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+Please note that the downloaded data for temperature and the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 }
 \examples{
 \dontrun{

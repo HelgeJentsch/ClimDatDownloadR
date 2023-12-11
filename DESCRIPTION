@@ -45,7 +45,7 @@ Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2023-09-05 15:51:38 UTC; helge
+Packaged: 2023-12-11 16:52:02 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],
