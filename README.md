@@ -1,36 +1,40 @@
-## Welcome to the ClimDatDownloadR - Update 05.09.2023
+---
+title: "Readme - Welcome to the ClimDatDownloadR"
+output: html_document
+---
+## Update 05.09.2023
 
-Hello and welcome to the ClimDatDownloadR R-package. 
+Hello and welcome to the ClimDatDownloadR R-package.
 
-With this package **cli**mate **dat**asets provided by [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**. 
+With this package **cli**mate **dat**asets provided by [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**.
 
-To start, you'll have to install the package and it's dependencies first, if not already done. Then you can activate the package with the `library`-function.  
-For the installation process you need to need to input the following code: 
-```(r)
+To start, you'll have to install the package and it's dependencies first, if not already done. Then you can activate the package with the `library`-function.\
+For the installation process you need to need to input the following code:
+
+``` (r)
 if(!require(devtools)) install.packages("devtools")
 library(devtools)
 devtools::install_github("HelgeJentsch/ClimDatDownloadR")
 library(ClimDatDownloadR)
 ```
-Very well, now that you have the package installed and attached, let's start with the data sets of the climatologies of Chelsa and WorldClim.  
 
-If you have any feedback or are in need of support, you can reach me via **helgejentsch.research@gmail.com**. 
-Feedback and ideas for improving your user experience are always apprechiated!
+Very well, now that you have the package installed and attached, let's start with the data sets of the climatologies of Chelsa and WorldClim.
+
+If you have any feedback or are in need of support, you can reach me via [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com){.email}. Feedback and ideas for improving your user experience are always apprechiated!
 
 ## Overview of download-functions
 
-Besides the functions to download the currend climatologies of [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](../man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](../man/WorldClim.HistClim.download.Rd), the package offers more download functions.  
-- Beginning with the 'Last Glacial Maximum'-data set (LGM), Chelsa offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](../man/Chelsa.lgm.download.Rd).  
-- [Chelsa's](http://chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](../man/Chelsa.timeseries.download.Rd)-function.  
-- For projected climatic conditions both [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options. 
-  - [Chelsa's](http://chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](../man/Chelsa.CMIP_5.download.Rd) and/or [`Chelsa.CRUts.download()`](../man/Chelsa.CRUts.download.Rd). 
-  - [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](../man/WorldClim.CMIP_5.download.Rd) and/or [`WorldClim.CMIP_6.download()`](../man/WorldClim.CMIP_6.download.Rd).  
+Besides the functions to download the currend climatologies of [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](./man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](./man/WorldClim.HistClim.download.Rd), the package offers more download functions.\
+- Beginning with the 'Last Glacial Maximum'-data set (LGM), Chelsa offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](./man/Chelsa.lgm.download.Rd).\
+- [Chelsa's](http://chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](./man/Chelsa.timeseries.download.Rd)-function.\
+- For projected climatic conditions both [Chelsa](http://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options. - [Chelsa's](http://chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](./man/Chelsa.CMIP_5.download.Rd) and/or [`Chelsa.CRUts.download()`](./man/Chelsa.CRUts.download.Rd). - [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](./man/WorldClim.CMIP_5.download.Rd) and/or [`WorldClim.CMIP_6.download()`](./man/WorldClim.CMIP_6.download.Rd).
 
 ## Download Climatologies
 
-In the help pages of [`Chelsa.Clim.download()`](../man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](../man/WorldClim.HistClim.download.Rd) you can find further information about the handling of these functions. In fact running the functions all by itself bulk-downloads all the climatology data sets from the servers to your current working directory.  
-Let's start with a example of the Chelsa climatologies:  
-```(r)
+In the help pages of [`Chelsa.Clim.download()`](./man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](./man/WorldClim.HistClim.download.Rd) you can find further information about the handling of these functions. In fact running the functions all by itself bulk-downloads all the climatology data sets from the servers to your current working directory.\
+Let's start with a example of the Chelsa climatologies:
+
+``` (r)
 Chelsa.Clim.download(
   # first you'll have to choose your working directory
   # don't worry about having a directory for every parameter you want to download
@@ -71,9 +75,12 @@ Chelsa.Clim.download(
   save.bib.file = TRUE
 )
 ```
-___
-With this showing the basic principle of these functions, here is a example of a WorldClim climatology download:  
-```(r)
+
+------------------------------------------------------------------------
+
+With this showing the basic principle of these functions, here is a example of a WorldClim climatology download:
+
+``` (r)
 WorldClim.HistClim.download(
   # As you can see, the structure of this function is very similar to the Chelsa-function
   save.location = "./",
@@ -97,14 +104,14 @@ WorldClim.HistClim.download(
 )
 ```
 
-To get more information, please proceed [here](./articles/ClimDatDownloadR.html). 
+To get more information, please proceed [here](./articles/ClimDatDownloadR.html).
 
-This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany. 
+This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany.
 
-Feedback, support, and ideas for improving your user experience are apprechiated at **helgejentsch.research@gmail.com**. 
+Feedback, support, and ideas for improving your user experience are apprechiated at [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com){.email}.
 
 If you want to cite ClimDatDownloadR you can find the package on Zenodo via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7924343.svg)](https://doi.org/10.5281/zenodo.7924343)
 
 We would like to be cited as:
 
-Jentsch, Helge, Weidinger, Johannes, & Bobrowski, Maria. (_current year e.g. 2023_). ClimDatDownloadR: Downloads Climate Data from Chelsa and WorldClim (_current version e.g. 0.1.7-4_). Zenodo. DOI: [10.5281/zenodo.7924343](http://doi.org/10.5281/zenodo.7924343). URL: https://github.com/HelgeJentsch/ClimDatDownloadR. 
+Jentsch, Helge, Weidinger, Johannes, & Bobrowski, Maria. (*current year e.g. 2023*). ClimDatDownloadR: Downloads Climate Data from Chelsa and WorldClim (*current version e.g. 0.1.7-4*). Zenodo. DOI: [10.5281/zenodo.7924343](http://doi.org/10.5281/zenodo.7924343). URL: <https://github.com/HelgeJentsch/ClimDatDownloadR>.
