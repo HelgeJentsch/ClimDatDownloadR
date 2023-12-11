@@ -1,8 +1,4 @@
----
-title: "Readme - Welcome to the ClimDatDownloadR"
-output: html_document
----
-## Update 05.09.2023
+## Readme - Welcome to the ClimDatDownloadR - Update 05.09.2023
 
 Hello and welcome to the ClimDatDownloadR R-package.
 
