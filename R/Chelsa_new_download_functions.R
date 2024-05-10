@@ -1326,6 +1326,25 @@ Chelsa.timeseries.download <- function(save.location = "./",
         gc()
       }
       rm(rescale_i)
+      # PET has a scale of 0.01, so another rescaling is necessary. 
+      if(is.element("pet", rescaleDF_V21$parameter)){
+        rescaleDF_V21 <- rescaleDF_V21[rescaleDF_V21$parameter == "pet",]
+        for(rescale_i in 1:nrow(rescaleDF_V21)){
+          gc()
+          tempRast <- terra::rast(rescaleDF_V21$filepath[rescale_i])
+          tempRast <- process.raster.int.doub(tempRast)
+          tempFilePath <- tempfile(tmpdir = tempdir(), fileext = ".tif")
+          terra::writeRaster(x = tempRast,
+                             filename = tempFilePath
+          )
+          terra::writeRaster(x = terra::rast(x = tempFilePath),
+                             filename = rescaleDF_V21$filepath[rescale_i], 
+                             overwrite = TRUE)
+          rm(tempFilePath)
+          gc()
+        }
+        rm(rescale_i)
+      }
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
     offsetDF_V21 <- dataDF[dataDF$version == "2.1" & 
@@ -1348,6 +1367,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
       rm(rescale_i)
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
+    rm(rescaleDF_V21, offsetDF_V21)
   }
   locationSack <- unique(locationSack)
   for (temp.temp.save.location in locationSack) {
