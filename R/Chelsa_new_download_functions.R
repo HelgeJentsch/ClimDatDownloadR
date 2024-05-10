@@ -198,6 +198,9 @@ Chelsa.Clim.download <- function(save.location = "./",
              "_V.2.1.tif")
   }
   
+  # here might be a good place for another error-check
+  
+  
   if(save.download.table){
     write.table(x = dataDF, 
                 file = paste0(normalizePath(save.location, winslash = "/"), "/", call.time, "_downloadDataframe.csv"), 
@@ -209,12 +212,12 @@ Chelsa.Clim.download <- function(save.location = "./",
   # Check if URL exists!
   for(urlexists in dataDF$URL){ # loop through all URLs
     if(!RCurl::url.exists(urlexists)){ # if not, print warning!
-      cat(paste(urlexists, 
-                " does not exist, please check the website of Chelsa. \n")
-      )
       if(urlexists == dataDF$URL[1]){
         cat(paste("\t If any of these download warnings was prompted incorrectly, we apprecheate a feedback on this at helgejentsch.research@gmail.com \n")
         )}
+      cat(paste(urlexists, 
+                " does not exist, please check the website of Chelsa. \n")
+      )
       next 
     }
   }
@@ -222,7 +225,13 @@ Chelsa.Clim.download <- function(save.location = "./",
   # print the amount of data to be downloaded and processed.
   print(paste0(getDownloadSize(dataDF$URL), " MB will be downloaded."))
   # Progressbar setup
-  PGBsum <- nrow(dataDF) + length(unique(dataDF$parameter)) + 1
+  PGBsum <- nrow(dataDF) + 
+            length(unique(dataDF$parameter)) + 
+            1 + # ?!
+            1 + # Location Check
+            1 + # Identifier column 
+            1 + # save of dataDF
+            1  # rescale
   PGB <- utils::txtProgressBar(min = 0, max = PGBsum, style = 3)
   PGBstate <- 0
   # Preparation of save location stack 
@@ -246,6 +255,8 @@ Chelsa.Clim.download <- function(save.location = "./",
       locationSack <- c(locationSack, paste0(save.location, "/", parm, "/ChelsaV2.1Climatologies/"))
     }
   }
+  setTxtProgressBar(PGB, PGBstate+1)
+  PGBstate <- PGBstate+1
   # print(locationSack)
   dataDF$filepath[dataDF$version == "1.2"]  <- 
     paste0(save.location,"/",
@@ -259,6 +270,8 @@ Chelsa.Clim.download <- function(save.location = "./",
            "_V2.1.tif")
   
   dataDF$fileExisted <- FALSE
+  setTxtProgressBar(PGB, PGBstate+1)
+  PGBstate <- PGBstate+1
   
     # check for file existance - if not already present - download file 
   for(fileexists in dataDF$filepath){
@@ -295,6 +308,8 @@ Chelsa.Clim.download <- function(save.location = "./",
                 row.names = F, 
                 append = F)
   }
+  setTxtProgressBar(PGB, PGBstate+1)
+  PGBstate <- PGBstate+1
   
   # processing of raster into double conversion! 
   #        1.2       2.1
@@ -389,6 +404,8 @@ Chelsa.Clim.download <- function(save.location = "./",
       unlink(list.files(tempdir(), recursive = T, full.names =T))
     }
   }
+  setTxtProgressBar(PGB, PGBstate+1)
+  PGBstate <- PGBstate+1
 
   locationSack <- unique(locationSack)
   for (temp.temp.save.location in locationSack) {
@@ -959,7 +976,7 @@ Chelsa.CMIP_6.download <- function(save.location = "./",
 #'
 #'@export
 Chelsa.timeseries.download <- function(save.location = "./",
-                                       parameter = c("prec", "temp", "tmax", "tmin"),
+                                       parameter = c("prec", "temp", "tmax", "tmin", "pet"),
                                        start.year.var = 1979,
                                        start.month.var = 1,
                                        end.year.var = 2013,
@@ -1040,9 +1057,10 @@ Chelsa.timeseries.download <- function(save.location = "./",
     if(is.element("prec", parameter)|
        is.element("tmax", parameter)|
        is.element("temp", parameter)|
+       is.element("pet", parameter)|
        is.element("tmin", parameter)){
       include.month.var <- c(include.month.var)
-      if(!is.numeric(include.month.var)) stop()
+      if(!is.numeric(include.month.var)) stop("this is stops")
       include.month.var <- str_pad(include.month.var,
                                    2,
                                    'left', 
@@ -1092,6 +1110,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
                             "prec" = ts_string,
                             "tmax" = ts_string,
                             "temp" = ts_string,
+                            "pet" = ts_string,
                             "tmin" = ts_string, 
                             stop()
                      )
@@ -1154,17 +1173,32 @@ Chelsa.timeseries.download <- function(save.location = "./",
                       dataDF$parameter == "tmin"] <- base::paste0("tasmin")
     dataDF$parmLong[dataDF$version == "2.1" & 
                       dataDF$parameter == "tmax"] <- base::paste0("tasmax")
+    dataDF$parmLong[dataDF$version == "2.1" & 
+                      dataDF$parameter == "pet"] <- base::paste0("pet_penman")
     # dataDF$years[dataDF$version =="2.1"] <- "_1981-2010"
     
     
     # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/tas/CHELSA_tas_11_2007_V.2.1.tif
-    dataDF$URL[dataDF$version == "2.1" & dataDF$parameter != "bio"]  <-
+    # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/pet/CHELSA_pet_penman_01_1980_V.2.1.tif
+    dataDF$URL[dataDF$version == "2.1" & 
+                  (dataDF$parameter != "bio" | dataDF$parameter != "pet")]  <-
       paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/",
-             dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio"],
+             dataDF$parmLong[dataDF$version == "2.1"  & 
+                  (dataDF$parameter != "bio" | dataDF$parameter != "pet")],
              "/CHELSA_", 
-             dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio"],
+             dataDF$parmLong[dataDF$version == "2.1"  & 
+                  (dataDF$parameter != "bio" | dataDF$parameter != "pet")],
              "_", 
-             dataDF$variable[dataDF$version == "2.1" & dataDF$parameter != "bio"],
+             dataDF$variable[dataDF$version == "2.1"  & 
+                  (dataDF$parameter != "bio" | dataDF$parameter != "pet")],
+             "_V.2.1.tif")
+    dataDF$URL[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"]  <-
+      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/",
+             dataDF$parameter[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"],
+             "/CHELSA_", 
+             dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"],
+             "_", 
+             dataDF$variable[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"],
              "_V.2.1.tif")
   }
   write.table(x = dataDF, 
@@ -1201,18 +1235,18 @@ Chelsa.timeseries.download <- function(save.location = "./",
     }
     if("1.2" %in% dataDF$version){
       if (!dir.exists(paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries"))){
-        dir.create(paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries"))
+        dir.create(paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries"), showWarnings = F)
       }
       locationSack <- c(locationSack, paste0(save.location, "/", parm, "/ChelsaV1.2Timeseries/"))
     }
     if("2.1" %in% dataDF$version){
       if (!dir.exists(paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries"))){
-        dir.create(paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries"))
+        dir.create(paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries"), showWarnings = F)
       }
       locationSack <- c(locationSack, paste0(save.location, "/", parm, "/ChelsaV2.1Timeseries/"))
     }
   }
-  print(locationSack)
+  # print(locationSack)
   
   dataDF$filepath[dataDF$version == "1.2"]  <- 
     paste0(save.location,"/",

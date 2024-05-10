@@ -7,7 +7,7 @@
 \usage{
 Chelsa.timeseries.download(
   save.location = "./",
-  parameter = c("prec", "temp", "tmax", "tmin"),
+  parameter = c("prec", "temp", "tmax", "tmin", "pet"),
   start.year.var = 1979,
   start.month.var = 1,
   end.year.var = 2013,
@@ -26,7 +26,7 @@ Chelsa.timeseries.download(
 
 Chelsa.timeseries.download(
   save.location = "./",
-  parameter = c("prec", "temp", "tmax", "tmin"),
+  parameter = c("prec", "temp", "tmax", "tmin", "pet"),
   start.year.var = 1979,
   start.month.var = 1,
   end.year.var = 2013,

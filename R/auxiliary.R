@@ -32,7 +32,13 @@ clipping.tif  <- function(clip.save.location = "./",
                           clip.extent = c(-180, 180, -90, 90),
                           buffer = 0,
                           convert.files.to.asc = FALSE,
-                          time.stamp.var = str_replace_all(str_replace_all(paste0(Sys.time()), pattern = ":", replacement = "-"), pattern = " ", replacement = "_")
+                          time.stamp.var = str_replace_all(
+                            str_replace_all(
+                              paste0(Sys.time()), 
+                              pattern = ":", 
+                              replacement = "-"), 
+                            pattern = " ", 
+                            replacement = "_")
 ){
   gc()
   
@@ -42,8 +48,12 @@ clipping.tif  <- function(clip.save.location = "./",
   # global.crs<- terra::crs("+proj=longlat +datum=WGS84 +no_defs")
   global.crs <- "+proj=longlat +datum=WGS84 +no_defs"
   
-  if((length(clip.extent) != 4) & !is.null(clip.extent)) stop("Please enter a extent as shown in the help! E.g. c(0, 30, 25, 80)")
-  if((is.null(clip.shapefile) & is.null(clip.extent))) stop("Please provide a valid extent or shapefile to which the files should be clipped!")
+  if((length(clip.extent) != 4) & !is.null(clip.extent)){ 
+    stop("Please enter a extent as shown in the help! E.g. c(0, 30, 25, 80)")
+    }
+  if((is.null(clip.shapefile) & is.null(clip.extent))){
+    stop("Please provide a valid extent or shapefile to which the files should be clipped!")
+  }
   
   temp.list.files <- list.files(clip.save.location,
                                 full.names = TRUE,
@@ -446,7 +456,9 @@ save.citation <- function(save.location = "./",
       citation_WC14 <- RefManageR::ReadCrossRef("10.1002/joc.1276")
       # citation_  <- RefManageR::ReadCrossRef("")
       print(citation_WC14)
-      RefManageR::WriteBib(bib = citation_WC14, file = paste0(save.location, "Worldclim14_citation.bib"))
+      RefManageR::WriteBib(bib = citation_WC14, 
+                           file = paste0(save.location, 
+                                         "Worldclim14_citation.bib"))
     }
   }
   if (dataSetName == "WorldClim2.1") {
