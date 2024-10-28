@@ -191,7 +191,7 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
                 raster.temp <- terra::rast(dest.temp)
                 gc()
                 raster.temp <- terra::clamp(raster.temp, lower = -1000,
-                                     useValues = FALSE)
+                                     values = FALSE)
                 raster.temp <- process.raster.int.doub(raster.temp)
                 gc()
                 
@@ -327,7 +327,7 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
                 
                 gc()
                 raster.temp <- terra::clamp(raster.temp, lower = -1000,
-                                     useValues = FALSE)
+                                     values = FALSE)
                 raster.temp <- process.raster.int.doub(raster.temp)
                 terra::writeRaster(raster.temp,
                             dest.temp,
@@ -339,7 +339,7 @@ Chelsa.Clim.download.deprecated<- function(save.location = "./",
                                              i, "_", bio, vers, ".tif"))
                 gc()
                 raster.temp <- terra::clamp(raster.temp, lower = -1000,
-                                     useValues = FALSE)
+                                     values = FALSE)
                 gc()
                 terra::writeRaster(raster.temp,
                             paste0(temp.temp.save.location, "CHELSA_",
@@ -612,7 +612,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                     gc()
                     raster.temp <- terra::rast(dest.temp)
                     raster.temp <- terra::clamp(raster.temp, lower = -1000,
-                                         useValues = FALSE)
+                                         values = FALSE)
                     gc()
                     raster.temp <- process.raster.int.doub(dest.temp)
                     gc()
@@ -696,7 +696,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
                   # rm(raster.values); gc()
                   raster.temp <- terra::clamp(raster.temp,
                                        lower = -1000,
-                                       useValues = FALSE)
+                                       values = FALSE)
                   gc()
                   if(bio <= 11){
                     gc()
@@ -961,7 +961,7 @@ Chelsa.lgm.download <- function(save.location = "./",
               if(i != "prec"){
                 raster.temp <- terra::rast(dest.temp)
                 
-                raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues= FALSE)
+                raster.temp <- terra::clamp(raster.temp, lower = -1000, values= FALSE)
                 gc()
                 
                 # Conversion Float
@@ -977,7 +977,7 @@ Chelsa.lgm.download <- function(save.location = "./",
               }else{
                 # for precipitation as http://chelsa-climate.org/last-glacial-maximum-climate/ says
                 raster.temp <- terra::rast(dest.temp)
-                raster.temp <- terra::clamp(raster.temp, upper = 30000, useValues= FALSE)
+                raster.temp <- terra::clamp(raster.temp, upper = 30000, values= FALSE)
                 gc()
                 raster.temp <- process.raster.int.doub(raster.temp)
                 
@@ -1056,7 +1056,7 @@ Chelsa.lgm.download <- function(save.location = "./",
                             quiet = FALSE)
               # Casting into floats and deleting NA values
                 raster.temp <- terra::rast(dest.temp)
-                raster.temp <- terra::clamp(raster.temp, upper = -1000, useValues= FALSE)
+                raster.temp <- terra::clamp(raster.temp, upper = -1000, values= FALSE)
               gc()
               
               if(bio <= 11){
@@ -1333,7 +1333,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
           if(i != "prec"){
             raster.temp <- terra::rast(dest.file)
             
-            raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues = FALSE)
+            raster.temp <- terra::clamp(raster.temp, lower = -1000, values = FALSE)
             gc()
             
             raster.temp <- process.raster.int.doub(raster.temp)

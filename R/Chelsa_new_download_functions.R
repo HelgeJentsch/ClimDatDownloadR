@@ -179,7 +179,7 @@ Chelsa.Clim.download <- function(save.location = "./",
     # print(dataDF[dataDF$version == "2.1" & dataDF$parameter != "bio", ])
     
     dataDF$URL[dataDF$version == "2.1" & dataDF$parameter != "bio"]  <-
-      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/climatologies/1981-2010/",
+      paste0("https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/",
              dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio"],
              "/CHELSA_", 
              dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio"] ,
@@ -188,7 +188,7 @@ Chelsa.Clim.download <- function(save.location = "./",
              "_V.2.1.tif")
     
     dataDF$URL[dataDF$version == "2.1" & dataDF$parameter == "bio"]  <- 
-      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/climatologies/1981-2010/",
+      paste0("https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/1981-2010/",
              dataDF$parameter[dataDF$version == "2.1" & dataDF$parameter == "bio"], 
              "/CHELSA_",
              dataDF$parameter[dataDF$version == "2.1" & dataDF$parameter == "bio"] ,
@@ -710,7 +710,7 @@ Chelsa.CMIP_6.download <- function(save.location = "./",
   # CHELSA_[short_name]_[timeperiod]_[model] _[ssp] _[Version].tif
   
   dataDF$URL[dataDF$parameter != "bio"]  <-
-    paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/climatologies/",
+    paste0("https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/",
            dataDF$timeperiod[dataDF$parameter != "bio"],
            "/",
            base::toupper(dataDF$model[dataDF$parameter != "bio"]),
@@ -734,7 +734,7 @@ Chelsa.CMIP_6.download <- function(save.location = "./",
            "norm.tif")
   
   dataDF$URL[dataDF$parameter == "bio"]  <-
-    paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/climatologies/",
+    paste0("https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/climatologies/",
            dataDF$timeperiod[dataDF$parameter == "bio"],
            "/",
            base::toupper(dataDF$model[dataDF$parameter == "bio"]),
@@ -1178,11 +1178,11 @@ Chelsa.timeseries.download <- function(save.location = "./",
     # dataDF$years[dataDF$version =="2.1"] <- "_1981-2010"
     
     
-    # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/tas/CHELSA_tas_11_2007_V.2.1.tif
-    # https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/pet/CHELSA_pet_penman_01_1980_V.2.1.tif
+    # https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/monthly/tas/CHELSA_tas_11_2007_V.2.1.tif
+    # https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/monthly/pet/CHELSA_pet_penman_01_1980_V.2.1.tif
     dataDF$URL[dataDF$version == "2.1" & 
                  (dataDF$parameter != "bio" | dataDF$parameter != "pet")]  <-
-      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/",
+      paste0("https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/monthly/",
              dataDF$parmLong[dataDF$version == "2.1"  & 
                                (dataDF$parameter != "bio" | dataDF$parameter != "pet")],
              "/CHELSA_", 
@@ -1193,7 +1193,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
                                (dataDF$parameter != "bio" | dataDF$parameter != "pet")],
              "_V.2.1.tif")
     dataDF$URL[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"]  <-
-      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/GLOBAL/monthly/",
+      paste0("https://os.zhdk.cloud.switch.ch/chelsav2/GLOBAL/monthly/",
              dataDF$parameter[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"],
              "/CHELSA_", 
              dataDF$parmLong[dataDF$version == "2.1" & dataDF$parameter != "bio" & dataDF$parameter == "pet"],
@@ -1541,7 +1541,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
 #           if(i != "prec"){
 #             raster.temp <- terra::rast(dest.file)
 #             
-#             raster.temp <- terra::clamp(raster.temp, lower = -1000, useValues = FALSE)
+#             raster.temp <- terra::clamp(raster.temp, lower = -1000, values = FALSE)
 #             gc()
 #             
 #             raster.temp <- process.raster.int.doub(raster.temp)
