@@ -143,15 +143,14 @@ Chelsa.Clim.download <- function(save.location = "./",
                    (dataDF$parameter == "prec" | dataDF$parameter == "bio")] <- base::paste0("")
     # Adding the URL stings
     dataDF$URL[dataDF$version == "1.2" & dataDF$parameter != "bio"]  <-  
-      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/climatologies/",
+      paste0("https://os.zhdk.cloud.switch.ch/chelsav1/climatologies/",
              dataDF$parameter[dataDF$version == "1.2" & dataDF$parameter != "bio"], 
              "/CHELSA_", dataDF$parmLong[dataDF$version == "1.2" & dataDF$parameter != "bio"] , 
              "_", dataDF$variable[dataDF$version == "1.2" & dataDF$parameter != "bio"], 
              dataDF$years[dataDF$version == "1.2" & dataDF$parameter != "bio"],
              "_V1.2_land.tif")
-    
     dataDF$URL[dataDF$version == "1.2" & dataDF$parameter == "bio"]  <- 
-      paste0("https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/climatologies/",
+      paste0("https://os.zhdk.cloud.switch.ch/chelsav1/climatologies/",
              dataDF$parameter[dataDF$version == "1.2" & dataDF$parameter == "bio"], 
              "/CHELSA_",
              dataDF$parmLong[dataDF$version == "1.2" & dataDF$parameter == "bio"] ,
