@@ -1,7 +1,7 @@
 Package: ClimDatDownloadR
 Type: Package
 Title: Downloads Climate Data from Chelsa and WorldClim
-Version: 0.1.7-6
+Version: 1.0.0
 Authors@R: c(person("Helge", "Jentsch", 
   email = "helgejentsch.research@gmail.com", 
   role = c("aut", "cre"),
@@ -33,7 +33,7 @@ Description: This package `ClimDatDownloadR` provides functions to download, pre
     Bobrowski & Schickhoff 2017 <doi:10.1016/j.ecolmodel.2017.05.021>.
 URL: https://doi.org/10.5281/zenodo.7924343,
         https://github.com/HelgeJentsch/ClimDatDownloadR
-YEAR: 2021-2024
+YEAR: 2021-2025
 License: MIT + file LICENSE
 Encoding: UTF-8
 Depends: R (>= 3.6), terra (>= 1.7-18)
@@ -45,8 +45,8 @@ Suggests: knitr, testthat, usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
-Packaged: 2025-03-06 09:32:22 UTC; helge
 Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],
   Nadine Kaul [ctb]
+Packaged: 2025-06-14 09:44:18 UTC; helge
