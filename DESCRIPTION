@@ -41,7 +41,7 @@ Imports: curl (>= 4.3.2), httr (>= 1.4.1), ncdf4 (>= 1.17), RCurl (>=
         1.98), RefManageR (>= 1.2.12), stringr (>= 1.4.0), sf (>=
         0.9-4), sp (>= 1.4-1), utils
 RoxygenNote: 7.3.2
-Suggests: knitr, testthat, usethis, rmarkdown
+Suggests: knitr, testthat (>= 3.0.0), usethis, rmarkdown
 VignetteBuilder: knitr
 SystemRequirements: Tested with at least 4 GB RAM.
 NeedsCompilation: no
@@ -49,4 +49,5 @@ Author: Helge Jentsch [aut, cre],
   Maria Bobrowski [aut],
   Johannes Weidinger [aut],
   Nadine Kaul [ctb]
-Packaged: 2025-06-14 11:22:07 UTC; helge
+Config/testthat/edition: 3
+Packaged: 2025-08-06 12:47:38 UTC; helge
