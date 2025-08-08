@@ -4,6 +4,7 @@ tags:
   - Climate Data
   - Chelsa
   - WorldClim
+  - Species Distribution Modelling
   - Environmental Niche Modelling
   - Easy Access Geodata
 
@@ -37,8 +38,8 @@ affiliations:
     index: 2
     ror: 00g30e956
 
-date: 07.08.2025
-bibliography: paper_CDDR.bib
+date: 08.08.2025
+bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
 
