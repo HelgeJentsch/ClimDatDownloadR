@@ -5,7 +5,7 @@ tags:
   - Chelsa
   - WorldClim
   - Species Distribution Modelling
-  - Environmental Niche Modelling
+  - Ecological Niche Modelling
   - Easy Access Geodata
 
 authors:
