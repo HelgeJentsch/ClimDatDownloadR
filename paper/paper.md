@@ -38,7 +38,7 @@ affiliations:
     index: 2
     ror: 00g30e956
 
-date: 08.08.2025
+date: 08 August 2025
 bibliography: paper.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
