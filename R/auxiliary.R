@@ -604,9 +604,9 @@ getDownloadSize <- function(URLVector){
     filesizes <- sum(filesizes,fileISize)
     # return(Downloadsize)
   }
-  if(Sys.info()[names(Sys.info()) == "sysname"] == "Windows"){
-    availDiscSpaceMB <- as.numeric(stringr::str_remove(base::system("wmic logicaldisk get freespace", inter=TRUE)[2], pattern = "  \r"))/1024/1024
-  }
+  # if(Sys.info()[names(Sys.info()) == "sysname"] == "Windows"){
+  #   availDiscSpaceMB <- as.numeric(stringr::str_remove(base::system("wmic logicaldisk get freespace", inter=TRUE)[2], pattern = "  \r"))/1024/1024
+  # }
   # else if(Sys.info()[names(Sys.info()) == "sysname"] != "Windows"){
   # }
   # if(availDiscSpaceMB < round(filesizes*0.000001, 2)){

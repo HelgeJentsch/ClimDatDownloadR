@@ -26,13 +26,13 @@ Description: This package `ClimDatDownloadR` provides functions to download, pre
     automate the downloading and pre-processing workflows. 
     We are not redistributing the climate data sets.
     This work is based on work by 
-    Karger et al. (2017) https://doi.org/10.1038/sdata.2017.122 (CHELSA), 
-    Hijmans et al. (2005) https://doi.org/10.1002/joc.1276 (WorldClim 1.4), 
-    and Fick and Hijmans (2017) https://doi.org/10.1002/joc.5086 (WorldClim 2.1). 
+    Karger et al. (2017) <https://doi.org/10.1038/sdata.2017.122> (CHELSA), 
+    Hijmans et al. (2005) <https://doi.org/10.1002/joc.1276> (WorldClim 1.4), 
+    and Fick and Hijmans (2017) <https://doi.org/10.1002/joc.5086> (WorldClim 2.1). 
     A applied comparison of the two data sets is given by 
-    Bobrowski & Schickhoff 2017 https://doi.org/10.1016/j.ecolmodel.2017.05.021>.
-URL: https://doi.org/10.5281/zenodo.7924343,
-        https://github.com/HelgeJentsch/ClimDatDownloadR
+    Bobrowski & Schickhoff 2017 <https://doi.org/10.1016/j.ecolmodel.2017.05.021>.
+URL: <https://doi.org/10.5281/zenodo.7924343>,
+        <https://github.com/HelgeJentsch/ClimDatDownloadR>
 YEAR: 2021-2025
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -50,4 +50,4 @@ Author: Helge Jentsch [aut, cre],
   Johannes Weidinger [aut],
   Nadine Kaul [ctb]
 Config/testthat/edition: 3
-Packaged: 2025-08-06 12:47:38 UTC; helge
+Packaged: 2025-09-26 11:31:33 UTC; helge
