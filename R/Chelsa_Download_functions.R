@@ -2,17 +2,17 @@
 #'@author Helge Jentsch
 #'@description This function supports the download of CHELSA CMIP5 future climate scenarios comprising of monthly precipitation sums in mm, monthly temperature (average, minimum, maximum) in degrees Celsius, and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 #'
-#'@details "The downscaled data has been produced using climatological aided interpolation based on the 1979-2013 reference climatologies from CHELSA." (CHELSA Climate 2020: \url{http://chelsa-climate.org/future/})
+#'@details "The downscaled data has been produced using climatological aided interpolation based on the 1979-2013 reference climatologies from CHELSA." (CHELSA Climate 2020: \url{https://www.chelsa-climate.org/future/})
 #'
-#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models and rcps are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{http://chelsa-climate.org/future/}). Please note, that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models and rcps are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{https://www.chelsa-climate.org/future/}). Please note, that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 #'
 #'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
 #'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "temp", "tmax", "tmin", "bio")}
-#'@param bio.var integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{http://chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}
+#'@param bio.var integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{https://www.chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}
 #'@param month.var integer (vector). Input which monthly data should be downloaded. Only applicable to Precipitation and Temperature (average, maximum, minimum). \cr Default: \code{c(1:12)}
 #'@param emission.scenario.var string (vector). Input which emission scenario dataset should be downloaded. Provided are the representative concentration pathways (RCP) 2.6, 4.5, 6.0, and 8.5.\cr Default: \code{c("rcp26", "rcp45", "rcp60", "rcp85")}
 #'@param time.interval.var string (vector). Input for which time interval data should be downloaded. CHELSA provides downscaled CMIP5 climatologies for 2050 and 2070. Multiple inputs possible.\cr Default: \code{c("2041-2060", "2061-2080")}
-#'@param model.var string (vector). Input which future model dataset should be downloaded. For more information see: \url{http://chelsa-climate.org/future/}.\cr For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("ACCESS1-0", "bcc-csm1-1", "BNU-ESM", "CanESM2", "CCSM4", "CESM1-BGC", } \cr \code{"CESM1-CAM5", "CMCC-CESM", "CMCC-CM", "CMCC-CMS", "CNRM-CM5", "CSIRO-Mk3-6-0",} \cr \code{ "CSIRO-Mk3L-1-2", "EC-EARTH", "FGOALS-g2", "FIO-ESM", "GFDL-CM3", "GFDL-ESM2G", } \cr \code{"GFDL-ESM2M","GISS-E2-H", "GISS-E2-H-CC", "GISS-E2-R", "GISS-E2-R-CC", "HadGEM2-AO",} \cr \code{"HadGEM2-CC", "HadGEM2-ES", "inmcm4", "IPSL-CM5A-LR", "IPSL-CM5A-MR","MIROC-ESM",} \cr \code{"MIROC-ESM-CHEM","MIROC5", "MPI-ESM-LR", "MPI-ESM-MR", "MRI-CGCM3", "MRI-ESM1",} \cr \code{ "NorESM1-M","NorESM1-ME")}
+#'@param model.var string (vector). Input which future model dataset should be downloaded. For more information see: \url{https://www.chelsa-climate.org/future/}.\cr For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("ACCESS1-0", "bcc-csm1-1", "BNU-ESM", "CanESM2", "CCSM4", "CESM1-BGC", } \cr \code{"CESM1-CAM5", "CMCC-CESM", "CMCC-CM", "CMCC-CMS", "CNRM-CM5", "CSIRO-Mk3-6-0",} \cr \code{ "CSIRO-Mk3L-1-2", "EC-EARTH", "FGOALS-g2", "FIO-ESM", "GFDL-CM3", "GFDL-ESM2G", } \cr \code{"GFDL-ESM2M","GISS-E2-H", "GISS-E2-H-CC", "GISS-E2-R", "GISS-E2-R-CC", "HadGEM2-AO",} \cr \code{"HadGEM2-CC", "HadGEM2-ES", "inmcm4", "IPSL-CM5A-LR", "IPSL-CM5A-MR","MIROC-ESM",} \cr \code{"MIROC-ESM-CHEM","MIROC5", "MPI-ESM-LR", "MPI-ESM-MR", "MRI-CGCM3", "MRI-ESM1",} \cr \code{ "NorESM1-M","NorESM1-ME")}
 #'@param clipping logical. Input whether the downloaded data should be clipped.\cr If \code{FALSE} \code{clip.shapefile}, buffer, clip.extent will be ignored. \cr Default: \code{FALSE}
 #'@param clip.shapefile string. Input which shapefile should be used for clipping.  \cr Default: \code{NULL}
 #'@param clip.extent numeric (vector). Input vector with four numeric values. This is following the input order c("xleft", "xright", "ybottom", "ytop").\cr Default: \code{c(-180, 180, -90, 90)}
@@ -26,7 +26,7 @@
 #'@return Downscaled CHELSA CMIP5 climatologies for 2050 and 2070.
 #'
 #'@references D. N. Karger, O. Conrad, J. Böhner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: <https://doi.org/10.1038/sdata.2017.122>>.
-#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
+#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <https://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
 #'
 #'@examples
 #' \dontrun{
@@ -346,18 +346,18 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
 
 #'@title Function for downloading CHELSA Last Glacial Maximum datasets
 #'@author Helge Jentsch
-#'@description This function supports a download of the CHELSA Last Glacial Maximum Climate datasets (21.000 BP). This includes monthly precipitation sums in mm, monthly temperature (average, maximum, minimum) in degree Celsius, annual characteristics (19 bioclimatic parameters), and a global digital elevation model. For further information, please regard \url{http://chelsa-climate.org/last-glacial-maximum-climate/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'@description This function supports a download of the CHELSA Last Glacial Maximum Climate datasets (21.000 BP). This includes monthly precipitation sums in mm, monthly temperature (average, maximum, minimum) in degree Celsius, annual characteristics (19 bioclimatic parameters), and a global digital elevation model. For further information, please regard \url{https://www.chelsa-climate.org/last-glacial-maximum-climate/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 #'
-#'@details "The CHELSA LGM data is based on a implementation of the CHELSA algorithm on PMIP3 data." (CHELSA Climate 2020: \url{http://chelsa-climate.org/last-glacial-maximum-climate/})
+#'@details "The CHELSA LGM data is based on a implementation of the CHELSA algorithm on PMIP3 data." (CHELSA Climate 2020: \url{https://www.chelsa-climate.org/last-glacial-maximum-climate/})
 #'
-#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{http://chelsa-climate.org/last-glacial-maximum-climate/}).
+#'@note Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{https://www.chelsa-climate.org/last-glacial-maximum-climate/}).
 #'
 #'
 #'@param save.location string. Input where the datasets should be saved. \cr Default: Working Directory.
 #'@param parameter string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "temp", "tmax", "tmin", "bio")}
-#'@param bio.var integer (vector). Input which bioclim data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{http://chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}
+#'@param bio.var integer (vector). Input which bioclim data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{https://www.chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}
 #'@param month.var integer (vector). Input which monthly data should be downloaded. Only applicable to Precipitation and Temperature (average, maximum, minimum). \cr Default: \code{c(1:12)}
-#'@param model.var string (vector). Input which future model dataset should be downloaded. For more information see: \url{http://chelsa-climate.org/last-glacial-maximum-climate/}. For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("CCSM4", "MRI-CGCM3", "CNRM-CM5", } \cr \code{"FGOALS-g2", "IPSL-CM5A-LR", "MIROC-ESM", "MPI-ESM-P")}
+#'@param model.var string (vector). Input which future model dataset should be downloaded. For more information see: \url{https://www.chelsa-climate.org/last-glacial-maximum-climate/}. For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("CCSM4", "MRI-CGCM3", "CNRM-CM5", } \cr \code{"FGOALS-g2", "IPSL-CM5A-LR", "MIROC-ESM", "MPI-ESM-P")}
 #'@param download.dem logical. Input whether a LGM digital elevation model should be downloaded. \cr Default: \code{FALSE}
 #'@param clipping logical. Input whether the downloaded data should be clipped.\cr If \code{FALSE}; clip.shapefile, buffer, clip.extent will be ignored. \cr Default: \code{FALSE}
 #'@param clip.shapefile string. Input which shapefile should be used for clipping. \cr Default: \code{NULL}
@@ -372,7 +372,7 @@ Chelsa.CMIP_5.download <- function(save.location = "./",
 #'@return Downscaled global climatological data from the last glacial maximum.
 #'
 #'@references D. N. Karger, O. Conrad, J. Böhner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: <https://doi.org/10.1038/sdata.2017.122>>.
-#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
+#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <https://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
 #'
 #'@examples
 #' \dontrun{
@@ -545,7 +545,7 @@ Chelsa.lgm.download <- function(save.location = "./",
                 rm(raster.temp)
                 gc()
               }else{
-                # for precipitation as http://chelsa-climate.org/last-glacial-maximum-climate/ says
+                # for precipitation as https://www.chelsa-climate.org/last-glacial-maximum-climate/ says
                 raster.temp <- terra::rast(dest.temp)
                 raster.temp <- terra::clamp(raster.temp, upper = 30000, values= FALSE)
                 gc()
@@ -716,7 +716,7 @@ Chelsa.lgm.download <- function(save.location = "./",
 
 #'@title CHELSA Timeseries Download
 #'@author Helge Jentsch
-#'@description This function supports a download of the CHELSA Timeseries dataset (Jan. 1979 - Dec. 2013). This includes precipitation sums (mm) and temperature (average, maximum, minimum; °C) parameters. For further information, please regard \url{http://chelsa-climate.org/timeseries/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'@description This function supports a download of the CHELSA Timeseries dataset (Jan. 1979 - Dec. 2013). This includes precipitation sums (mm) and temperature (average, maximum, minimum; °C) parameters. For further information, please regard \url{https://www.chelsa-climate.org/timeseries/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 #'
 #'@note Please note that the downloaded data for temperature are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 #'
@@ -739,7 +739,7 @@ Chelsa.lgm.download <- function(save.location = "./",
 #'@return Custom dataset of CHELSA Timeseries for a chosen timeseries.
 #'
 #'@references D. N. Karger, O. Conrad, J. Böhner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: <https://doi.org/10.1038/sdata.2017.122>>.
-#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
+#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <https://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
 #'
 #'@examples
 #' \dontrun{
@@ -983,7 +983,7 @@ Chelsa.timeseries.download <- function(save.location = "./",
 
 #'@title CHELSA CRU Timeseries Download
 #'@author Helge Jentsch
-#'@description This function supports a download of the CHELSA CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation sums in mm and temperature (maximum, minimum) in degree Celsius. For further information, please regard \url{http://chelsa-climate.org/chelsacruts/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+#'@description This function supports a download of the CHELSA CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation sums in mm and temperature (maximum, minimum) in degree Celsius. For further information, please regard \url{https://www.chelsa-climate.org/chelsacruts/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 #'
 #'@note Please note that the downloaded data for temperature is processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 #'
@@ -1008,8 +1008,8 @@ Chelsa.timeseries.download <- function(save.location = "./",
 #'
 #'
 #'@references D. N. Karger, O. Conrad, J. Böhner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: <https://doi.org/10.1038/sdata.2017.122>>.
-#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
-#'@references D. N. Karger and N. E. Zimmermann. _CHELSAcruts - High resolution temperature and precipitation timeseries for the 20th century and beyond_. 2018. DOI: <http://dx.doi.org/10.16904/envidat.159>.
+#'@references D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: <https://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>>.
+#'@references D. N. Karger and N. E. Zimmermann. _CHELSAcruts - High resolution temperature and precipitation timeseries for the 20th century and beyond_. 2018. DOI: <https://dx.doi.org/10.16904/envidat.159>.
 #'
 #'@examples
 #' \dontrun{

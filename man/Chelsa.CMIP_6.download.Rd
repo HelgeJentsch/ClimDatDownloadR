@@ -29,7 +29,7 @@ Chelsa.CMIP_6.download(
 
 \item{parameter}{string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "temp", "tmax", "tmin", "bio")}}
 
-\item{bio.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{http://chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}}
+\item{bio.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{https://www.chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}}
 
 \item{month.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to Precipitation and Temperature (average, maximum, minimum). \cr Default: \code{c(1:12)}}
 
@@ -37,7 +37,7 @@ Chelsa.CMIP_6.download(
 
 \item{time.interval.var}{string (vector). Input for which time interval data should be downloaded. CHELSA provides downscaled CMIP6 climatologies for 2050 and 2070. Multiple inputs possible.\cr Default: \code{c("2041-2060", "2061-2080")}}
 
-\item{model.var}{string (vector). Input which future model dataset should be downloaded. For more information see: \url{http://chelsa-climate.org/future/}.\cr For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("gfdl-esm4", "ukesm1-0-ll", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "mri-esm2-0")}}
+\item{model.var}{string (vector). Input which future model dataset should be downloaded. For more information see: \url{https://www.chelsa-climate.org/future/}.\cr For some of the datasets not all downloads are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. For an overview please try "warnings()" after execution. \cr Default: \code{c("gfdl-esm4", "ukesm1-0-ll", "mpi-esm1-2-hr", "ipsl-cm6a-lr", "mri-esm2-0")}}
 
 \item{clipping}{logical. Input whether the downloaded data should be clipped.\cr If \code{FALSE} \code{clip.shapefile}, buffer, clip.extent will be ignored. \cr Default: \code{FALSE}}
 
@@ -64,12 +64,12 @@ CHELSA CMIP6 climatology datasets.
 This function supports the download of CHELSA CMIP6 future climate scenarios comprising of monthly precipitation sums in mm, monthly temperature (average, minimum, maximum) in degrees Celsius, and annual chracteristics (19 bioclimatic variables).\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \details{
-"The downscaled data has been produced using climatological aided interpolation based on the 1979-2013 reference climatologies from CHELSA." (CHELSA Climate 2020: \url{http://chelsa-climate.org/future/})
+"The downscaled data has been produced using climatological aided interpolation based on the 1979-2013 reference climatologies from CHELSA." (CHELSA Climate 2020: \url{https://www.chelsa-climate.org/future/})
 }
 \note{
-Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models and rcps are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{http://chelsa-climate.org/future/}). Please note, that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
+Please note that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.\cr For some of the datasets not all models and rcps are available. For the ones that are not supported the data will not be downloaded and a warning will be prompted. See parameter \code{model.var} for more information or check the website of CHELSA Climate (\url{https://www.chelsa-climate.org/future/}). Please note, that the downloaded data for temperature and the therefore also the first eleven bioclim-variables are processed to °C without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
 
-Specifications: <URL: https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf>
+Specifications: <URL: https://www.chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf>
 
 More information on Shared Socioeconomic Pathways under <URL: https://www.dkrz.de/en/communication/climate-simulations/cmip6-en/the-ssp-scenarios?set_language=en>
 }
@@ -93,7 +93,7 @@ Chelsa.CMIP_6.download(parameter = "prec",
 \references{
 D. N. Karger, O. Conrad, J. Böhner , et al. "Climatologies at high resolution for the earth's land surface areas". In: _Scientific Data_ 4.1 (Sep. 2017). DOI: 10.1038/sdata.2017.122. <URL: https://doi.org/10.1038/sdata.2017.122>.
 
-D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: http://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
+D. N. Karger, O. Conrad, J. Böhner , et al. _Data from: Climatologies at high resolution for the earth's land surface areas_. En. 2018. DOI: 10.5061/DRYAD.KD1D4. <URL: https://datadryad.org/stash/dataset/doi:10.5061/dryad.kd1d4>.
 }
 \author{
 Helge Jentsch
