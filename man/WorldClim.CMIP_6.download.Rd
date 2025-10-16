@@ -40,7 +40,7 @@ WorldClim.CMIP_6.download(
 
 \item{model.var}{string (vector). Model used to calculate the dataset.\cr Default: \code{c("BCC-CSM2-MR", "CNRM-CM6-1", "CNRM-ESM2-1", "CanESM5", "GFDL-ESM4", "IPSL-CM6A-LR", "MIROC-ES2L", "MIROC6", "MRI-ESM2-0")}}
 
-\item{emission.scenario.var}{string (vector). Input which emission scenario dataset should be downloaded. Provided are the shared socio-economic pathways (SSPs) 126, 245, 370, and 585.\cr Further information on SSPs: \url{https://www.carbonbrief.org/cmip6-the-next-generation-of-climate-models-explained} and \url{https://www.carbonbrief.org/explainer-how-shared-socioeconomic-pathways-explore-future-climate-change}.\cr Default: \code{c("ssp126", "ssp245", "ssp370", "ssp585")}}
+\item{emission.scenario.var}{string (vector). Input which emission scenario dataset should be downloaded. Provided are the shared socio-economic pathways (SSPs) 126, 245, 370, and 585.\cr Further information on SSPs: \url{https://www.carbonbrief.org/cmip6-the-next-generation-of-climate-models-explained/} and \url{https://www.carbonbrief.org/explainer-how-shared-socioeconomic-pathways-explore-future-climate-change/}.\cr Default: \code{c("ssp126", "ssp245", "ssp370", "ssp585")}}
 
 \item{time.interval.var}{string (vector). Averaged monthly values over a 20 year period. Periodes availabe are: 2021-2040, 2041-2060, 2061-2080, 2081-2100. \cr Default: \code{c("2021-2040", "2041-2060", "2061-2080", "2081-2100")}}
 
