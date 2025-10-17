@@ -345,69 +345,137 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>A warm welcome</h2>
 <p>Hello and welcome to the ClimDatDownloadR R-package.</p>
 <p>With this package <strong>cli</strong>mate <strong>dat</strong>asets
-provided by <a href="http://chelsa-climate.org/">Chelsa</a> and <a href="https://www.worldclim.org/">WorldClim</a> can be automatically
+provided by <a href="https://www.chelsa-climate.org/">CHELSA</a> and <a href="https://www.worldclim.org/">WorldClim</a> can be automatically
 <strong>download</strong>ed, clipped, and converted with
 <strong>R</strong>.</p>
 <p>To start, you’ll have to install the package and it’s dependencies
 first, if not already done. Then you can activate the package with the
-<code>library</code>-function.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;ClimDatDownloadR&quot;, dependencies = TRUE)</span></span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ClimDatDownloadR)</span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Loading required package: terra</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; terra 1.8.70</span></span></code></pre></div>
-<p>Very well, now that you have the package installed and attached,
-let’s start with the data sets of the climatologies of Chelsa and
-WorldClim.</p>
+<code>library</code>-function.<br />
+For the installation process you need to need to input the following
+code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(remotes)) <span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(remotes)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;HelgeJentsch/ClimDatDownloadR&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ClimDatDownloadR)</span></code></pre></div>
+<p>Now that you have the package installed and loaded, let’s start with
+the data sets of the climatologies of CHELSA and WorldClim.</p>
+<p>If you have any feedback or are in need of support, you can reach me
+via <a href="mailto:helgejentsch.research@gmail.com"><strong>helgejentsch.research@gmail.com</strong></a>.
+Feedback and ideas for improving your user experience are always
+apprechiated!</p>
 </div>
 <div id="download-climatologies" class="section level2">
 <h2>Download Climatologies</h2>
-<p>These climatologies are among the most frequently requested data sets
-used mostly for xxx and yyy. In the help pages of <a href="../reference/Chelsa.Clim.download.html">Chelsa.Clim.download()</a>
-and <a href="../reference/WorldClim.HistClim.download.html">WorldClim.HistClim.download()</a>
-you can find further information about the handling of these functions.
-In fact running the functions all by itself bulk-downloads all the
-climatology data sets from the servers.</p>
-<p>Let’s start with a example of the Chelsa climatologies:</p>
-<pre><code>Chelsa.Clim.download(
-  # first you&#39;ll have to choose your working directory
-  # don&#39;t worry about having a directory for every parameter you want to download
-  # ClimDatDownloadR sorts this out for you
-  save.location = &quot;./&quot;, 
-  # now you&#39;ll have to choose parameters. 
-  # since there is the possibility to download more than one data set
-  # the parameters must be a string-vector input. 
-  # Single parameters, however, can be just put in as a string. 
-  # the valid parameter inputs can be found in the help (linked s.o.)
-  parameter = c(&quot;temp&quot;, &quot;bio&quot;),
-  # Now, since you chose &quot;temp&quot; and &quot;bio&quot; as input parameters, 
-  # you can specify the months and bioclim-variables to download. 
-  # If you want all of them, just leave the default values.
-  # It is crutial, however, that the inputs are integer number values.
-  month.var = c(1), # Here January was chosen to be downloaded for demonstration purposes
-  bio.var =  c(1), # Here the first bioclim-variable was chosen to be downloaded for demonstration purposes
-  # For Chelsa a newer Version of their climatologies was published in 2019.
-  # They still got their old version still hosted on their website. 
-  # So you can download it as well, if you want to reproduce some research you base your studies on. 
-  version.var = &quot;1.2&quot;, # Here the newer version is chosen
-  # Now you can choose whether you want the data set clipped
-  clipping = TRUE, # Here TRUE was chosen to show a basic introduction to the function
-  # Since &quot;clipping&quot; is enganged now you can specify the extent you want to have for your analysis
-  # This is possible via the parameters &quot;clip.shapefile&quot;, &quot;clip.extent&quot;, and &quot;buffer&quot;
-  clip.extent = c(-9,20,35,80), # Here the extent for Europe was used ... 
-  buffer = 5, # ... with a 5 arc-degree buffer.
-  # Now, since some might prefer older file formats there is a possibility to convert 
-  # clipped files and raw data into ESRI-ASCII format
-  convert.files.to.asc = FALSE, 
-  # now you can stack the data ...
-  stacking.data = FALSE, 
-  # ... and choose if you want to combine the raw data in a .zip-file ...
-  combine.raw.zip = FALSE,
-  # and whether raw data should be deleted.
-  delete.raw.data = FALSE,
-  # Finally you are presented with the option to save a bibliography file at the save location. 
-  save.bib.file = TRUE
-)</code></pre>
-<hr />
+</div>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+<p>The ClimDatDownloadR enables</p>
+<ol style="list-style-type: decimal">
+<li>selection of dataset and version (e.g., CHELSA 2.1),</li>
+<li>selection of available variable-parameters (e.g., bioclimatic
+variables and precipitation sums),</li>
+<li>pre-processing steps like clipping, and</li>
+<li>file management options. After describing the complete extent of the
+workflow a working example is shown.</li>
+</ol>
+<p>While this introduces an overview on how to approach the usage of the
+download functions of the <code>ClimDatDownloadR</code>, we employ users
+to consult documentations on the specific functions to gain further
+insights on e.g., variable or model availability or additional function
+parameters. An up-to-date version of the manual can be accessed on the
+<a href="https://github.com/HelgeJentsch/ClimDatDownloadR/blob/master/ClimDatDownloadR_manual.pdf">GitHub
+repository</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Start selecting the dataset with
+<code>provider.dataset.download()</code>. The <em>provider</em> are
+<code>Chelsa</code> or <code>WorldClim</code>. The following
+<em>dataset</em> completes the function name and specifies the accessed
+dataset. Function names and accessed datasets are referenced in the
+leading columns of the table above (<a href="#table-overview-of-the-functions-and-respective-datasets">Table:
+Overview of the functions and respective datasets</a>). The version can
+be specified with <code>version.var</code>.</li>
+<li>The availability of parameters differs between datasets, despite
+every dataset providing data on monthly temperature means, minima, and
+maxima, as well as precipitation sums. Bioclimatic variables are also
+available for all climatologies. Here, the function parameters
+<code>month.var</code> and <code>bio.var</code> can be used to specify a
+subset from the dataset. For past (last glacial maximum) and future
+(CMIP 5/6) model climatologies a set of function parameters to specify
+models (<code>model.var</code>), scenarios
+(<code>emission.scenario.var</code>), and time interval
+(<code>time.interval.var</code>) can be used. The WorldClim datasets
+come in different spatial resolutions (10/5/2.5 arc-min., 30 arc-sec.),
+while CHELSA data is always in 30 arc-sec. resolution. Therefore,
+<code>WorldClim.*.download()</code>-functions have an additional
+<code>resolution</code> function parameter.</li>
+<li>The pre-processing steps consist of two levels. While the processing
+of the provided data to interpretable values cannot be addressed by the
+user, clipping needs to be enabled with the eponymous function parameter
+and specified further with parameters like <code>clip.shapefile</code>
+or <code>clip.extent</code> with <code>buffer</code> as additional
+parameter.</li>
+<li>File-management addresses the conversion to different file formats,
+the decluttering of the working directory, and a citation file that
+includes the providers’ relevant publications. Currently, the functions
+parameter <code>convert.files.to.asc</code> and
+<code>stacking.data</code> convert the data to ASCII raster and netCDF
+format, respectively. For a storage efficient way, the user can decide
+to delete the downloaded datasets (<code>delete.raw.data</code>), save
+them in a zip-archive file (<code>combine.raw.zip</code> (CHELSA),
+<code>keep.raw.zip</code> (WorldClim)), or keep them in the directory
+as-is. The function parameter <code>save.bib.file</code> adds a citation
+file of the publications from the data provider to the working directory
+for convenience.</li>
+</ol>
+<p>In the following, the basic usage of the download functions are
+demonstrated by applying an example call of the
+<code>Chelsa.Clim.download()</code> function, aiming at downloading
+CHELSA V2.1 bioclimatic and precipitation data, with clipping to the
+European continent’s extent, and file management tools:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">Chelsa.Clim.download</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="co"># First you&#39;ll have to choose your working directory</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="co"># don&#39;t worry about having a directory for every parameter you want to download</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="co"># ClimDatDownloadR sorts this out for you.</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="at">save.location =</span> <span class="st">&quot;./&quot;</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="co"># Second, specify the version of, in this case, CHELSA you want to download.</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="at">version.var =</span> <span class="st">&quot;2.1&quot;</span>,  </span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="co"># Third, you&#39;ll have to choose parameters. </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="co"># Since there is the possibility to download more than one data set</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="co"># the parameters must be a string-vector input. </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="co"># Single parameters, however, can be just put in as a string. </span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="co"># the valid parameter inputs can be found in the help (linked s.o.)</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="at">parameter =</span> <span class="fu">c</span>(<span class="st">&quot;bio&quot;</span>, <span class="st">&quot;prec&quot;</span>), </span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="co"># Now, since you chose &quot;bio&quot; and &quot;prec&quot; as input parameters, </span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="co"># you can specify the months and bioclim-variables to download. </span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="co"># If you want all of them, just leave the default values.</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="co"># It is crutial, however, that the inputs are integer number values.</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="at">month.var =</span> <span class="fu">c</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">9</span>), <span class="co"># Here January was chosen to be downloaded for demonstration purposes</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>  <span class="at">bio.var =</span>  <span class="fu">c</span>(<span class="dv">1</span>), <span class="co"># Here the first bioclim-variable was chosen to be downloaded for demonstration purposes</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="co"># For Chelsa a newer Version of their climatologies was published in 2019.</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  <span class="co"># They still got their old version still hosted on their website. </span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  <span class="co"># So you can download it as well, if you want to reproduce some research you base your studies on. </span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  <span class="at">clipping =</span> <span class="cn">TRUE</span>, <span class="co"># Here TRUE was chosen to show a basic introduction to the function</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  <span class="co"># Since &quot;clipping&quot; is enganged now you can specify the extent you want to have for your analysis</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>  <span class="co"># This is possible via the parameters &quot;clip.shapefile&quot;, &quot;clip.extent&quot;, and &quot;buffer&quot;</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>  <span class="at">clip.extent =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">25</span>,<span class="dv">40</span>,<span class="dv">62</span>), <span class="co"># Here the extent for Europe was used.</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>  <span class="co"># If you work in a specific region and need data just for that region,</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>  <span class="co"># you can specify the region with:</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>  <span class="at">clip.shapefile =</span> <span class="cn">NULL</span>, <span class="co"># in this case no shapefile is used.</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>  <span class="co"># If you wish to extend the extent of the shapefile, </span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>  <span class="co"># you can set a buffer here:</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>  <span class="at">buffer =</span> <span class="dv">0</span>, </span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>  <span class="co"># Now, since some might prefer older file formats there is a possibility to convert </span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>  <span class="co"># clipped files and raw data into ESRI-ASCII format</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>  <span class="at">convert.files.to.asc =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  <span class="co"># now you can stack the data ...</span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>  <span class="at">stacking.data =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>  <span class="co"># ... and choose if you want to combine the raw data in a .zip-file ...</span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>  <span class="at">combine.raw.zip =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>  <span class="co"># and whether raw data should be deleted.</span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>  <span class="at">delete.raw.data =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>  <span class="co"># Finally you are presented with the option to save a bibliography file at the save location. </span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a>  <span class="at">save.bib.file =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a>)</span></code></pre></div>
 <p>With this showing the basic principle of these functions, here is a
 example of a WorldClim climatology download:</p>
 <pre><code>WorldClim.HistClim.download(
@@ -431,6 +499,242 @@ example of a WorldClim climatology download:</p>
   delete.raw.data = FALSE,
   save.bib.file = TRUE
 )</code></pre>
+</div>
+<div id="overview-of-download-functions" class="section level2">
+<h2>Overview of download-functions</h2>
+<p>Besides the functions to download the current climatologies of <a href="https://www.chelsa-climate.org/">CHELSA</a> and <a href="https://www.worldclim.org/">WorldClim</a>, described below as <a href="./man/Chelsa.Clim.download.Rd"><code>Chelsa.Clim.download()</code></a>
+and <a href="./man/WorldClim.HistClim.download.Rd"><code>WorldClim.HistClim.download()</code></a>,
+the package offers more download functions.</p>
+<ul>
+<li>Beginning with the Last Glacial Maximum-data set (LGM), CHELSA
+offers a data set with parameters like precipitation, temperature, and
+also bioclim variables, driven by various models. It can be called with
+<a href="./man/Chelsa.lgm.download.Rd"><code>Chelsa.lgm.download()</code></a>.</li>
+<li><a href="https://www.chelsa-climate.org/">CHELSA’s</a> timeseries
+dataset can be downloaded via the <a href="./man/Chelsa.timeseries.download.Rd"><code>Chelsa.timeseries.download()</code></a>-function.</li>
+<li>For projected climatic conditions both <a href="https://www.chelsa-climate.org/">CHELSA</a> and <a href="https://www.worldclim.org/">WorldClim</a> provide various
+options.</li>
+<li><a href="https://www.chelsa-climate.org/">CHELSA’s</a> options can
+be downloaded through the functions <a href="./man/Chelsa.CMIP_5.download.Rd"><code>Chelsa.CMIP_5.download()</code></a>
+and/or <a href="./man/Chelsa.CRUts.download.Rd"><code>Chelsa.CRUts.download()</code></a>.</li>
+<li><a href="https://www.worldclim.org/">WorldClim’s</a> options can be
+downloaded through the functions <a href="./man/WorldClim.CMIP_5.download.Rd"><code>WorldClim.CMIP_5.download()</code></a>
+and/or <a href="./man/WorldClim.CMIP_6.download.Rd"><code>WorldClim.CMIP_6.download()</code></a>.</li>
+</ul>
+<div id="table-overview-of-the-functions-and-respective-datasets" class="section level3">
+<h3>Table: Overview of the functions and respective datasets</h3>
+<!-- prettier-ignore -->
+<table>
+<colgroup>
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function Name</th>
+<th>Accessed Dataset</th>
+<th>Version</th>
+<th>Reference Period</th>
+<th>Emission Scenario</th>
+<th>Models</th>
+<th>Spatial Resolution</th>
+<th>Temporal Resolution</th>
+<th>Parameters</th>
+<th>Citation</th>
+<th>Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Chelsa.Clim.download</code></td>
+<td>CHELSA Climatologies</td>
+<td>1.2, 2.1</td>
+<td>1.2: 1979–2013; 2.1: 1989-2010</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>30 arc-seconds</td>
+<td>Monthly</td>
+<td>19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max)</td>
+<td>Karger et al. (2017), Karger et al. (2018), Beck et al. (2020)</td>
+<td>Karger et al. (2021), Karger and Zimmermann (2019)</td>
+</tr>
+<tr class="even">
+<td><code>Chelsa.timeseries.download</code></td>
+<td>CHELSA Climatology Timeseries</td>
+<td>1.2, 2.1</td>
+<td>1.2: 1979–2013; 2.1: 1980-06.2019</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>30 arc-seconds</td>
+<td>Monthly</td>
+<td>19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max), Potential
+available transpiration (PET)</td>
+<td>Karger et al. (2017), Karger et al. (2018), Beck et al. (2020)</td>
+<td>Karger et al. (2021), Karger and Zimmermann (2019)</td>
+</tr>
+<tr class="odd">
+<td><code>Chelsa.CRUts.download</code></td>
+<td>CHELSA CRU Timeseries</td>
+<td>1.2</td>
+<td>1901-2016</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>30 arc-seconds</td>
+<td>Monthly</td>
+<td>19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max), Potential
+available transpiration (PET)</td>
+<td>Karger et al. (2017), Karger et al. (2018), Karger and Zimmermann
+(2018)</td>
+<td>(Karger and Zimmermann (2019), p. 23)</td>
+</tr>
+<tr class="even">
+<td><code>Chelsa.CMIP_6.download</code></td>
+<td>CHELSA CMIP6 dataset</td>
+<td>2.1</td>
+<td>2011-2040, 2041-2070, and 2071-2100</td>
+<td>SSP scenarios 1 (SSP126), 3 (SSP370), and 5 (SSP585)</td>
+<td>Multiple CMIP6 Models [ref. Karger et al. (2021), p. 7]</td>
+<td>30 arc-seconds</td>
+<td>Monthly</td>
+<td>19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max)</td>
+<td>Karger et al. (2017), Karger et al. (2018)</td>
+<td>Karger et al. (2021)</td>
+</tr>
+<tr class="odd">
+<td><code>Chelsa.CMIP_5.download</code></td>
+<td>CHELSA CMIP5 dataset</td>
+<td>1.2</td>
+<td>2041-2060 and 2061-2080</td>
+<td>RCP 2.6, 4.5, 6.0, and 8.5</td>
+<td>Multiple CMIP5 Models [ref. Karger and Zimmermann (2019),
+pp. 24]</td>
+<td>30 arc-seconds</td>
+<td>Monthly</td>
+<td>19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max)</td>
+<td>Karger et al. (2017), Karger et al. (2018)</td>
+<td>Karger and Zimmermann (2019)</td>
+</tr>
+<tr class="even">
+<td><code>Chelsa.lgm.download</code></td>
+<td>CHELSA PMIP3 dataset</td>
+<td>1.2</td>
+<td>21.000 years before 1950</td>
+<td>N/A</td>
+<td>Multiple Paleoclimatic Models [ref. Karger and Zimmermann (2019),
+p. 25]</td>
+<td>0.5 degree</td>
+<td>N/A</td>
+<td>19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max)</td>
+<td>Karger et al. (2017), Karger et al. (2018)</td>
+<td>Karger and Zimmermann (2019)</td>
+</tr>
+<tr class="odd">
+<td><code>WorldClim.HistClim.download</code></td>
+<td>WorldClim historical climate data</td>
+<td>1.4, 2.1</td>
+<td>1.4: 1960-1990; 2.1: 1970-2000</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>10 minutes to 30 arc-seconds</td>
+<td>Monthly</td>
+<td><a href="https://www.worldclim.org/data/bioclim.html">Bioclim.
+Param.</a>, Precip. (sum), Temp. (mean, min, max), Solar Radiation, Wind
+Speed, Water Vapor Pressure</td>
+<td>Hijmans et al. (2005), Fick and Hijmans (2017)</td>
+<td>Version 1.4: <a href="https://www.worldclim.org/data/v1.4/methods.html">Methods</a>, <a href="https://www.worldclim.org/data/v1.4/formats.html">Data
+Formats</a>; Version 2.1: <a href="https://www.worldclim.org/data/worldclim21.html">Download
+Page</a></td>
+</tr>
+<tr class="even">
+<td><code>WorldClim.CMIP_6.download</code></td>
+<td>WorldClim CMIP6 dataset</td>
+<td>2.1</td>
+<td>2021-2040, 2041-2060, 2061-2080, and 2081-2100</td>
+<td>SSP scenarios 1 (SSP126),2 (SSP245), 3 (SSP370), and 5 (SSP585)</td>
+<td>Multiple CMIP5 Models, ref. <a href="https://www.worldclim.org/data/cmip6/cmip6_clim10m.html">10-</a>,
+<a href="https://www.worldclim.org/data/cmip6/cmip6_clim5m.html">5-</a>,
+<a href="https://www.worldclim.org/data/cmip6/cmip6_clim2.5m.html">2.5-</a>minutes,
+and <a href="https://www.worldclim.org/data/cmip6/cmip6_clim30s.html">30-</a>second
+download sites</td>
+<td>10 minutes to 30 arc-seconds</td>
+<td>Monthly</td>
+<td><a href="https://www.worldclim.org/data/bioclim.html">Bioclim.
+Param.</a>, Precip. (sum), Temp. (mean, min, max)</td>
+<td>Fick and Hijmans (2017)</td>
+<td><a href="https://www.worldclim.org/data/downscaling.html">Downscaling
+methods</a></td>
+</tr>
+<tr class="odd">
+<td><code>WorldClim.CMIP_6.download</code></td>
+<td>WorldClim CMIP5 dataset</td>
+<td>1.4</td>
+<td>2041-2060, 2061-2080</td>
+<td>rcp26, rcp45, rcp60, and rcp85</td>
+<td>Multiple CMIP5 Models, ref. <a href="https://www.worldclim.org/data/v1.4/cmip5_10m.html">10-</a>, <a href="https://www.worldclim.org/data/v1.4/cmip5_5m.html">5-</a>, <a href="https://www.worldclim.org/data/v1.4/cmip5_2.5m.html">2.5-</a>minutes,
+and <a href="https://www.worldclim.org/data/v1.4/cmip5_30s.html">30-</a>second
+download sites</td>
+<td>10 minutes to 30 arc-seconds</td>
+<td>Monthly</td>
+<td><a href="https://www.worldclim.org/data/bioclim.html">Bioclim.
+Param.</a>, Precip. (sum), Temp. (mean, min, max)</td>
+<td>Hijmans et al. (2005), Fick and Hijmans (2017)</td>
+<td><a href="https://www.worldclim.org/data/downscaling.html">Downscaling
+methods</a></td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>
+Bibliography
+</summary>
+<p>Beck, Hylke E., Eric F. Wood, Tim R. McVicar, et al. 2020. “Bias
+Correction of Global High-Resolution Precipitation Climatologies Using
+Streamflow Observations from 9372 Catchments.” Journal of Climate 33
+(4): 1299–315. <a href="https://doi.org/10.1175/jcli-d-19-0332.1" class="uri">https://doi.org/10.1175/jcli-d-19-0332.1</a>.<br />
+Fick, Stephen E., and Robert J. Hijmans. 2017. “WorldClim 2: New 1‐km
+Spatial Resolution Climate Surfaces for Global Land Areas.”
+International Journal of Climatology 37 (12): 4302–15. <a href="https://doi.org/10.1002/joc.5086" class="uri">https://doi.org/10.1002/joc.5086</a>.<br />
+Hijmans, Robert J., Susan E. Cameron, Juan L. Parra, Peter G. Jones, and
+Andy Jarvis. 2005. “Very High Resolution Interpolated Climate Surfaces
+for Global Land Areas.” International Journal of Climatology 25 (15):
+1965–78. <a href="https://doi.org/10.1002/joc.1276" class="uri">https://doi.org/10.1002/joc.1276</a>.<br />
+Karger, D. N., Philipp Brun, and Niklaus E. Zimmermann. 2021. CHELSA
+V2.1: Technical Specification. Swiss Federal Research Institute WSL. <a href="https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf" class="uri">https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification_V2.pdf</a>.<br />
+Karger, D. N., Olaf Conrad, Jürgen Böhner, et al. 2017. “Climatologies
+at High Resolution for the Earth’s Land Surface Areas.” Scientific Data
+4 (1): 170122. <a href="https://doi.org/10.1038/sdata.2017.122" class="uri">https://doi.org/10.1038/sdata.2017.122</a>.<br />
+Karger, D. N., Olaf Conrad, Jürgen Böhner, et al. 2018. “Data from:
+Climatologies at High Resolution for the Earth’s Land Surface Areas.”
+Dryad. <a href="https://doi.org/10.5061/DRYAD.KD1D4" class="uri">https://doi.org/10.5061/DRYAD.KD1D4</a>.<br />
+Karger, D. N., and Niklaus E. Zimmermann. 2018. “CHELSAcruts - High
+Resolution Temperature and Precipitation Timeseries for the 20th Century
+and Beyond.” EnviDat. <a href="http://dx.doi.org/10.16904/envidat.159" class="uri">http://dx.doi.org/10.16904/envidat.159</a>.<br />
+Karger, D. N., and Niklaus E. Zimmermann. 2019. CHELSA V1.2: Technical
+Specification. Swiss Federal Research Institute WSL. <a href="https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf" class="uri">https://chelsa-climate.org/wp-admin/download-page/CHELSA_tech_specification.pdf</a>.</p>
+</details>
+<p>To get more information, please proceed <a href="./docs/index.html">here to the documentation</a>.</p>
+<p>This R-package was developed as a student project for the masters
+programm Geography at the Universität Hamburg, Germany.</p>
+<p>Feedback, support, and ideas for improving your user experience are
+apprechiated at <a href="mailto:helgejentsch.research@gmail.com"><strong>helgejentsch.research@gmail.com</strong></a>.</p>
+<p>If you want to cite ClimDatDownloadR you can find the package on
+Zenodo via <a href="https://doi.org/10.5281/zenodo.15663182"><img role="img" aria-label="DOI" src="data:image/svg+xml; charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgd2lkdGg9IjE5MC44NDM3NSIgaGVpZ2h0PSIyMCI+CiAgICAgICAgPGxpbmVhckdyYWRpZW50IGlkPSJiIiB4Mj0iMCIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiYmIiIHN0b3Atb3BhY2l0eT0iLjEiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLW9wYWNpdHk9Ii4xIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICA8bWFzayBpZD0iYSIgd2lkdGg9IjE5MC44NDM3NSIgaGVpZ2h0PSIyMCI+CiAgICAgICAgICAgIDxyZWN0IHdpZHRoPSIxOTAuODQzNzUiIGhlaWdodD0iMjAiIHJ4PSIzIgogICAgICAgICAgICBmaWxsPSIjZmZmIi8+CiAgICAgICAgPC9tYXNrPgogICAgICAgIDxnIG1hc2s9InVybCgjYSkiPgogICAgICAgICAgICA8cGF0aCBmaWxsPSIjNTU1IiBkPSJNMCAwaDMxLjM3NXYyMEgweiIgLz4KICAgICAgICAgICAgPHBhdGggZmlsbD0iIzAwN2VjNiIKICAgICAgICAgICAgZD0iTTMxLjM3NSAwaDE1OS40Njg3NXYyMEgzMS4zNzV6IgogICAgICAgICAgICAvPgogICAgICAgICAgICA8cGF0aCBmaWxsPSJ1cmwoI2IpIiBkPSJNMCAwaDE5MC44NDM3NXYyMEgweiIgLz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkRlamFWdSBTYW5zLAogICAgICAgIFZlcmRhbmEsR2VuZXZhLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiPgogICAgICAgICAgICA8dGV4dCB4PSIxNi4xODc1IiB5PSIxNSIgZmlsbD0iIzAxMDEwMSIKICAgICAgICAgICAgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgICAgICAgICAgICBET0kKICAgICAgICAgICAgPC90ZXh0PgogICAgICAgICAgICA8dGV4dCB4PSIxNi4xODc1IiB5PSIxNCI+CiAgICAgICAgICAgICAgICBET0kKICAgICAgICAgICAgPC90ZXh0PgogICAgICAgICAgICA8dGV4dCB4PSIxMTAuNjA5Mzc1IgogICAgICAgICAgICB5PSIxNSIgZmlsbD0iIzAxMDEwMSIgZmlsbC1vcGFjaXR5PSIuMyI+CiAgICAgICAgICAgICAgICAxMC41MjgxL3plbm9kby4xNTY2MzE4MgogICAgICAgICAgICA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9IjExMC42MDkzNzUiIHk9IjE0Ij4KICAgICAgICAgICAgICAgIDEwLjUyODEvemVub2RvLjE1NjYzMTgyCiAgICAgICAgICAgIDwvdGV4dD4KICAgICAgICA8L2c+CiAgICA8L3N2Zz4=" alt="DOI" /></a></p>
+<p>We would like to be cited as:</p>
+<p>Jentsch, Helge, Weidinger, Johannes, &amp; Bobrowski, Maria.
+(<em>current year e.g. 2023</em>). ClimDatDownloadR: Downloads Climate
+Data from Chelsa and WorldClim (_current version e.g. 1.0.0). Zenodo.
+DOI: <a href="https://doi.org/10.5281/zenodo.15663182">10.5281/zenodo.15663182</a>.
+URL: <a href="https://github.com/HelgeJentsch/ClimDatDownloadR" class="uri">https://github.com/HelgeJentsch/ClimDatDownloadR</a>.</p>
+</div>
 </div>
 
 
