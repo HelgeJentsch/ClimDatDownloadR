@@ -27,7 +27,7 @@ Chelsa.Clim.download(
 
 \item{parameter}{string (vector). Input of parameters which should be downloaded. \cr Default: \code{c("prec", "temp", "tmax", "tmin", "bio")}}
 
-\item{bio.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{https://www.chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}}
+\item{bio.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to BIOCLIM variables. For further information see: \url{https://chelsa-climate.org/bioclim/}. \cr Default: \code{c(1:19)}}
 
 \item{month.var}{integer (vector). Input which monthly data should be downloaded. Only applicable to precipitation and temperature (average, maximum, minimum). \cr Default: \code{c(1:12)}}
 

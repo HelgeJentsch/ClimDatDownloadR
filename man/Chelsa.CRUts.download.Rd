@@ -60,7 +60,7 @@ Chelsa.CRUts.download(
 Custom dataset of CHELSA CRU Timeseries for a chosen timeseries.
 }
 \description{
-This function supports a download of the CHELSA CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation sums in mm and temperature (maximum, minimum) in degree Celsius. For further information, please regard \url{https://www.chelsa-climate.org/chelsacruts/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
+This function supports a download of the CHELSA CRU Timeseries dataset (Jan. 1901 - Dec. 2016). This includes precipitation sums in mm and temperature (maximum, minimum) in degree Celsius. For further information, please regard \url{https://chelsa-climate.org/chelsacruts/}.\cr To allow pre-processing, clipping and buffering, conversion to ASCII-grids and stacking options are included.\cr Optional an output of a .bib-file of the cited literature can be retrieved.\cr For user convenience, saving directories will be created automatically. Also options to "zip" and/or delete the RAW-files are included.
 }
 \note{
 Please note that the downloaded data for temperature is processed to °C with one significant decimal without offset and factor. Processing and conversion to other file-formats on a global dataset may take some time.
