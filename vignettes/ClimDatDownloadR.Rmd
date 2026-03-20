@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ## A warm welcome
 Hello and welcome to the ClimDatDownloadR R-package. 
 
-With this package **cli**mate **dat**asets provided by [CHELSA](https://www.chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**.
+With this package **cli**mate **dat**asets provided by [CHELSA](https://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**.
 
 To start, you'll have to install the package and it's dependencies first, if not already done. Then you can activate the package with the `library`-function.  
 For the installation process you need to need to input the following code:
@@ -129,13 +129,13 @@ WorldClim.HistClim.download(
 
 ## Overview of download-functions
 
-Besides the functions to download the current climatologies of [CHELSA](https://www.chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](./man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](./man/WorldClim.HistClim.download.Rd), the package offers more download functions.
+Besides the functions to download the current climatologies of [CHELSA](https://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](?Chelsa.Clim.download) and [`WorldClim.HistClim.download()`](?man/WorldClim.HistClim.download), the package offers more download functions.
 
-- Beginning with the Last Glacial Maximum-data set (LGM), CHELSA offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](./man/Chelsa.lgm.download.Rd).
-- [CHELSA's](https://www.chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](./man/Chelsa.timeseries.download.Rd)-function.
-- For projected climatic conditions both [CHELSA](https://www.chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options.
-- [CHELSA's](https://www.chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](./man/Chelsa.CMIP_5.download.Rd) and/or [`Chelsa.CRUts.download()`](./man/Chelsa.CRUts.download.Rd).
-- [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](./man/WorldClim.CMIP_5.download.Rd) and/or [`WorldClim.CMIP_6.download()`](./man/WorldClim.CMIP_6.download.Rd).
+- Beginning with the Last Glacial Maximum-data set (LGM), CHELSA offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](?Chelsa.lgm.download).
+- [CHELSA's](https://chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](?Chelsa.timeseries.download)-function.
+- For projected climatic conditions both [CHELSA](https://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options.
+- [CHELSA's](https://chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](?Chelsa.CMIP_5.download) and/or [`Chelsa.CRUts.download()`](?Chelsa.CRUts.download).
+- [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](?WorldClim.CMIP_5.download) and/or [`WorldClim.CMIP_6.download()`](?WorldClim.CMIP_6.download).
 
 ### Table: Overview of the functions and respective datasets
 
@@ -165,11 +165,11 @@ Karger, D. N., and Niklaus E. Zimmermann. 2019. CHELSA V1.2: Technical Specifica
 
 </details>
 
-To get more information, please proceed [here to the documentation](./docs/index.html).
+To get more information, please proceed regard the documentation.
 
-This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany.
+This R-package was developed as a student project for the masters program Geography at the Universität Hamburg, Germany.
 
-Feedback, support, and ideas for improving your user experience are apprechiated at [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com).
+Feedback, support, and ideas for improving your user experience are appreciated at [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com).
 
 If you want to cite ClimDatDownloadR you can find the package on Zenodo via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15663182.svg)](https://doi.org/10.5281/zenodo.15663182)
 
