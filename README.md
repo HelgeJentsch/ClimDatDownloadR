@@ -2,12 +2,12 @@
 
 Hello and welcome to the ClimDatDownloadR R-package.
 
-With this package **cli**mate **dat**asets provided by [CHELSA](https://www.chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**.
+With this package **cli**mate **dat**asets provided by [CHELSA](https://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) can be automatically **download**ed, clipped, and converted with **R**.
 
 To start, you'll have to install the package and it's dependencies first, if not already done. Then you can activate the package with the `library`-function.\
 For the installation process you need to need to input the following code:
 
-``` (r)
+```(r)
 if(!require(remotes)) install.packages("remotes")
 library(remotes)
 remotes::install_github("HelgeJentsch/ClimDatDownloadR")
@@ -16,7 +16,7 @@ library(ClimDatDownloadR)
 
 Now that you have the package installed and loaded, let's start with the data sets of the climatologies of CHELSA and WorldClim.
 
-If you have any feedback or are in need of support, you can reach me via [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com). Feedback and ideas for improving your user experience are always apprechiated!
+If you have any feedback or are in need of support, you can reach me via [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com). Feedback and ideas for improving your user experience are always appreciated!
 
 ## Usage
 
@@ -29,7 +29,7 @@ The ClimDatDownloadR enables
 
 While this introduces an overview on how to approach the usage of the download functions of the `ClimDatDownloadR`, we employ users to consult documentations on the specific functions to gain further insights on e.g., variable or model availability or additional function parameters. An up-to-date version of the manual can be accessed on the [GitHub repository](https://github.com/HelgeJentsch/ClimDatDownloadR/blob/master/ClimDatDownloadR_manual.pdf).
 
-1.  Start selecting the dataset with `provider.dataset.download()`. The *provider* are `Chelsa` or `WorldClim`. The following *dataset* completes the function name and specifies the accessed dataset. Function names and accessed datasets are referenced in the leading columns of the table above ([Table: Overview of the functions and respective datasets](#table-overview-of-the-functions-and-respective-datasets)). The version can be specified with `version.var`.
+1.  Start selecting the dataset with `provider.dataset.download()`. The _provider_ are `Chelsa` or `WorldClim`. The following _dataset_ completes the function name and specifies the accessed dataset. Function names and accessed datasets are referenced in the leading columns of the table above ([Table: Overview of the functions and respective datasets](#table-overview-of-the-functions-and-respective-datasets)). The version can be specified with `version.var`.
 2.  The availability of parameters differs between datasets, despite every dataset providing data on monthly temperature means, minima, and maxima, as well as precipitation sums. Bioclimatic variables are also available for all climatologies. Here, the function parameters `month.var` and `bio.var` can be used to specify a subset from the dataset. For past (last glacial maximum) and future (CMIP 5/6) model climatologies a set of function parameters to specify models (`model.var`), scenarios (`emission.scenario.var`), and time interval (`time.interval.var`) can be used. The WorldClim datasets come in different spatial resolutions (10/5/2.5 arc-min., 30 arc-sec.), while CHELSA data is always in 30 arc-sec. resolution. Therefore, `WorldClim.*.download()`-functions have an additional `resolution` function parameter.
 3.  The pre-processing steps consist of two levels. While the processing of the provided data to interpretable values cannot be addressed by the user, clipping needs to be enabled with the eponymous function parameter and specified further with parameters like `clip.shapefile` or `clip.extent` with `buffer` as additional parameter.
 4.  File-management addresses the conversion to different file formats, the decluttering of the working directory, and a citation file that includes the providers' relevant publications. Currently, the functions parameter `convert.files.to.asc` and `stacking.data` convert the data to ASCII raster and netCDF format, respectively. For a storage efficient way, the user can decide to delete the downloaded datasets (`delete.raw.data`), save them in a zip-archive file (`combine.raw.zip` (CHELSA), `keep.raw.zip` (WorldClim)), or keep them in the directory as-is. The function parameter `save.bib.file` adds a citation file of the publications from the data provider to the working directory for convenience.
@@ -37,7 +37,6 @@ While this introduces an overview on how to approach the usage of the download f
 In the following, the basic usage of the download functions are demonstrated by applying an example call of the `Chelsa.Clim.download()` function, aiming at downloading CHELSA V2.1 bioclimatic and precipitation data, with clipping to the European continent's extent, and file management tools:
 
 <!-- prettier-ignore -->
-
 ``` r
 ClimDatDownloadR::Chelsa.Clim.Download(  
   save.location = "./",  
@@ -59,18 +58,17 @@ ClimDatDownloadR::Chelsa.Clim.Download(
 
 ## Overview of download-functions
 
-Besides the functions to download the current climatologies of [CHELSA](https://www.chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](./man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](./man/WorldClim.HistClim.download.Rd), the package offers more download functions.
+Besides the functions to download the current climatologies of [CHELSA](https://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/), described below as [`Chelsa.Clim.download()`](?Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](?WorldClim.HistClim.download.Rd), the package offers more download functions.
 
--   Beginning with the Last Glacial Maximum-data set (LGM), CHELSA offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](./man/Chelsa.lgm.download.Rd).
--   [CHELSA's](https://www.chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](./man/Chelsa.timeseries.download.Rd)-function.
--   For projected climatic conditions both [CHELSA](https://www.chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options.
--   [CHELSA's](https://www.chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](./man/Chelsa.CMIP_5.download.Rd) and/or [`Chelsa.CRUts.download()`](./man/Chelsa.CRUts.download.Rd).
--   [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](./man/WorldClim.CMIP_5.download.Rd) and/or [`WorldClim.CMIP_6.download()`](./man/WorldClim.CMIP_6.download.Rd).
+- Beginning with the Last Glacial Maximum-data set (LGM), CHELSA offers a data set with parameters like precipitation, temperature, and also bioclim variables, driven by various models. It can be called with [`Chelsa.lgm.download()`](?Chelsa.lgm.download.Rd).
+- [CHELSA's](https://chelsa-climate.org/) timeseries dataset can be downloaded via the [`Chelsa.timeseries.download()`](?Chelsa.timeseries.download.Rd)-function.
+- For projected climatic conditions both [CHELSA](https://chelsa-climate.org/) and [WorldClim](https://www.worldclim.org/) provide various options.
+- [CHELSA's](https://chelsa-climate.org/) options can be downloaded through the functions [`Chelsa.CMIP_5.download()`](?Chelsa.CMIP_5.download.Rd) and/or [`Chelsa.CRUts.download()`](?Chelsa.CRUts.download.Rd).
+- [WorldClim's](https://www.worldclim.org/) options can be downloaded through the functions [`WorldClim.CMIP_5.download()`](?WorldClim.CMIP_5.download.Rd) and/or [`WorldClim.CMIP_6.download()`](?WorldClim.CMIP_6.download.Rd).
 
 ### Table: Overview of the functions and respective datasets {#table-overview-of-the-functions-and-respective-datasets}
 
 <!-- prettier-ignore -->
-
 | Function Name | Accessed Dataset | Version | Reference Period | Emission Scenario | Models | Spatial Resolution | Temporal Resolution | Parameters | Citation | Documentation |
 |-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | `Chelsa.Clim.download` | CHELSA Climatologies | 1.2, 2.1 | 1.2: 1979–2013; 2.1: 1989-2010 | N/A | N/A | 30 arc-seconds | Monthly | 19 Bioclim. Param., Precip. (sum), Temp. (mean, min, max) | Karger et al. (2017), Karger et al. (2018), Beck et al. (2020) | Karger et al. (2021), Karger and Zimmermann (2019) |
@@ -98,22 +96,22 @@ Karger, D. N., and Niklaus E. Zimmermann. 2019. CHELSA V1.2: Technical Specifica
 
 </details>
 
-To get more information, please proceed [here to the documentation](./docs/index.html).
+To get more information, please proceed regard the documentation.
 
-This R-package was developed as a student project for the masters programm Geography at the Universität Hamburg, Germany.
+This R-package was developed as a student project for the masters program Geography at the University of Hamburg, Germany.
 
-Feedback, support, and ideas for improving your user experience are apprechiated at [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com).
+Feedback, support, and ideas for improving your user experience are appreciated at [**helgejentsch.research\@gmail.com**](mailto:helgejentsch.research@gmail.com).
 
 If you want to cite ClimDatDownloadR you can find the package on Zenodo via [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15663182.svg)](https://doi.org/10.5281/zenodo.15663182)
 
 We would like to be cited as:
 
-Jentsch, Helge, Weidinger, Johannes, & Bobrowski, Maria. (*current year e.g. 2023*). ClimDatDownloadR: Downloads Climate Data from Chelsa and WorldClim (\_current version e.g. 1.0.0). Zenodo. DOI: [10.5281/zenodo.15663182](https://doi.org/10.5281/zenodo.15663182). URL: <https://github.com/HelgeJentsch/ClimDatDownloadR>.
+Jentsch, Helge, Weidinger, Johannes, & Bobrowski, Maria. (_current year e.g. 2023_). ClimDatDownloadR: Downloads Climate Data from Chelsa and WorldClim (\_current version e.g. 1.0.0). Zenodo. DOI: [10.5281/zenodo.15663182](https://doi.org/10.5281/zenodo.15663182). URL: <https://github.com/HelgeJentsch/ClimDatDownloadR>.
 
 ````{=html}
 <!-- ## Download Climatologies
 
-In the help pages of [`Chelsa.Clim.download()`](./man/Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](./man/WorldClim.HistClim.download.Rd) you can find further information about the handling of these functions. In fact running the functions all by itself bulk-downloads all the climatology data sets from the servers to your current working directory.
+In the help pages of [`Chelsa.Clim.download()`](?Chelsa.Clim.download.Rd) and [`WorldClim.HistClim.download()`](?WorldClim.HistClim.download.Rd) you can find further information about the handling of these functions. In fact running the functions all by itself bulk-downloads all the climatology data sets from the servers to your current working directory.
 Let's start with a example of the Chelsa climatologies:
 
 ```(r)
@@ -121,7 +119,7 @@ Chelsa.Clim.download(
   # first you'll have to choose your working directory
   # don't worry about having a directory for every parameter you want to download
   # ClimDatDownloadR sorts this out for you
-  save.location = "./",
+  save.location = "/",
   # now you'll have to choose parameters.
   # since there is the possibility to download more than one data set
   # the parameters must be a string-vector input.
@@ -165,7 +163,7 @@ With this showing the basic principle of these functions, here is a example of a
 ```(r)
 WorldClim.HistClim.download(
   # As you can see, the structure of this function is very similar to the Chelsa-function
-  save.location = "./",
+  save.location = "/",
   parameter = c("temp", "bio"),
   month.var = c(1),
   bio.var = c(1),
